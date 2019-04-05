@@ -1,4 +1,4 @@
-package me.daviddoan.planner.Model;
+package me.daviddoan.planner.model;
 
 public class Movie {
 

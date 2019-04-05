@@ -1,4 +1,4 @@
-package me.daviddoan.planner.View;
+package me.daviddoan.planner.view;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

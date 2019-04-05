@@ -1,6 +1,5 @@
-package me.daviddoan.planner.Controller;
+package me.daviddoan.planner.controller;
 
-import android.net.wifi.p2p.WifiP2pManager;
 import android.view.View;
 
 public class manageEventsController implements View.OnClickListener {
