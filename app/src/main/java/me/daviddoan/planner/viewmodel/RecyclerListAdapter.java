@@ -1,4 +1,4 @@
-package me.daviddoan.planner.controller;
+package me.daviddoan.planner.viewmodel;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -11,17 +11,17 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import me.daviddoan.planner.R;
-import me.daviddoan.planner.view.ExampleItem;
+import me.daviddoan.planner.model.EventImpl;
 
-public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleViewHolder>{
-    public ArrayList<ExampleItem> mExampleList;
+public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapter.RecyclerViewHolder>{
+    public ArrayList<EventImpl> mExampleList;
 
-    public static class ExampleViewHolder extends RecyclerView.ViewHolder {
+    public static class RecyclerViewHolder extends RecyclerView.ViewHolder {
         public ImageView mImageView;
         public TextView mTextView1;
         public TextView mTextView2;
 
-        public ExampleViewHolder(@NonNull View itemView) {
+        public RecyclerViewHolder(@NonNull View itemView) {
             super(itemView);
             mImageView = itemView.findViewById(R.id.imageView);
             mTextView1 = itemView.findViewById(R.id.textView);
@@ -32,23 +32,23 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
 
     @NonNull
     @Override
-    public ExampleViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public RecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.example_item, viewGroup, false);
-        ExampleViewHolder evh = new ExampleViewHolder(v);
+        RecyclerViewHolder evh = new RecyclerViewHolder(v);
         return evh;
     }
 
-    public ExampleAdapter(ArrayList<ExampleItem> exampleList) {
+    public RecyclerListAdapter(ArrayList<EventImpl> exampleList) {
         this.mExampleList = exampleList;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ExampleViewHolder exampleViewHolder, int i) {
-        ExampleItem currentItem = mExampleList.get(i);
+    public void onBindViewHolder(@NonNull RecyclerViewHolder recyclerViewHolder, int i) {
+        EventImpl currentItem = mExampleList.get(i);
 
-        exampleViewHolder.mImageView.setImageResource(currentItem.getImageResource());
-        exampleViewHolder.mTextView1.setText(currentItem.getText1());
-        exampleViewHolder.mTextView2.setText(currentItem.getText2());
+        recyclerViewHolder.mImageView.setImageResource(currentItem.getImageResource());
+        recyclerViewHolder.mTextView1.setText(currentItem.getTitle());
+        recyclerViewHolder.mTextView2.setText(currentItem.getVenue());
     }
 
     @Override
