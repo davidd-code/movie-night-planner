@@ -19,7 +19,7 @@ public class ExampleItem {
         return mText1;
     }
 
-    public String getmText2() {
+    public String getText2() {
         return mText2;
     }
 }
