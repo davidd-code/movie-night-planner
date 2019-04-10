@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">Movie Night Planner</string>
-    <string name="manage_events">Manage Events</string>
+    <string name="add_events">Add Events</string>
 </resources>

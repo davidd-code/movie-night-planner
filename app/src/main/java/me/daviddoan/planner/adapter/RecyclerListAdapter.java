@@ -14,7 +14,7 @@ import me.daviddoan.planner.R;
 import me.daviddoan.planner.model.EventImpl;
 
 public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapter.RecyclerViewHolder>{
-    public ArrayList<EventImpl> mExampleList;
+    public ArrayList<EventImpl> mEventList;
 
     public static class RecyclerViewHolder extends RecyclerView.ViewHolder {
         public ImageView mImageView;
@@ -38,13 +38,13 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         return evh;
     }
 
-    public RecyclerListAdapter(ArrayList<EventImpl> exampleList) {
-        this.mExampleList = exampleList;
+    public RecyclerListAdapter(ArrayList<EventImpl> eventList) {
+        this.mEventList = eventList;
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewHolder recyclerViewHolder, int i) {
-        EventImpl currentItem = mExampleList.get(i);
+        EventImpl currentItem = mEventList.get(i);
 
         recyclerViewHolder.mTextView1.setText(currentItem.getTitle());
         recyclerViewHolder.mTextView2.setText(currentItem.getVenue());
@@ -52,7 +52,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
 
     @Override
     public int getItemCount() {
-        return mExampleList.size();
+        return mEventList.size();
     }
 
 
