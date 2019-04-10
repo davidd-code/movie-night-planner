@@ -1,4 +1,4 @@
-package me.daviddoan.planner.viewmodel;
+package me.daviddoan.planner.adapter;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -46,7 +46,6 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
     public void onBindViewHolder(@NonNull RecyclerViewHolder recyclerViewHolder, int i) {
         EventImpl currentItem = mExampleList.get(i);
 
-        recyclerViewHolder.mImageView.setImageResource(currentItem.getImageResource());
         recyclerViewHolder.mTextView1.setText(currentItem.getTitle());
         recyclerViewHolder.mTextView2.setText(currentItem.getVenue());
     }
