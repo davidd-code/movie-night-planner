@@ -3,7 +3,7 @@ package me.daviddoan.planner.model;
 import me.daviddoan.planner.model.interfaces.Event;
 import me.daviddoan.planner.model.interfaces.Movie;
 
-public class AbstractEvent implements Event {
+public abstract class AbstractEvent implements Event {
 
     private String id, title, startDate, endDate, venue, location;
     private Movie movie;

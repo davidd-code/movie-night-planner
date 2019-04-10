@@ -8,10 +8,5 @@ public class EventImpl extends AbstractEvent{
         super(id, title, startDate, endDate, venue, location, movie);
     }
 
-//    public EventImpl(int imageResource, String text1, String text2) {
-//        this.mImageResource = imageResource;
-//        this.mText1 = text1;
-//        this.mText2 = text2;
-//    }
 
 }

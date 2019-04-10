@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import me.daviddoan.planner.model.EventImpl;
 import me.daviddoan.planner.model.EventModel;
 
-public class EventViewModel extends AndroidViewModel {
+public class AppViewModel extends AndroidViewModel {
 
     private MutableLiveData<ArrayList<EventImpl>> mEventList;
     private EventModel mEventModel;
@@ -24,7 +24,7 @@ public class EventViewModel extends AndroidViewModel {
         mEventList = mEventModel.getEventList();
     }
 
-    public EventViewModel(@NonNull Application application) {
+    public AppViewModel(@NonNull Application application) {
         super(application);
     }
 

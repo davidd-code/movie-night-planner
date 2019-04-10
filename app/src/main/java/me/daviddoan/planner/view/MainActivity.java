@@ -1,7 +1,6 @@
 package me.daviddoan.planner.view;
 
 import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -14,14 +13,14 @@ import java.util.ArrayList;
 import me.daviddoan.planner.R;
 import me.daviddoan.planner.adapter.RecyclerListAdapter;
 import me.daviddoan.planner.model.EventImpl;
-import me.daviddoan.planner.viewmodel.EventViewModel;
+import me.daviddoan.planner.viewmodel.AppViewModel;
 
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private EventViewModel mEventViewModel;
+    private AppViewModel mAppViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,9 +28,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Set up ViewModel object
-        mEventViewModel = ViewModelProviders.of(this).get(EventViewModel.class);
-        mEventViewModel.init();
-        mEventViewModel.getEventList().observe(this, new Observer<ArrayList<EventImpl>>() {
+        mAppViewModel = ViewModelProviders.of(this).get(AppViewModel.class);
+        mAppViewModel.init();
+        mAppViewModel.getEventList().observe(this, new Observer<ArrayList<EventImpl>>() {
             @Override
             public void onChanged(@Nullable ArrayList<EventImpl> events) {
                 mAdapter.notifyDataSetChanged();
@@ -41,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView = findViewById(R.id.recyclerView);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
-        mAdapter = new RecyclerListAdapter(mEventViewModel.getEventList().getValue());
+        mAdapter = new RecyclerListAdapter(mAppViewModel.getEventList().getValue());
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);

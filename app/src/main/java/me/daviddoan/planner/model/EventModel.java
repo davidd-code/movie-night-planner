@@ -3,11 +3,11 @@ package me.daviddoan.planner.model;
 import android.arch.lifecycle.MutableLiveData;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class EventModel {
     private static EventModel firstInstance = null;
     private ArrayList<EventImpl> eventList = new ArrayList<>();
+    private ArrayList<MovieImpl> movieList = new ArrayList<>();
 
     private EventModel(){
 
@@ -39,6 +39,11 @@ public class EventModel {
         eventList.add(new EventImpl("2", "Scary Saturday", "3/01/2019 2:00:00 AM",
                 "3/01/2019 4:00:00 AM", "HOYTS The District Docklands",
                 "-37.811363, 144.936967", null));
+    }
+
+    private void setMovieList() {
+        movieList.add(new MovieImpl("1", "Blade Runner", "1982", "BladeRunner1982.jpg"));
+        movieList.add(new MovieImpl("2", "Hackers", "1995", "Hackers.jpg"));
     }
 
 }
