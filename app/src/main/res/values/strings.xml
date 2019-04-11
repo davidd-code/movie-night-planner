@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">Movie Night Planner</string>
-    <string name="add_events">Add Events</string>
+    <string name="add_events">Add Event</string>
+    <string name="title">Title</string>
+    <string name="start_date">Start Date</string>
+    <string name="end_date">End Date</string>
+    <string name="set_time">Set Time</string>
+    <string name="set_date">Set Date</string>
 </resources>
