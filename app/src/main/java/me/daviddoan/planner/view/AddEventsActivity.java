@@ -48,7 +48,6 @@ public class AddEventsActivity extends AppCompatActivity implements DatePickerDi
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-//        startDateTextView.setText(dayOfMonth + '/' + month + '/' + year);
         Calendar c = Calendar.getInstance();
         c.set(Calendar.YEAR, year);
         c.set(Calendar.MONTH, month);
