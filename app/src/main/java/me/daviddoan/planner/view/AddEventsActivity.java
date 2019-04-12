@@ -15,22 +15,35 @@ import java.util.Calendar;
 
 import me.daviddoan.planner.R;
 
+//public class AddEventsActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+
 public class AddEventsActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
-
     private TextView startTimeTextView, startDateTextView, endTimeTextView, endDateTextView;
+    private Calendar startDate, endDate;
+    private TextView activeDateTextView, activeTimeTextView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_events);
 
+        DatePickerDialog.OnDateSetListener start_dateListener, end_dateListener;
+
+
+        // Assigning the text views inside of this activity
         startTimeTextView = (TextView)findViewById(R.id.startTimeTextView);
         startDateTextView = (TextView)findViewById(R.id.startDateTextView);
+        endTimeTextView = (TextView)findViewById(R.id.endTimeTextView);
+        endDateTextView = (TextView)findViewById(R.id.endDateTextView);
+
+        startDate = Calendar.getInstance();
 
         startTimeTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setActiveTimeTextView(startTimeTextView);
                 DialogFragment startTimePicker = new TimePickerFragment();
                 startTimePicker.show(getSupportFragmentManager(), "Start Time");
             }
@@ -39,8 +52,27 @@ public class AddEventsActivity extends AppCompatActivity implements DatePickerDi
         startDateTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setActiveDateTextView(startDateTextView);
                 DialogFragment startDatePicker = new DatePickerFragment();
                 startDatePicker.show(getSupportFragmentManager(), "Start Date");
+            }
+        });
+
+        endTimeTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setActiveTimeTextView(endTimeTextView);
+                DialogFragment startTimePicker = new TimePickerFragment();
+                startTimePicker.show(getSupportFragmentManager(), "Start Time");
+            }
+        });
+
+        endDateTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setActiveDateTextView(endDateTextView);
+                DialogFragment endDatePicker = new DatePickerFragment();
+                endDatePicker.show(getSupportFragmentManager(), "End Date");
             }
         });
 
@@ -53,12 +85,22 @@ public class AddEventsActivity extends AppCompatActivity implements DatePickerDi
         c.set(Calendar.MONTH, month);
         c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
         String dateString = DateFormat.getDateInstance().format(c.getTime());
-        startDateTextView.setText(dateString);
+        activeDateTextView.setText(dateString);
     }
+
+    public void setActiveDateTextView(TextView textView) {
+        this.activeDateTextView = textView;
+    }
+
+    public void setActiveTimeTextView(TextView textView) {
+        this.activeTimeTextView = textView;
+    }
+
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        startTimeTextView.setText(hourOfDay + " : " + minute);
+        activeTimeTextView.setText(hourOfDay + " : " + minute);
     }
 }
+
 
