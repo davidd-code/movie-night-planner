@@ -12,9 +12,16 @@ import java.util.ArrayList;
 
 import me.daviddoan.planner.R;
 import me.daviddoan.planner.model.EventImpl;
+import me.daviddoan.planner.model.MovieImpl;
 
-public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapter.RecyclerViewHolder>{
+public class EventRecyclerListAdapter extends RecyclerView.Adapter<EventRecyclerListAdapter.RecyclerViewHolder>{
     public ArrayList<EventImpl> mEventList;
+    public ArrayList<MovieImpl> mMovieList;
+
+    public EventRecyclerListAdapter(ArrayList<EventImpl> eventList) {
+        this.mEventList = eventList;
+    }
+
 
     public static class RecyclerViewHolder extends RecyclerView.ViewHolder {
         public ImageView mImageView;
@@ -23,8 +30,8 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
 
         public RecyclerViewHolder(@NonNull View itemView) {
             super(itemView);
-            mImageView = itemView.findViewById(R.id.imageView);
-            mTextView1 = itemView.findViewById(R.id.textView);
+            mImageView = itemView.findViewById(R.id.moviePosterImageView);
+            mTextView1 = itemView.findViewById(R.id.movieTitleTextView);
             mTextView2 = itemView.findViewById(R.id.textView2);
 
         }
@@ -33,19 +40,16 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
     @NonNull
     @Override
     public RecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.example_item, viewGroup, false);
+        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.event_item, viewGroup, false);
         RecyclerViewHolder evh = new RecyclerViewHolder(v);
         return evh;
     }
 
-    public RecyclerListAdapter(ArrayList<EventImpl> eventList) {
-        this.mEventList = eventList;
-    }
+
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewHolder recyclerViewHolder, int i) {
         EventImpl currentItem = mEventList.get(i);
-
         recyclerViewHolder.mTextView1.setText(currentItem.getTitle());
         recyclerViewHolder.mTextView2.setText(currentItem.getVenue());
     }

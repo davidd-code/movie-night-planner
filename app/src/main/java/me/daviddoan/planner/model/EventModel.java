@@ -41,18 +41,24 @@ public class EventModel {
     }
 
     private void setEventList() {
-        eventList.add(new EventImpl
-                ("1", "Freaky Friday", "2/01/2019 1:00:00 AM",
-                        "2/01/2019 3:00:00 AM", "RMIT Capitol Theatre",
-                        "-37.814795, 144.966119", null));
-        eventList.add(new EventImpl("2", "Scary Saturday", "3/01/2019 2:00:00 AM",
-                "3/01/2019 4:00:00 AM", "HOYTS The District Docklands",
-                "-37.811363, 144.936967", null));
+        if(eventList.size() == 0) {
+            eventList.add(new EventImpl
+                    ("1", "Freaky Friday", "2/01/2019 1:00:00 AM",
+                            "2/01/2019 3:00:00 AM", "RMIT Capitol Theatre",
+                            "-37.814795, 144.966119", null));
+            eventList.add(new EventImpl("2", "Scary Saturday", "3/01/2019 2:00:00 AM",
+                    "3/01/2019 4:00:00 AM", "HOYTS The District Docklands",
+                    "-37.811363, 144.936967", null));
+        }
+
     }
 
     private void setMovieList() {
-        movieList.add(new MovieImpl("1", "Blade Runner", "1982", "BladeRunner1982.jpg"));
-        movieList.add(new MovieImpl("2", "Hackers", "1995", "Hackers.jpg"));
+        if(movieList.size() == 0) {
+            movieList.add(new MovieImpl("1", "Blade Runner", "1982", "BladeRunner1982.jpg"));
+            movieList.add(new MovieImpl("2", "Hackers", "1995", "Hackers.jpg"));
+        }
+
     }
 
 }

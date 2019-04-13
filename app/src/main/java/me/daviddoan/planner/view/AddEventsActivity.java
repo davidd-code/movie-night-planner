@@ -2,10 +2,12 @@ package me.daviddoan.planner.view;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -37,6 +39,8 @@ public class AddEventsActivity extends AppCompatActivity implements DatePickerDi
         startDateTextView = (TextView)findViewById(R.id.startDateTextView);
         endTimeTextView = (TextView)findViewById(R.id.endTimeTextView);
         endDateTextView = (TextView)findViewById(R.id.endDateTextView);
+        Button selectMovieBtn = (Button) findViewById(R.id.selectMovieButton);
+        Button saveEventBtn = (Button) findViewById(R.id.saveEventButton);
 
         startDate = Calendar.getInstance();
 
@@ -76,6 +80,13 @@ public class AddEventsActivity extends AppCompatActivity implements DatePickerDi
             }
         });
 
+        selectMovieBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent movieIntent = new Intent(getApplicationContext(), SelectMovieActivity.class);
+                startActivity(movieIntent);
+            }
+        });
     }
 
     @Override

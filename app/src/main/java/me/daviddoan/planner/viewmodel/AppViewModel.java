@@ -34,4 +34,8 @@ public class AppViewModel extends AndroidViewModel {
     public LiveData<ArrayList<EventImpl>> getEventList() {
         return mEventList;
     }
+
+    public LiveData<ArrayList<MovieImpl>> getMovieList() {
+        return mMovieList;
+    }
 }
