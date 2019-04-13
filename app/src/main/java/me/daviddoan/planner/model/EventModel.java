@@ -31,6 +31,15 @@ public class EventModel {
         return data;
     }
 
+    public MutableLiveData<ArrayList<MovieImpl>> getMovieList() {
+        setMovieList();
+
+        MutableLiveData<ArrayList<MovieImpl>> data = new MutableLiveData<>();
+        data.setValue(movieList);
+
+        return data;
+    }
+
     private void setEventList() {
         eventList.add(new EventImpl
                 ("1", "Freaky Friday", "2/01/2019 1:00:00 AM",

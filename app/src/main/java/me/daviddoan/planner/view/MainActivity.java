@@ -38,14 +38,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(startIntent);
             }
         });
-//        AddEventsController addEventsController = new AddEventsController();
-//        addEventsController.setAddEventsListener(new AddEventsController.AddEventsListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent startIntent = new Intent(getApplicationContext(), AddEventsActivity.class);
-//                startActivity(startIntent);
-//            }
-//        });
+
 
         // Set up ViewModel object
         mAppViewModel = ViewModelProviders.of(this).get(AppViewModel.class);
