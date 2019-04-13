@@ -1,8 +1,10 @@
 package me.daviddoan.planner.view;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,9 +23,11 @@ import me.daviddoan.planner.R;
 
 public class AddEventsActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
+    public static final int REQUEST_CODE = 999;
     private TextView startTimeTextView, startDateTextView, endTimeTextView, endDateTextView;
     private Calendar startDate, endDate;
-    private TextView activeDateTextView, activeTimeTextView;
+    private TextView activeDateTextView, activeTimeTextView, movieSelectedTextView;
+    private Intent movieIntent;
 
 
     @Override
@@ -40,6 +44,7 @@ public class AddEventsActivity extends AppCompatActivity implements DatePickerDi
         endTimeTextView = (TextView)findViewById(R.id.endTimeTextView);
         endDateTextView = (TextView)findViewById(R.id.endDateTextView);
         Button selectMovieBtn = (Button) findViewById(R.id.selectMovieButton);
+        movieSelectedTextView = (TextView) findViewById(R.id.movieSelectedTextView);
         Button saveEventBtn = (Button) findViewById(R.id.saveEventButton);
 
         startDate = Calendar.getInstance();
@@ -83,10 +88,22 @@ public class AddEventsActivity extends AppCompatActivity implements DatePickerDi
         selectMovieBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent movieIntent = new Intent(getApplicationContext(), SelectMovieActivity.class);
-                startActivity(movieIntent);
+                movieIntent = new Intent(getApplicationContext(), SelectMovieActivity.class);
+                startActivityForResult(movieIntent, REQUEST_CODE);
             }
         });
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        switch(requestCode) {
+            case REQUEST_CODE:
+                if(resultCode == Activity.RESULT_OK) {
+                    String text = data.getStringExtra("Movie Title");
+                    movieSelectedTextView.setText(text);
+                }
+        }
     }
 
     @Override

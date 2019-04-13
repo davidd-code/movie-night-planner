@@ -1,5 +1,6 @@
 package me.daviddoan.planner.adapter;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -16,24 +17,37 @@ import me.daviddoan.planner.model.EventImpl;
 import me.daviddoan.planner.model.MovieImpl;
 
 public class MovieRecyclerListAdapter extends RecyclerView.Adapter<MovieRecyclerListAdapter.RecyclerViewHolder>{
-    public ArrayList<MovieImpl> mMovieList;
+    private ArrayList<MovieImpl> mMovieList;
+    private MovieRecyclerListListener mRecyclerListener;
 
-    public MovieRecyclerListAdapter(ArrayList<MovieImpl> movieList) {
+    final int BLADE_RUNNER = 0;
+    final int HACKERS = 1;
+
+    public MovieRecyclerListAdapter(ArrayList<MovieImpl> movieList, MovieRecyclerListListener movieRecyclerListListener) {
         this.mMovieList = movieList;
+        this.mRecyclerListener = movieRecyclerListListener;
     }
 
 
-    public static class RecyclerViewHolder extends RecyclerView.ViewHolder {
-        public ImageView mImageView;
-        public TextView mTextView1;
-        public TextView mTextView2;
+    public class RecyclerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private ImageView mImageView;
+        private TextView mTextView1;
+        private TextView mTextView2;
+        MovieRecyclerListListener movieRecyclerListListener;
 
-        public RecyclerViewHolder(@NonNull View itemView) {
+        private RecyclerViewHolder(@NonNull View itemView, MovieRecyclerListListener listener) {
             super(itemView);
             mImageView = itemView.findViewById(R.id.moviePosterImageView);
             mTextView1 = itemView.findViewById(R.id.movieTitleTextView);
             mTextView2 = itemView.findViewById(R.id.movieYearTextView);
+            itemView.setOnClickListener(this);
+            this.movieRecyclerListListener = listener;
 
+        }
+
+        @Override
+        public void onClick(View v) {
+            movieRecyclerListListener.onMovieClick(getAdapterPosition());
         }
     }
 
@@ -41,7 +55,7 @@ public class MovieRecyclerListAdapter extends RecyclerView.Adapter<MovieRecycler
     @Override
     public RecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.movie_item, viewGroup, false);
-        RecyclerViewHolder evh = new RecyclerViewHolder(v);
+        RecyclerViewHolder evh = new RecyclerViewHolder(v, mRecyclerListener);
         return evh;
     }
 
@@ -51,9 +65,14 @@ public class MovieRecyclerListAdapter extends RecyclerView.Adapter<MovieRecycler
     public void onBindViewHolder(@NonNull RecyclerViewHolder recyclerViewHolder, int i) {
         MovieImpl currentItem = mMovieList.get(i);
 
-        // Set the movie poster
-//        Resources res;
-//        recyclerViewHolder.mImageView.setImageResource(currentItem.getPoster());
+        switch(currentItem.getPoster()) {
+            case "BladeRunner1982.jpg":
+                recyclerViewHolder.mImageView.setImageResource(R.drawable.blade_runner1982);
+                break;
+            case "Hackers.jpg":
+                recyclerViewHolder.mImageView.setImageResource(R.drawable.hackers);
+                break;
+        }
         recyclerViewHolder.mTextView1.setText(currentItem.getTitle());
         recyclerViewHolder.mTextView2.setText(currentItem.getYear());
     }
@@ -63,5 +82,12 @@ public class MovieRecyclerListAdapter extends RecyclerView.Adapter<MovieRecycler
         return mMovieList.size();
     }
 
+    public MovieImpl getMovie(ArrayList<MovieImpl> movieList, int position) {
+        return movieList.get(position);
+    }
+
+    public interface MovieRecyclerListListener {
+        void onMovieClick(int position);
+    }
 
 }

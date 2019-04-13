@@ -20,7 +20,7 @@ import me.daviddoan.planner.model.EventImpl;
 import me.daviddoan.planner.model.MovieImpl;
 import me.daviddoan.planner.viewmodel.AppViewModel;
 
-public class SelectMovieActivity extends AppCompatActivity {
+public class SelectMovieActivity extends AppCompatActivity implements MovieRecyclerListAdapter.MovieRecyclerListListener {
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -45,9 +45,18 @@ public class SelectMovieActivity extends AppCompatActivity {
         mRecyclerView = findViewById(R.id.moviesRecyclerView);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
-        mAdapter = new MovieRecyclerListAdapter(mAppViewModel.getMovieList().getValue());
+        mAdapter = new MovieRecyclerListAdapter(mAppViewModel.getMovieList().getValue(), this);
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
+    }
+
+    @Override
+    public void onMovieClick(int position) {
+        Intent intent = new Intent();
+
+        intent.putExtra("Movie Title" , mAppViewModel.getMovie(mAppViewModel.getMovieArrayList(), position).getTitle());
+        setResult(RESULT_OK, intent);
+        finish();
     }
 }

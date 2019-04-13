@@ -38,4 +38,12 @@ public class AppViewModel extends AndroidViewModel {
     public LiveData<ArrayList<MovieImpl>> getMovieList() {
         return mMovieList;
     }
+
+    public ArrayList<MovieImpl> getMovieArrayList() {
+        return mMovieList.getValue();
+    }
+
+    public MovieImpl getMovie(ArrayList<MovieImpl> movieList, int position) {
+        return movieList.get(position);
+    }
 }
