@@ -12,11 +12,9 @@ import java.util.ArrayList;
 
 import me.daviddoan.planner.R;
 import me.daviddoan.planner.model.EventImpl;
-import me.daviddoan.planner.model.MovieImpl;
 
 public class EventRecyclerListAdapter extends RecyclerView.Adapter<EventRecyclerListAdapter.RecyclerViewHolder>{
     public ArrayList<EventImpl> mEventList;
-    public ArrayList<MovieImpl> mMovieList;
 
     public EventRecyclerListAdapter(ArrayList<EventImpl> eventList) {
         this.mEventList = eventList;

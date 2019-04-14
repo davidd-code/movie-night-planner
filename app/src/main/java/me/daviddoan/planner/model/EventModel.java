@@ -1,13 +1,17 @@
 package me.daviddoan.planner.model;
 
 import android.arch.lifecycle.MutableLiveData;
+import android.support.v7.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import me.daviddoan.planner.adapter.EventRecyclerListAdapter;
+
 public class EventModel {
     private static EventModel firstInstance = null;
-    private ArrayList<EventImpl> eventList = new ArrayList<>();
+    private static ArrayList<EventImpl> eventList = new ArrayList<>();
     private ArrayList<MovieImpl> movieList = new ArrayList<>();
+    private static RecyclerView.Adapter mAdapter;
 
     private EventModel(){
 
@@ -15,7 +19,7 @@ public class EventModel {
 
     public static EventModel getInstance(){
         if(firstInstance == null){
-
+            mAdapter = new EventRecyclerListAdapter(eventList);
             firstInstance = new EventModel();
 
         }
@@ -29,6 +33,10 @@ public class EventModel {
         data.setValue(eventList);
 
         return data;
+    }
+
+    public RecyclerView.Adapter getEventAdapter() {
+        return mAdapter;
     }
 
     public MutableLiveData<ArrayList<MovieImpl>> getMovieList() {
@@ -53,12 +61,21 @@ public class EventModel {
 
     }
 
+    public int getEventListSize() {
+        return this.eventList.size();
+    }
+
     private void setMovieList() {
         if(movieList.size() == 0) {
             movieList.add(new MovieImpl("1", "Blade Runner", "1982", "BladeRunner1982.jpg"));
             movieList.add(new MovieImpl("2", "Hackers", "1995", "Hackers.jpg"));
         }
 
+    }
+
+    public void addEvent(EventImpl newEvent) {
+        this.eventList.add(newEvent);
+        mAdapter.notifyDataSetChanged();
     }
 
 }
