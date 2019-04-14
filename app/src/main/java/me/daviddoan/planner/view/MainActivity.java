@@ -61,10 +61,10 @@ public class MainActivity extends AppCompatActivity implements EventRecyclerList
 
     @Override
     public void onEventClick(int position) {
-        openEditDialog();
+        openEditDialog(position);
     }
 
-    public void openEditDialog() {
+    public void openEditDialog(int position) {
 //        Intent intent = new Intent(getApplicationContext(), EditEventDialog.class);
 //        intent.putExtra("Event Title", EventModel.getInstance().getEventInstance(position).getTitle());
 //        intent.putExtra("Start Date", EventModel.getInstance().getEventInstance(position).getStartDate());
@@ -72,8 +72,20 @@ public class MainActivity extends AppCompatActivity implements EventRecyclerList
 //        intent.putExtra("Venue", EventModel.getInstance().getEventInstance(position).getVenue());
 //        intent.putExtra("Location", EventModel.getInstance().getEventInstance(position).getLocation());
 //        intent.putExtra("Movie", EventModel.getInstance().getEventInstance(position).getMovie().getTitle());
-
         EditEventDialog editEventDialog = new EditEventDialog();
+
+        Bundle args = new Bundle();
+        args.putString("Event Title", EventModel.getInstance().getEventInstance(position).getTitle());
+        args.putString("Start Date", EventModel.getInstance().getEventInstance(position).getStartDate());
+        args.putString("End Date", EventModel.getInstance().getEventInstance(position).getEndDate());
+        args.putString("Venue", EventModel.getInstance().getEventInstance(position).getVenue());
+        args.putString("Location", EventModel.getInstance().getEventInstance(position).getLocation());
+        if(EventModel.getInstance().getEventInstance(position).getMovie() != null) {
+            args.putString("Movie", EventModel.getInstance().getEventInstance(position).getMovie().getTitle());
+        }
+
+        editEventDialog.setArguments(args);
+
         editEventDialog.show(getSupportFragmentManager(), "Edit Event");
     }
 }

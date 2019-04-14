@@ -3,7 +3,6 @@ package me.daviddoan.planner.view;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.view.LayoutInflater;
@@ -13,7 +12,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import me.daviddoan.planner.R;
-import me.daviddoan.planner.model.EventImpl;
 
 public class EditEventDialog extends AppCompatDialogFragment {
     EditText edit_eventTitle, edit_eventVenue, edit_eventLocation;
@@ -22,6 +20,7 @@ public class EditEventDialog extends AppCompatDialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -51,10 +50,17 @@ public class EditEventDialog extends AppCompatDialogFragment {
         edit_movieDisplay = view.findViewById(R.id.edit_movieDisplay);
         edit_eventMovieBtn = view.findViewById(R.id.edit_eventMovieBtn);
 
-//        Intent intent = getActivity().getIntent();
-//        if(intent.hasExtra("Event Title")) {
-//            edit_eventTitle.setText(intent.getStringExtra("Event Title"));
-//        }
+        // Set view items to the values of the event that is being edited
+        edit_eventTitle.setText(getArguments().getString("Event Title"));
+        edit_eventVenue.setText(getArguments().getString("Venue"));
+        edit_eventLocation.setText(getArguments().getString("Location"));
+        String[] startDateArray = getArguments().getString("Start Date").split(" ");
+        edit_startDate.setText(startDateArray[0]);
+        edit_startTime.setText(startDateArray[1]);
+        String[] endDateArray = getArguments().getString("End Date").split(" ");
+        edit_endDate.setText(endDateArray[0]);
+        edit_endTime.setText(endDateArray[1]);
+        edit_movieDisplay.setText(getArguments().getString("Movie"));
 
         return builder.create();
 
