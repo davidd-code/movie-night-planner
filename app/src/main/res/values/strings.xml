@@ -10,4 +10,5 @@
     <string name="location">Location</string>
     <string name="select_movie">Select Movie</string>
     <string name="save_event">Save Event</string>
+    <string name="cancel">Cancel</string>
 </resources>

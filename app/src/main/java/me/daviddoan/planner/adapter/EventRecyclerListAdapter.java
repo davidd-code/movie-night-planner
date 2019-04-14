@@ -14,24 +14,34 @@ import me.daviddoan.planner.R;
 import me.daviddoan.planner.model.EventImpl;
 
 public class EventRecyclerListAdapter extends RecyclerView.Adapter<EventRecyclerListAdapter.RecyclerViewHolder>{
-    public ArrayList<EventImpl> mEventList;
+    private ArrayList<EventImpl> mEventList;
+    private EventRecyclerListListener mEventRecyclerListListener;
 
-    public EventRecyclerListAdapter(ArrayList<EventImpl> eventList) {
+    public EventRecyclerListAdapter(ArrayList<EventImpl> eventList, EventRecyclerListListener listener) {
         this.mEventList = eventList;
+        this.mEventRecyclerListListener = listener;
     }
 
 
-    public static class RecyclerViewHolder extends RecyclerView.ViewHolder {
+    public static class RecyclerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public ImageView mImageView;
         public TextView mTextView1;
         public TextView mTextView2;
+        EventRecyclerListListener eventRecyclerListListener;
 
-        public RecyclerViewHolder(@NonNull View itemView) {
+        public RecyclerViewHolder(@NonNull View itemView, EventRecyclerListListener listener) {
             super(itemView);
             mImageView = itemView.findViewById(R.id.moviePosterImageView);
             mTextView1 = itemView.findViewById(R.id.movieTitleTextView);
             mTextView2 = itemView.findViewById(R.id.textView2);
+            this.eventRecyclerListListener = listener;
+            itemView.setOnClickListener(this);
 
+        }
+
+        @Override
+        public void onClick(View v) {
+            eventRecyclerListListener.onEventClick(getAdapterPosition());
         }
     }
 
@@ -39,7 +49,7 @@ public class EventRecyclerListAdapter extends RecyclerView.Adapter<EventRecycler
     @Override
     public RecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.event_item, viewGroup, false);
-        RecyclerViewHolder evh = new RecyclerViewHolder(v);
+        RecyclerViewHolder evh = new RecyclerViewHolder(v, mEventRecyclerListListener);
         return evh;
     }
 
@@ -57,5 +67,8 @@ public class EventRecyclerListAdapter extends RecyclerView.Adapter<EventRecycler
         return mEventList.size();
     }
 
+    public interface EventRecyclerListListener {
+        void onEventClick(int position);
+    }
 
 }

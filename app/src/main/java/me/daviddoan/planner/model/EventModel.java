@@ -1,29 +1,36 @@
 package me.daviddoan.planner.model;
 
+import android.app.Activity;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.v7.widget.RecyclerView;
 
 import java.util.ArrayList;
 
 import me.daviddoan.planner.adapter.EventRecyclerListAdapter;
+import me.daviddoan.planner.view.MainActivity;
 
 public class EventModel {
     private static EventModel firstInstance = null;
-    private static ArrayList<EventImpl> eventList = new ArrayList<>();
+    private ArrayList<EventImpl> eventList = new ArrayList<>();
     private ArrayList<MovieImpl> movieList = new ArrayList<>();
-    private static RecyclerView.Adapter mAdapter;
+    private RecyclerView.Adapter mAdapter;
+    private EventRecyclerListAdapter.EventRecyclerListListener listener;
 
     private EventModel(){
-
+        if(firstInstance == null) {
+        }
     }
 
     public static EventModel getInstance(){
         if(firstInstance == null){
-            mAdapter = new EventRecyclerListAdapter(eventList);
             firstInstance = new EventModel();
 
         }
         return firstInstance;
+    }
+
+    public void setRecyclerViewAdapter(MainActivity activity) {
+        mAdapter = new EventRecyclerListAdapter(eventList, activity);
     }
 
     public MutableLiveData<ArrayList<EventImpl>> getEventList() {
@@ -71,6 +78,10 @@ public class EventModel {
             movieList.add(new MovieImpl("2", "Hackers", "1995", "Hackers.jpg"));
         }
 
+    }
+
+    public EventImpl getEventInstance(int position) {
+        return this.getEventList().getValue().get(position);
     }
 
     public void addEvent(EventImpl newEvent) {

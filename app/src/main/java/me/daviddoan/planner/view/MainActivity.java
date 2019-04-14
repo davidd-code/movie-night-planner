@@ -13,10 +13,12 @@ import android.widget.ImageView;
 
 
 import me.daviddoan.planner.R;
+import me.daviddoan.planner.adapter.EventRecyclerListAdapter;
+import me.daviddoan.planner.model.EventImpl;
 import me.daviddoan.planner.model.EventModel;
 import me.daviddoan.planner.viewmodel.AppViewModel;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements EventRecyclerListAdapter.EventRecyclerListListener {
 
 
     @Override
@@ -47,13 +49,31 @@ public class MainActivity extends AppCompatActivity {
 //                mAdapter.notifyDataSetChanged();
 //            }
 //        });
-
+        EventModel.getInstance().setRecyclerViewAdapter(this);
         mRecyclerView = findViewById(R.id.eventsRecyclerView);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
-        mAdapter = EventModel.getInstance().getAdapter();
+        mAdapter = EventModel.getInstance().getEventAdapter();
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
+    }
+
+    @Override
+    public void onEventClick(int position) {
+        openEditDialog();
+    }
+
+    public void openEditDialog() {
+//        Intent intent = new Intent(getApplicationContext(), EditEventDialog.class);
+//        intent.putExtra("Event Title", EventModel.getInstance().getEventInstance(position).getTitle());
+//        intent.putExtra("Start Date", EventModel.getInstance().getEventInstance(position).getStartDate());
+//        intent.putExtra("End Date", EventModel.getInstance().getEventInstance(position).getEndDate());
+//        intent.putExtra("Venue", EventModel.getInstance().getEventInstance(position).getVenue());
+//        intent.putExtra("Location", EventModel.getInstance().getEventInstance(position).getLocation());
+//        intent.putExtra("Movie", EventModel.getInstance().getEventInstance(position).getMovie().getTitle());
+
+        EditEventDialog editEventDialog = new EditEventDialog();
+        editEventDialog.show(getSupportFragmentManager(), "Edit Event");
     }
 }

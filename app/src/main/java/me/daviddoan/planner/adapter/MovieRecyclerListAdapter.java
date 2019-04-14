@@ -20,9 +20,6 @@ public class MovieRecyclerListAdapter extends RecyclerView.Adapter<MovieRecycler
     private ArrayList<MovieImpl> mMovieList;
     private MovieRecyclerListListener mRecyclerListener;
 
-    final int BLADE_RUNNER = 0;
-    final int HACKERS = 1;
-
     public MovieRecyclerListAdapter(ArrayList<MovieImpl> movieList, MovieRecyclerListListener movieRecyclerListListener) {
         this.mMovieList = movieList;
         this.mRecyclerListener = movieRecyclerListListener;

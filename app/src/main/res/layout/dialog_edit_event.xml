@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/edit_eventTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="1dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Event Title"
+        android:textAlignment="center" />
+
+    <TextView
+        android:id="@+id/edit_startLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edit_eventTitle"
+        android:layout_marginTop="10dp"
+        android:text="@string/start_date"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/edit_startDate"
+        android:layout_width="395dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edit_startLabel"
+        android:layout_marginTop="10dp"
+        android:text="@string/start_date"
+        android:textAlignment="center"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/edit_startTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edit_startDate"
+        android:layout_alignStart="@+id/edit_startDate"
+        android:layout_marginTop="10dp"
+        android:text="TextView"
+        android:textAlignment="center"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/end_endLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edit_startTime"
+        android:layout_marginTop="10dp"
+        android:text="@string/end_date"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/edit_endDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/end_endLabel"
+        android:layout_marginTop="10dp"
+        android:text="TextView"
+        android:textAlignment="center"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/edit_endTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edit_endDate"
+        android:layout_marginTop="10dp"
+        android:text="TextView"
+        android:textAlignment="center"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/edit_eventVenue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edit_endTime"
+        android:layout_marginTop="10dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="@string/venue"
+        android:textAlignment="center" />
+
+    <EditText
+        android:id="@+id/edit_eventLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edit_eventVenue"
+        android:layout_marginTop="10dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="@string/location"
+        android:textAlignment="center" />
+
+    <Button
+        android:id="@+id/edit_eventMovieBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edit_eventLocation"
+        android:layout_alignStart="@+id/edit_eventTitle"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="1dp"
+        android:text="@string/select_movie" />
+
+    <TextView
+        android:id="@+id/edit_movieDisplay"
+        android:layout_width="224dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edit_eventLocation"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="22dp"
+        android:layout_marginTop="11dp"
+        android:layout_marginEnd="22dp"
+        android:layout_toEndOf="@+id/edit_eventMovieBtn"
+        android:text="TextView"
+        android:textSize="18sp" />
+
+</RelativeLayout>
