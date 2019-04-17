@@ -3,6 +3,7 @@ package me.daviddoan.planner.view;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -14,12 +15,14 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import me.daviddoan.planner.R;
-import me.daviddoan.planner.controller.AddEventsController;
+import me.daviddoan.planner.controller.EventsController;
 import me.daviddoan.planner.model.EventModel;
 import me.daviddoan.planner.model.MovieImpl;
 
@@ -31,7 +34,7 @@ public class AddEventsActivity extends AppCompatActivity implements DatePickerDi
     private Calendar startDate, endDate;
     private TextView activeDateTextView, activeTimeTextView, movieSelectedTextView;
     private Intent movieIntent;
-    private AddEventsController addEventsController;
+    private EventsController eventsController;
 
 
     @Override
@@ -52,7 +55,8 @@ public class AddEventsActivity extends AppCompatActivity implements DatePickerDi
         Button saveEventBtn = (Button) findViewById(R.id.saveEventButton);
 
         startDate = Calendar.getInstance();
-        addEventsController = new AddEventsController(this);
+        endDate = Calendar.getInstance();
+        eventsController = new EventsController();
 
         startTimeTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,10 +107,14 @@ public class AddEventsActivity extends AppCompatActivity implements DatePickerDi
             public void onClick(View v) {
                 String id = Integer.toString(EventModel.getInstance().getEventListSize() + 1);
                 String title = titleEditText.getText().toString();
-                String startTime = startTimeTextView.getText().toString();
-                String startDate = startDateTextView.getText().toString() + " " + startTime;
-                String endTime = endTimeTextView.getText().toString();
-                String endDate = endDateTextView.getText().toString() + " " + endTime;
+//                String startTime = startTimeTextView.getText().toString();
+//                String startDate = startDateTextView.getText().toString() + " " + startTime;
+//                String endTime = endTimeTextView.getText().toString();
+//                String endDate = endDateTextView.getText().toString() + " " + endTime;
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a");
+                dateFormat.setTimeZone(startDate.getTimeZone());
+                String startDateString = dateFormat.format(startDate.getTime());
+                String endDateString = dateFormat.format(endDate.getTime());
                 String venue = venueTextView.getText().toString();
                 String location = locationTextView.getText().toString();
                 String movieTitle = movieSelectedTextView.getText().toString();
@@ -122,7 +130,7 @@ public class AddEventsActivity extends AppCompatActivity implements DatePickerDi
                     default:
                         movie = null;
                 }
-                addEventsController.addEvent(id, title, startDate, endDate, venue, location, movie);
+                eventsController.addEvent(id, title, startDateString, endDateString, venue, location, movie);
                 finish();
             }
         });
@@ -142,12 +150,22 @@ public class AddEventsActivity extends AppCompatActivity implements DatePickerDi
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        Calendar c = Calendar.getInstance();
-        c.set(Calendar.YEAR, year);
-        c.set(Calendar.MONTH, month);
-        c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-        String dateString = DateFormat.getDateInstance().format(c.getTime());
-        activeDateTextView.setText(dateString);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        String displayDate;
+        if(activeDateTextView == startDateTextView) {
+            startDate.set(Calendar.YEAR, year);
+            startDate.set(Calendar.MONTH, month);
+            startDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            dateFormat.setTimeZone(startDate.getTimeZone());
+            displayDate = dateFormat.format(startDate.getTime());
+        } else {
+            endDate.set(Calendar.YEAR, year);
+            endDate.set(Calendar.MONTH, month);
+            endDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            endDate.setTimeZone(endDate.getTimeZone());
+            displayDate = dateFormat.format(endDate.getTime());
+        }
+        activeDateTextView.setText(displayDate);
     }
 
     public void setActiveDateTextView(TextView textView) {
@@ -161,7 +179,30 @@ public class AddEventsActivity extends AppCompatActivity implements DatePickerDi
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        activeTimeTextView.setText(hourOfDay + " : " + minute);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss a");
+        if(activeTimeTextView == startTimeTextView) {
+            if(hourOfDay > 12) {
+                startDate.set(Calendar.HOUR, hourOfDay - 12);
+                startDate.set(Calendar.AM_PM, 1);
+            } else {
+                startDate.set(Calendar.HOUR, hourOfDay);
+                startDate.set(Calendar.AM_PM, 0);
+            }
+            startDate.set(Calendar.MINUTE, minute);
+            dateFormat.setTimeZone(startDate.getTimeZone());
+            activeTimeTextView.setText(dateFormat.format(startDate.getTime()));
+        } else {
+            if(hourOfDay > 12) {
+                endDate.set(Calendar.HOUR, hourOfDay - 12);
+                endDate.set(Calendar.AM_PM, 1);
+            } else {
+                endDate.set(Calendar.HOUR, hourOfDay);
+                endDate.set(Calendar.AM_PM, 0);
+            }
+            endDate.set(Calendar.MINUTE, minute);
+            dateFormat.setTimeZone(endDate.getTimeZone());
+            activeTimeTextView.setText(dateFormat.format(endDate.getTime()));
+        }
     }
 }
 

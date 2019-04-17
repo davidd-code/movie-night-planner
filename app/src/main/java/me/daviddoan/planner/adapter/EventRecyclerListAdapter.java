@@ -60,6 +60,15 @@ public class EventRecyclerListAdapter extends RecyclerView.Adapter<EventRecycler
         EventImpl currentItem = mEventList.get(i);
         recyclerViewHolder.mTextView1.setText(currentItem.getTitle());
         recyclerViewHolder.mTextView2.setText(currentItem.getVenue());
+        if(currentItem.getMovie() != null) {
+            switch(currentItem.getMovie().getTitle()) {
+                case "Blade Runner":
+                    recyclerViewHolder.mImageView.setImageResource(R.drawable.blade_runner1982);
+                    break;
+                case "Hackers":
+                    recyclerViewHolder.mImageView.setImageResource(R.drawable.hackers);
+            }
+        }
     }
 
     @Override

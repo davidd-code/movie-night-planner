@@ -6,14 +6,10 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Scanner;
 
 public class FileLoader {
     private Context mContext;
-    String movieFileName;
-//    String eventFileName = "C:\\Users\\ddoan\\OneDrive\\RMIT\\2019\\sem1\\Mobile Application Development\\a1\\app\\src\\main\\assets\\events.txt";
-//    String eventFileName;
-    InputStream eventFileName;
+    InputStream eventFileName, movieFileName;
 
     public FileLoader(Context context) {
         this.mContext = context;
@@ -28,7 +24,6 @@ public class FileLoader {
             eventFileName = mContext.getAssets().open("events.txt");
             InputStreamReader isr = new InputStreamReader(eventFileName);
             BufferedReader br = new BufferedReader(isr);
-            StringBuilder sb = new StringBuilder();
             List<String> linesRead = new LinkedList<>();
 
             while((line = br.readLine()) != null) {
@@ -36,15 +31,6 @@ public class FileLoader {
                     linesRead.add(line);
                 }
             }
-//            FileReader file = new FileReader(eventFileName);
-//            BufferedReader textReader = new BufferedReader(file);
-//            List<String> linesRead = new LinkedList<String>();
-//            while((line = textReader.readLine()) != null) {
-//                if(!line.contains("//")) {
-//                    linesRead.add(line);
-//
-//                }
-//            }
 
             for(String element: linesRead) {
                 String[] stringArray;
@@ -59,13 +45,53 @@ public class FileLoader {
                 EventImpl readEvent = new EventImpl(id, title, startDate, endDate, venue, location, null);
                 eventList.add(readEvent);
             }
-//            textReader.close();
+            br.close();
         }
         catch(FileNotFoundException e) {
-
+            e.printStackTrace();
         }
         catch(IOException ex) {
+            ex.printStackTrace();
+        }
+    }
 
+
+    public void loadMovies(ArrayList<MovieImpl> movieList) {
+
+        String line = null;
+        // Movie Strings
+        String id, title, year, poster;
+
+        try {
+            movieFileName = mContext.getAssets().open("movies.txt");
+            InputStreamReader isr = new InputStreamReader(movieFileName);
+            BufferedReader br = new BufferedReader(isr);
+            List<String> linesRead = new LinkedList<>();
+
+            while((line = br.readLine()) != null) {
+                if(!line.contains("//")) {
+                    linesRead.add(line);
+                }
+            }
+
+            for(String element: linesRead) {
+                String[] stringArray;
+                stringArray = element.split("\"");
+                id = stringArray[1];
+                title = stringArray[3];
+                year = stringArray[5];
+                poster = stringArray[7];
+
+                MovieImpl readMovie = new MovieImpl(id, title, year, poster);
+                movieList.add(readMovie);
+            }
+            br.close();
+        }
+        catch(FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        catch(IOException ex) {
+            ex.printStackTrace();
         }
     }
 }

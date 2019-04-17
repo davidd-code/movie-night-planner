@@ -7,10 +7,10 @@ public interface Event {
     String getTitle();
     void setTitle(String title);
 
-    String getStartDate();
+    String getStartDateString();
     void setStartDate(String startDate);
 
-    String getEndDate();
+    String getEndDateString();
     void setEndDate(String endDate);
 
     String getVenue();
