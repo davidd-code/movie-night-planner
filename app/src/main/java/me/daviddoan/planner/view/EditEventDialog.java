@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -33,6 +34,7 @@ public class EditEventDialog extends AppCompatDialogFragment {
     private EditEventDialogListener listener;
     private TextView activeTextView;
     private FragmentActivity myContext;
+    private Button contactsBtn;
 
 
     @Override
@@ -72,6 +74,8 @@ public class EditEventDialog extends AppCompatDialogFragment {
         edit_endTime = view.findViewById(R.id.edit_endTime);
         edit_movieDisplay = view.findViewById(R.id.edit_movieDisplay);
         Button edit_eventMovieBtn = view.findViewById(R.id.edit_eventMovieBtn);
+        contactsBtn = view.findViewById(R.id.contactsBtn);
+
 
         edit_startDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,6 +110,15 @@ public class EditEventDialog extends AppCompatDialogFragment {
                 setActiveTextView(edit_endTime);
                 DialogFragment startTimePicker = new TimePickerFragment();
                 startTimePicker.show(myContext.getSupportFragmentManager(), "End Time");
+            }
+        });
+
+        contactsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent contactIntent = new Intent(getContext(), ViewContactsActivity.class);
+                contactIntent.putExtra("currentEventId", getArguments().getString("ID"));
+                startActivityForResult(contactIntent, 987);
             }
         });
 

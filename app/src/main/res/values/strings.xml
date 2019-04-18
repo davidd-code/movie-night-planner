@@ -11,4 +11,7 @@
     <string name="select_movie">Select Movie</string>
     <string name="save_event">Save Event</string>
     <string name="cancel">Cancel</string>
+    <string name="edit_attendees">Edit Attendees</string>
+    <string name="margin_top">15dp</string>
+    <string name="add_attendee">Add Attendee</string>
 </resources>

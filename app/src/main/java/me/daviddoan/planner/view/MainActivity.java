@@ -14,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.TimePicker;
 
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -31,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements
     EditEventDialog editEventDialog;
     String editEventId;
     Bundle args;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements
 //        });
 
 
-        EventModel.getInstance().setRecyclerViewAdapter(this);
+        EventModel.getInstance().setEventRecyclerViewAdapter(this);
         mRecyclerView = findViewById(R.id.eventsRecyclerView);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
@@ -90,6 +90,7 @@ public class MainActivity extends AppCompatActivity implements
         args = new Bundle();
 //        Bundle args = new Bundle();
         editEventId = EventModel.getInstance().getEventInstance(position).getId();
+        args.putString("ID", EventModel.getInstance().getEventInstance(position).getId());
         args.putString("Event Title", EventModel.getInstance().getEventInstance(position).getTitle());
         args.putString("Start Date", EventModel.getInstance().getEventInstance(position).getStartDateString());
         args.putString("End Date", EventModel.getInstance().getEventInstance(position).getEndDateString());

@@ -12,7 +12,7 @@ public class EventModel {
     private static EventModel firstInstance = null;
     private ArrayList<EventImpl> eventList;
     private ArrayList<MovieImpl> movieList;
-    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.Adapter mEventAdapter;
 
     private EventModel(){
         if(firstInstance == null) {
@@ -29,9 +29,11 @@ public class EventModel {
         return firstInstance;
     }
 
-    public void setRecyclerViewAdapter(MainActivity activity) {
-        mAdapter = new EventRecyclerListAdapter(eventList, activity);
+    public void setEventRecyclerViewAdapter(MainActivity activity) {
+        mEventAdapter = new EventRecyclerListAdapter(eventList, activity);
     }
+
+
 
     public MutableLiveData<ArrayList<EventImpl>> getEventList() {
 
@@ -41,8 +43,28 @@ public class EventModel {
         return data;
     }
 
+    public ArrayList<String[]> getContactsFromId(String id) {
+        ArrayList<String[]> attendees = new ArrayList<>();
+        for(EventImpl event: this.getEventList().getValue()) {
+            if(event.getId().equals(id)) {
+                attendees = event.getAttendees();
+            }
+        }
+        return attendees;
+    }
+
+    public EventImpl getEventFromId(String id) {
+        EventImpl matchingEvent = null;
+        for(EventImpl event: this.getEventList().getValue()) {
+            if(event.getId().equals(id)) {
+                matchingEvent = event;
+            }
+        }
+        return matchingEvent;
+    }
+
     public RecyclerView.Adapter getEventAdapter() {
-        return mAdapter;
+        return mEventAdapter;
     }
 
     public MutableLiveData<ArrayList<MovieImpl>> getMovieList() {
@@ -64,7 +86,7 @@ public class EventModel {
 
     public void addEvent(EventImpl newEvent) {
         this.eventList.add(newEvent);
-        mAdapter.notifyDataSetChanged();
+        mEventAdapter.notifyDataSetChanged();
     }
 
     public void editEvent(String id, String title, String startDate, String endDate, String venue, String location, String movieTitle) {
@@ -82,6 +104,6 @@ public class EventModel {
                 }
             }
         }
-        mAdapter.notifyDataSetChanged();
+        mEventAdapter.notifyDataSetChanged();
     }
 }

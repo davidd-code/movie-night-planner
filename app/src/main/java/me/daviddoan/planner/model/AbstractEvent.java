@@ -1,13 +1,15 @@
 package me.daviddoan.planner.model;
 
+import android.support.v7.widget.RecyclerView;
+
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Calendar;
 
+import me.daviddoan.planner.adapter.ContactRecyclerListAdapter;
 import me.daviddoan.planner.model.interfaces.Event;
 import me.daviddoan.planner.model.interfaces.Movie;
+import me.daviddoan.planner.view.ViewContactsActivity;
 
 public abstract class AbstractEvent implements Event {
 
@@ -15,32 +17,19 @@ public abstract class AbstractEvent implements Event {
     private Calendar startDate = Calendar.getInstance();
     private Calendar endDate = Calendar.getInstance();
     private Movie movie;
+    private ArrayList<String[]> attendees;
+    private RecyclerView.Adapter mContactAdapter;
 
     public AbstractEvent(String id, String title, String startDate, String endDate, String venue,
                          String location, Movie movie) {
         this.id = id;
         this.title = title;
-//        this.startDate = startDate;
-//        String[] startDateStringArray = startDate.split(" ");
-//        String[] startDateArray = startDateStringArray[0].split("/");
-//        this.startDate.set(Calendar.YEAR, Integer.parseInt(startDateArray[2]));
-//        this.startDate.set(Calendar.MONTH, Integer.parseInt(startDateArray[1]));
-//        this.startDate.set(Calendar.DAY_OF_MONTH, Integer.parseInt(startDateArray[0]));
-//        String[] startTimeArray = startDateStringArray[1].split(":");
-//        if(startDateStringArray[2].equals("AM")) {
-//            this.startDate.set(Calendar.HOUR, Integer.parseInt(startTimeArray[0]));
-//
-//        } else {
-//            this.startDate.set(Calendar.HOUR, Integer.parseInt(startTimeArray[0] + 12));
-//        }
-//        this.startDate.set(Calendar.MINUTE, Integer.parseInt(startTimeArray[1]));
-//        this.startDate.set(Calendar.SECOND, Integer.parseInt(startTimeArray[2]));
-//        this.endDate = endDate;
         setCalendarFromString(this.startDate, startDate);
         setCalendarFromString(this.endDate, endDate);
         this.venue = venue;
         this.location = location;
         this.movie = movie;
+        attendees = new ArrayList<>();
     }
 
     public Calendar setCalendarFromString(Calendar calendar, String date) {
@@ -60,6 +49,44 @@ public abstract class AbstractEvent implements Event {
         calendar.set(Calendar.SECOND, Integer.parseInt(startTimeArray[2]));
 
         return calendar;
+    }
+
+    public void addAttendee(String name, String number) {
+        String[] newContact = new String[2];
+        newContact[0] = name;
+        newContact[1] = number;
+        if(!attendees.contains(newContact)) {
+            attendees.add(newContact);
+            mContactAdapter.notifyDataSetChanged();
+        }
+    }
+
+    public boolean checkAttendee(String number) {
+        boolean check = false;
+        for(String[] element: attendees) {
+            if(number.equals(element[1])) {
+                check = true;
+            }
+        }
+        return check;
+    }
+
+    public ArrayList<String[]> getAttendees() {
+        return this.attendees;
+    }
+
+    public void setContactRecyclerViewAdapter(ViewContactsActivity activity) {
+        mContactAdapter = new ContactRecyclerListAdapter(getAttendees(), activity);
+    }
+
+    public RecyclerView.Adapter getmContactAdapter() {
+        return this.mContactAdapter;
+    }
+
+
+
+    public void setAttendees(ArrayList<String[]> attendees) {
+        this.attendees = attendees;
     }
 
     @Override

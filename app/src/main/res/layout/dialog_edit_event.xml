@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent" android:layout_height="match_parent"
-    android:padding="16dp">
+    android:padding="10dp">
 
     <EditText
         android:id="@+id/edit_eventTitle"
@@ -94,8 +95,9 @@
         android:id="@+id/edit_eventLocation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/edit_eventVenue"
-        android:layout_marginTop="10dp"
+        android:layout_below="@+id/contactsBtn"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="@string/location"
@@ -123,5 +125,13 @@
         android:layout_toEndOf="@+id/edit_eventMovieBtn"
         android:text="TextView"
         android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/contactsBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edit_eventVenue"
+        android:layout_marginTop="11dp"
+        android:text="@string/edit_attendees" />
 
 </RelativeLayout>

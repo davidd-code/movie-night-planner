@@ -5,6 +5,9 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
+import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
@@ -17,8 +20,8 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import me.daviddoan.planner.R;
@@ -28,13 +31,16 @@ import me.daviddoan.planner.model.MovieImpl;
 
 public class AddEventsActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
-    public static final int REQUEST_CODE = 999;
+    public static final int SELECT_MOVIE = 999;
+    public static final int SELECT_CONTACT = 101;
     private EditText titleEditText, venueTextView, locationTextView;
     private TextView startTimeTextView, startDateTextView, endTimeTextView, endDateTextView;
     private Calendar startDate, endDate;
+    private Button addContactBtn;
     private TextView activeDateTextView, activeTimeTextView, movieSelectedTextView;
     private Intent movieIntent;
     private EventsController eventsController;
+    private ArrayList<String[]> contacts = new ArrayList<>();
 
 
     @Override
@@ -50,6 +56,7 @@ public class AddEventsActivity extends AppCompatActivity implements DatePickerDi
         endDateTextView = (TextView)findViewById(R.id.endDateTextView);
         venueTextView = (EditText) findViewById(R.id.venueEditText);
         locationTextView = (EditText) findViewById(R.id.venueEditText);
+        addContactBtn = (Button) findViewById(R.id.addContactBtn);
         Button selectMovieBtn = (Button) findViewById(R.id.selectMovieButton);
         movieSelectedTextView = (TextView) findViewById(R.id.movieSelectedTextView);
         Button saveEventBtn = (Button) findViewById(R.id.saveEventButton);
@@ -98,7 +105,16 @@ public class AddEventsActivity extends AppCompatActivity implements DatePickerDi
             @Override
             public void onClick(View v) {
                 movieIntent = new Intent(getApplicationContext(), SelectMovieActivity.class);
-                startActivityForResult(movieIntent, REQUEST_CODE);
+                startActivityForResult(movieIntent, SELECT_MOVIE);
+            }
+        });
+
+        addContactBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_PICK);
+                i.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
+                startActivityForResult(i, SELECT_CONTACT);
             }
         });
 
@@ -107,10 +123,6 @@ public class AddEventsActivity extends AppCompatActivity implements DatePickerDi
             public void onClick(View v) {
                 String id = Integer.toString(EventModel.getInstance().getEventListSize() + 1);
                 String title = titleEditText.getText().toString();
-//                String startTime = startTimeTextView.getText().toString();
-//                String startDate = startDateTextView.getText().toString() + " " + startTime;
-//                String endTime = endTimeTextView.getText().toString();
-//                String endDate = endDateTextView.getText().toString() + " " + endTime;
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a");
                 dateFormat.setTimeZone(startDate.getTimeZone());
                 String startDateString = dateFormat.format(startDate.getTime());
@@ -130,7 +142,8 @@ public class AddEventsActivity extends AppCompatActivity implements DatePickerDi
                     default:
                         movie = null;
                 }
-                eventsController.addEvent(id, title, startDateString, endDateString, venue, location, movie);
+
+                eventsController.addEvent(id, title, startDateString, endDateString, venue, location, movie, contacts);
                 finish();
             }
         });
@@ -140,14 +153,53 @@ public class AddEventsActivity extends AppCompatActivity implements DatePickerDi
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         switch(requestCode) {
-            case REQUEST_CODE:
+            case SELECT_MOVIE:
                 if(resultCode == Activity.RESULT_OK) {
                     String text = data.getStringExtra("Movie Title");
                     movieSelectedTextView.setText(text);
                 }
+                break;
+            case SELECT_CONTACT:
+                if(resultCode == Activity.RESULT_OK) {
+                    String[] newContact = new String[2];
+                    Context context = getApplicationContext();
+                    CharSequence text;
+                    int duration = Toast.LENGTH_SHORT;
+//                    Works for phone / name only
+                    Uri contactUri = data.getData();
+                    String[] nameProjection = new String[]{ContactsContract.Contacts.DISPLAY_NAME};
+                    Cursor nameCursor = getApplicationContext().getContentResolver().query(contactUri, nameProjection,
+                            null, null, null);
+                    String name="";
+//                     If the cursor returned is valid, get the phone number
+                    if(nameCursor != null && nameCursor.moveToFirst()) {
+                        name = nameCursor.getString(nameCursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                        newContact[0] = name;
+                    }
+                    String[] phoneProjection = new String[]{ContactsContract.CommonDataKinds.Phone.NUMBER};
+                    Cursor phoneCursor = getApplicationContext().getContentResolver().query(contactUri, phoneProjection,
+                            null, null, null);
+                    if(phoneCursor != null && phoneCursor.moveToFirst()) {
+                        int phoneIndex = phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+                        String phoneNo = phoneCursor.getString(phoneIndex);
+                        newContact[1] = phoneNo;
+                        if(!contacts.contains(newContact)) {
+                            contacts.add(newContact);
+                            text = name + " has been added to this event";
+                            Toast toast = Toast.makeText(context, text, duration);
+                            toast.show();
+                        } else {
+                            text = "That contact has already been invited to this event";
+                            Toast toast = Toast.makeText(context, text, duration);
+                            toast.show();
+                        }
+                    }
+
+
+
+                }
         }
     }
-
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
