@@ -7,6 +7,10 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * This class loads the files from movie.txt and events.txt and generates movie and event objects
+ * which will then be added into the application. The text files are stored in the assets directory
+ */
 public class FileLoader {
     private Context mContext;
     InputStream eventFileName, movieFileName;

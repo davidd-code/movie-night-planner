@@ -2,34 +2,30 @@ package me.daviddoan.planner.view;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
-
-import java.text.DateFormat;
-import java.util.Calendar;
 
 import me.daviddoan.planner.R;
 import me.daviddoan.planner.model.EventImpl;
 import me.daviddoan.planner.model.EventModel;
 
+/**
+ * This class is used when the user clicks on an event in the list of events from the main activity.
+ * The dialog will also allow the user to edit the details of the event including the contacts
+ * invited and the movie associated with the event.
+ */
 public class EditEventDialog extends AppCompatDialogFragment {
     public static final int REQUEST_CODE = 111;
     private EditText edit_eventTitle, edit_eventVenue, edit_eventLocation;
@@ -80,7 +76,7 @@ public class EditEventDialog extends AppCompatDialogFragment {
         contactsBtn = view.findViewById(R.id.contactsBtn);
         deleteEventBtn = view.findViewById(R.id.deleteEventBtn);
 
-
+        // set up onclick listeners
         edit_startDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,7 +85,6 @@ public class EditEventDialog extends AppCompatDialogFragment {
                 startDatePicker.show(myContext.getSupportFragmentManager(), "Edit Date");
             }
         });
-
         edit_endDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -139,15 +134,20 @@ public class EditEventDialog extends AppCompatDialogFragment {
         deleteEventBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // alert the user with a warning before removing the event
                 new AlertDialog.Builder(getContext())
                         .setTitle("Delete Event?")
                         .setMessage("This action is permanent and cannot be undone")
                         .setIcon(android.R.drawable.ic_dialog_alert)
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-
+                        .setPositiveButton(android.R.string.yes,
+                                new DialogInterface.OnClickListener() {
+                            // If user clicks ok on warning dialog, remove event from the list
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                Toast.makeText(getContext(), "Event Deleted", Toast.LENGTH_SHORT).show();
-                                EventImpl eventToDelete = EventModel.getInstance().getEventFromId(getArguments().getString("ID"));
+                                Toast.makeText(getContext(), "Event Deleted",
+                                        Toast.LENGTH_SHORT).show();
+                                EventImpl eventToDelete =
+                                        EventModel.getInstance()
+                                                .getEventFromId(getArguments().getString("ID"));
                                 EventModel.getInstance().getController().deleteEvent(eventToDelete);
                                 dismiss();
                             }})
@@ -203,8 +203,6 @@ public class EditEventDialog extends AppCompatDialogFragment {
     public TextView getActiveTextView() {
         return this.activeTextView;
     }
-
-
 
     public interface EditEventDialogListener {
         void applyUpdate(String title, String startDate, String endDate, String venue, String location, String movieTitle);

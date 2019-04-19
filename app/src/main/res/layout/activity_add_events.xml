@@ -171,7 +171,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/locationEditText"
         android:layout_marginTop="5dp"
-        android:text="@string/edit_attendees"
+        android:text="@string/add_attendee"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/endTimeTextView" />
 

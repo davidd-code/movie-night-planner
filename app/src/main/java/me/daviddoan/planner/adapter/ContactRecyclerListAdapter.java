@@ -12,6 +12,9 @@ import java.util.ArrayList;
 
 import me.daviddoan.planner.R;
 
+/**
+ * This class is used for the recycler list which will display the list of contacts for each event
+ */
 public class ContactRecyclerListAdapter extends RecyclerView.Adapter<ContactRecyclerListAdapter.RecyclerViewHolder>{
     private ArrayList<String[]> mContactList;
     private ContactRecyclerListListener mContactRecyclerListListener;
@@ -21,7 +24,7 @@ public class ContactRecyclerListAdapter extends RecyclerView.Adapter<ContactRecy
         this.mContactRecyclerListListener = listener;
     }
 
-
+    // Generates the view for each item
     public static class RecyclerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public ImageView mImageView;
         public TextView mTextView1;
@@ -66,11 +69,7 @@ public class ContactRecyclerListAdapter extends RecyclerView.Adapter<ContactRecy
         return mContactList.size();
     }
 
-//    @Override
-//    public int getItemCount() {
-//        return mEventList.size();
-//    }
-
+    // Interface used to set up onclicklistener for each contact item
     public interface ContactRecyclerListListener {
         void onContactClick(int position);
     }

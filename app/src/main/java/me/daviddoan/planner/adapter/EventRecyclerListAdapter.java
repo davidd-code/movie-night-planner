@@ -13,6 +13,10 @@ import java.util.ArrayList;
 import me.daviddoan.planner.R;
 import me.daviddoan.planner.model.EventImpl;
 
+/**
+ * This class is the adapter for the event recycler list. It will also set the onclicklisteners
+ * for each event item so that an edit dialog will open when an event is clicked.
+ */
 public class EventRecyclerListAdapter extends RecyclerView.Adapter<EventRecyclerListAdapter.RecyclerViewHolder>{
     private ArrayList<EventImpl> mEventList;
     private EventRecyclerListListener mEventRecyclerListListener;
@@ -29,6 +33,7 @@ public class EventRecyclerListAdapter extends RecyclerView.Adapter<EventRecycler
         private TextView mEventVenueTextView;
         private TextView mEventStartDateTextView;
         private TextView mEventStartTimeTextView;
+        private TextView mNumAttendeesTextView;
 
         EventRecyclerListListener eventRecyclerListListener;
 
@@ -39,6 +44,7 @@ public class EventRecyclerListAdapter extends RecyclerView.Adapter<EventRecycler
             mEventVenueTextView = itemView.findViewById(R.id.eventVenueTextView);
             mEventStartDateTextView = itemView.findViewById(R.id.startDateDisplay);
             mEventStartTimeTextView = itemView.findViewById(R.id.startTimeTextView);
+            mNumAttendeesTextView = itemView.findViewById(R.id.numAttendeesTextView);
             this.eventRecyclerListListener = listener;
             itemView.setOnClickListener(this);
 
@@ -67,6 +73,8 @@ public class EventRecyclerListAdapter extends RecyclerView.Adapter<EventRecycler
         recyclerViewHolder.mEventVenueTextView.setText(currentItem.getVenue());
         recyclerViewHolder.mEventStartDateTextView.setText(currentItem.getStartDateOnly());
         recyclerViewHolder.mEventStartTimeTextView.setText(currentItem.getStartTimeOnly());
+        String numAttendees = Integer.toString(currentItem.getAttendees().size());
+        recyclerViewHolder.mNumAttendeesTextView.setText(numAttendees + " attendees");
         if(currentItem.getMovie() != null) {
             switch(currentItem.getMovie().getTitle()) {
                 case "Blade Runner":
@@ -82,7 +90,7 @@ public class EventRecyclerListAdapter extends RecyclerView.Adapter<EventRecycler
     public int getItemCount() {
         return mEventList.size();
     }
-
+    // interface used to set up onclicklistener
     public interface EventRecyclerListListener {
         void onEventClick(int position);
     }

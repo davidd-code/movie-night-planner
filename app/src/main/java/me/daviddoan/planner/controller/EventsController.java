@@ -9,6 +9,9 @@ import me.daviddoan.planner.model.EventModel;
 import me.daviddoan.planner.model.MovieImpl;
 import me.daviddoan.planner.model.interfaces.Movie;
 
+/**
+ * This class is responsible for making changes to the EventModel
+ */
 public class EventsController {
     boolean sorted, sortedAsc;
 

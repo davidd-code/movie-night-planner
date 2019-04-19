@@ -9,6 +9,9 @@ import me.daviddoan.planner.adapter.EventRecyclerListAdapter;
 import me.daviddoan.planner.controller.EventsController;
 import me.daviddoan.planner.view.MainActivity;
 
+/**
+ * Singleton class which can be used globally by any of the classes in the project
+ */
 public class EventModel {
     private static EventModel firstInstance = null;
     private ArrayList<EventImpl> eventList;

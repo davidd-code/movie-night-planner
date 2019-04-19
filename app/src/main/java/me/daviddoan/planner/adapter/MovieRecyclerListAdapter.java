@@ -13,6 +13,9 @@ import java.util.ArrayList;
 import me.daviddoan.planner.R;
 import me.daviddoan.planner.model.MovieImpl;
 
+/**
+ * This is the movie reycler list adapter which shows the list of movies that the user can select
+ */
 public class MovieRecyclerListAdapter extends RecyclerView.Adapter<MovieRecyclerListAdapter.RecyclerViewHolder>{
     private ArrayList<MovieImpl> mMovieList;
     private MovieRecyclerListListener mRecyclerListener;

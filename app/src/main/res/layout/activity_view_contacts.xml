@@ -6,10 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".view.ViewContactsActivity">
 
+    <include
+        android:id="@+id/my_toolbar"
+        layout="@layout/activity_app_bar"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/contactsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/my_toolbar"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="0dp"
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="8dp" />
 
@@ -17,11 +25,8 @@
         android:id="@+id/edit_addContactsBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="138dp"
-        android:layout_marginEnd="138dp"
+        android:layout_centerHorizontal="true"
         android:layout_marginBottom="45dp"
-        android:text="@string/edit_attendees" />
+        android:text="@string/add_attendee" />
 </RelativeLayout>

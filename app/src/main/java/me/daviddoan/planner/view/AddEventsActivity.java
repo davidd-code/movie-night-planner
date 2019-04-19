@@ -30,6 +30,11 @@ import me.daviddoan.planner.controller.EventsController;
 import me.daviddoan.planner.model.EventModel;
 import me.daviddoan.planner.model.MovieImpl;
 
+/**
+ * This activity will be caled from the main activity when the user clicks on tthe "add event"
+ * button. It allows the user to specify the details of the event as well as the contacts and
+ * movie associated with the event before it is created
+ */
 public class AddEventsActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
     public static final int SELECT_MOVIE = 999;

@@ -26,6 +26,11 @@ import me.daviddoan.planner.model.EventModel;
 import me.daviddoan.planner.model.FileLoader;
 import me.daviddoan.planner.viewmodel.AppViewModel;
 
+/**
+ * This class is the main activity that the app will be launched from. It will display the list
+ * of events that have been added to the system. This class uses the EventRecyclerListAdapter
+ * class for the recycler list.
+ */
 public class MainActivity extends AppCompatActivity implements
         EventRecyclerListAdapter.EventRecyclerListListener, EditEventDialog.EditEventDialogListener,
         DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
@@ -37,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // Use the custom toolbar
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
@@ -45,11 +51,12 @@ public class MainActivity extends AppCompatActivity implements
         AppViewModel mAppViewModel;
         RecyclerView.LayoutManager mLayoutManager;
 
-
+        // Set button for adding new events to the list of events
         ImageView addEventsBtn = (ImageView)findViewById(R.id.addEventsBtn);
         addEventsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Open the add events activity when this button is clicked
                 Intent startIntent = new Intent(getApplicationContext(), AddEventsActivity.class);
                 startActivity(startIntent);
             }
@@ -59,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements
         mAppViewModel = ViewModelProviders.of(this).get(AppViewModel.class);
         mAppViewModel.init();
 
+        // Set up recycler list
         EventModel.getInstance().setEventRecyclerViewAdapter(this);
         mRecyclerView = findViewById(R.id.eventsRecyclerView);
         mRecyclerView.setHasFixedSize(true);
@@ -73,11 +81,12 @@ public class MainActivity extends AppCompatActivity implements
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
 
-        // Sorting events by date
+        // Set button to sort events by date
         Button sortBtn = (Button) findViewById(R.id.sortBtn);
         sortBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // sorts the list in ascending or descending order when button clicked
                 if(EventModel.getInstance().getController().isListSortedAsc()) {
                     EventModel.getInstance().getController().sortDescending();
                 } else {
@@ -87,25 +96,33 @@ public class MainActivity extends AppCompatActivity implements
         });
     }
 
+    // When an event item in the recycler list is clicked
     @Override
     public void onEventClick(int position) {
         openEditDialog(position);
     }
 
+    // Opens the edit event dialog which shows the details of each event
     public void openEditDialog(int position) {
-
         editEventDialog = new EditEventDialog();
         // Sends the details of the current event to the edit dialog
         args = new Bundle();
+        // Sends information of the even clicked to the edit event dialog
         editEventId = EventModel.getInstance().getEventInstance(position).getId();
         args.putString("ID", EventModel.getInstance().getEventInstance(position).getId());
-        args.putString("Event Title", EventModel.getInstance().getEventInstance(position).getTitle());
-        args.putString("Start Date", EventModel.getInstance().getEventInstance(position).getStartDateString());
-        args.putString("End Date", EventModel.getInstance().getEventInstance(position).getEndDateString());
+        args.putString("Event Title",
+                EventModel.getInstance().getEventInstance(position).getTitle());
+        args.putString("Start Date",
+                EventModel.getInstance().getEventInstance(position).getStartDateString());
+        args.putString("End Date",
+                EventModel.getInstance().getEventInstance(position).getEndDateString());
         args.putString("Venue", EventModel.getInstance().getEventInstance(position).getVenue());
-        args.putString("Location", EventModel.getInstance().getEventInstance(position).getLocation());
+        args.putString("Location",
+                EventModel.getInstance().getEventInstance(position).getLocation());
+        // If the event clicked has a movie associated with it
         if(EventModel.getInstance().getEventInstance(position).getMovie() != null) {
-            args.putString("Movie", EventModel.getInstance().getEventInstance(position).getMovie().getTitle());
+            args.putString("Movie",
+                    EventModel.getInstance().getEventInstance(position).getMovie().getTitle());
         }
 
         editEventDialog.setArguments(args);
@@ -115,7 +132,9 @@ public class MainActivity extends AppCompatActivity implements
 
     // applies update to the event selected
     @Override
-    public void applyUpdate(String title, String startDate, String endDate, String venue, String location, String movieTitle) {
+    public void applyUpdate
+    (String title, String startDate, String endDate, String venue,
+     String location, String movieTitle) {
         EventsController controller = new EventsController();
         controller.editEvent(editEventId,title, startDate, endDate, venue, location, movieTitle);
     }

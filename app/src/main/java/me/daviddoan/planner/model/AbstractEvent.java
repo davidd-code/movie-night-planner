@@ -32,6 +32,10 @@ public abstract class AbstractEvent implements Event {
         attendees = new ArrayList<>();
     }
 
+    /**
+     * Accepts a calendar and string object and then returns a calendar object which uses the string
+     * to set the year, month, day etc
+     */
     public Calendar setCalendarFromString(Calendar calendar, String date) {
         String[] startDateStringArray = date.split(" ");
         String[] startDateArray = startDateStringArray[0].split("/");
@@ -51,6 +55,9 @@ public abstract class AbstractEvent implements Event {
         return calendar;
     }
 
+    /**
+     * Adds the attendee to the list of attendees
+     */
     public void addAttendee(String name, String number) {
         String[] newContact = new String[2];
         newContact[0] = name;
@@ -61,6 +68,11 @@ public abstract class AbstractEvent implements Event {
         }
     }
 
+    /**
+     * Uses the phone number that is passed into the function to look up the list of attendees
+     * invited to the event. This function will return true if the attendee is already invited
+     * and false if not
+     */
     public boolean checkAttendee(String number) {
         boolean check = false;
         for(String[] element: attendees) {
@@ -75,6 +87,9 @@ public abstract class AbstractEvent implements Event {
         return this.attendees;
     }
 
+    /**
+     * Sets the recycler list adapter for the contacts invited
+     */
     public void setContactRecyclerViewAdapter(ViewContactsActivity activity) {
         mContactAdapter = new ContactRecyclerListAdapter(getAttendees(), activity);
     }
@@ -82,8 +97,6 @@ public abstract class AbstractEvent implements Event {
     public RecyclerView.Adapter getmContactAdapter() {
         return this.mContactAdapter;
     }
-
-
 
     public void setAttendees(ArrayList<String[]> attendees) {
         this.attendees = attendees;
