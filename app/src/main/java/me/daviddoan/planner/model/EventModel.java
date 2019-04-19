@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import java.util.ArrayList;
 
 import me.daviddoan.planner.adapter.EventRecyclerListAdapter;
+import me.daviddoan.planner.controller.EventsController;
 import me.daviddoan.planner.view.MainActivity;
 
 public class EventModel {
@@ -13,9 +14,11 @@ public class EventModel {
     private ArrayList<EventImpl> eventList;
     private ArrayList<MovieImpl> movieList;
     private RecyclerView.Adapter mEventAdapter;
+    private EventsController controller;
 
     private EventModel(){
         if(firstInstance == null) {
+            controller = new EventsController();
             eventList = new ArrayList<>();
             movieList = new ArrayList<>();
         }
@@ -33,6 +36,9 @@ public class EventModel {
         mEventAdapter = new EventRecyclerListAdapter(eventList, activity);
     }
 
+    public EventsController getController() {
+        return this.controller;
+    }
 
 
     public MutableLiveData<ArrayList<EventImpl>> getEventList() {
@@ -43,15 +49,6 @@ public class EventModel {
         return data;
     }
 
-    public ArrayList<String[]> getContactsFromId(String id) {
-        ArrayList<String[]> attendees = new ArrayList<>();
-        for(EventImpl event: this.getEventList().getValue()) {
-            if(event.getId().equals(id)) {
-                attendees = event.getAttendees();
-            }
-        }
-        return attendees;
-    }
 
     public EventImpl getEventFromId(String id) {
         EventImpl matchingEvent = null;
@@ -84,26 +81,9 @@ public class EventModel {
         return this.getEventList().getValue().get(position);
     }
 
-    public void addEvent(EventImpl newEvent) {
-        this.eventList.add(newEvent);
-        mEventAdapter.notifyDataSetChanged();
-    }
 
-    public void editEvent(String id, String title, String startDate, String endDate, String venue, String location, String movieTitle) {
-        for(EventImpl eventElement: eventList) {
-            if(eventElement.getId().equals(id)) {
-                eventElement.setTitle(title);
-                eventElement.setStartDate(startDate);
-                eventElement.setEndDate(endDate);
-                eventElement.setVenue(venue);
-                eventElement.setLocation(location);
-                for(MovieImpl movieElement: movieList) {
-                    if(movieElement.getTitle().equals(movieTitle)) {
-                        eventElement.setMovie(movieElement);
-                    }
-                }
-            }
-        }
+
+    public void notifyEventAdapter() {
         mEventAdapter.notifyDataSetChanged();
     }
 }

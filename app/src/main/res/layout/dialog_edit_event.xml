@@ -134,4 +134,14 @@
         android:layout_marginTop="11dp"
         android:text="@string/edit_attendees" />
 
+    <Button
+        android:id="@+id/deleteEventBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edit_eventMovieBtn"
+        android:layout_alignStart="@+id/edit_eventTitle"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="11dp"
+        android:text="@string/delete" />
+
 </RelativeLayout>

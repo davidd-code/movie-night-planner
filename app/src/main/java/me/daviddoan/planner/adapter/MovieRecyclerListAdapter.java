@@ -1,7 +1,5 @@
 package me.daviddoan.planner.adapter;
 
-import android.content.Intent;
-import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,7 +11,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import me.daviddoan.planner.R;
-import me.daviddoan.planner.model.EventImpl;
 import me.daviddoan.planner.model.MovieImpl;
 
 public class MovieRecyclerListAdapter extends RecyclerView.Adapter<MovieRecyclerListAdapter.RecyclerViewHolder>{
@@ -35,7 +32,7 @@ public class MovieRecyclerListAdapter extends RecyclerView.Adapter<MovieRecycler
         private RecyclerViewHolder(@NonNull View itemView, MovieRecyclerListListener listener) {
             super(itemView);
             mImageView = itemView.findViewById(R.id.moviePosterImageView);
-            mTextView1 = itemView.findViewById(R.id.movieTitleTextView);
+            mTextView1 = itemView.findViewById(R.id.eventTitleTextView);
             mTextView2 = itemView.findViewById(R.id.movieYearTextView);
             itemView.setOnClickListener(this);
             this.movieRecyclerListListener = listener;

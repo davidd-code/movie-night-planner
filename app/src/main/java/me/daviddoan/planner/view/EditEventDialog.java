@@ -21,11 +21,14 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.util.Calendar;
 
 import me.daviddoan.planner.R;
+import me.daviddoan.planner.model.EventImpl;
+import me.daviddoan.planner.model.EventModel;
 
 public class EditEventDialog extends AppCompatDialogFragment {
     public static final int REQUEST_CODE = 111;
@@ -34,7 +37,7 @@ public class EditEventDialog extends AppCompatDialogFragment {
     private EditEventDialogListener listener;
     private TextView activeTextView;
     private FragmentActivity myContext;
-    private Button contactsBtn;
+    private Button contactsBtn, deleteEventBtn;
 
 
     @Override
@@ -75,6 +78,7 @@ public class EditEventDialog extends AppCompatDialogFragment {
         edit_movieDisplay = view.findViewById(R.id.edit_movieDisplay);
         Button edit_eventMovieBtn = view.findViewById(R.id.edit_eventMovieBtn);
         contactsBtn = view.findViewById(R.id.contactsBtn);
+        deleteEventBtn = view.findViewById(R.id.deleteEventBtn);
 
 
         edit_startDate.setOnClickListener(new View.OnClickListener() {
@@ -131,6 +135,26 @@ public class EditEventDialog extends AppCompatDialogFragment {
             }
         });
 
+        // Set delete button onclick listener
+        deleteEventBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Delete Event?")
+                        .setMessage("This action is permanent and cannot be undone")
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                Toast.makeText(getContext(), "Event Deleted", Toast.LENGTH_SHORT).show();
+                                EventImpl eventToDelete = EventModel.getInstance().getEventFromId(getArguments().getString("ID"));
+                                EventModel.getInstance().getController().deleteEvent(eventToDelete);
+                                dismiss();
+                            }})
+                        .setNegativeButton(android.R.string.no, null).show();
+            }
+        });
+
         // Set view items to the values of the event that is being edited
         edit_eventTitle.setText(getArguments().getString("Event Title"));
         edit_eventVenue.setText(getArguments().getString("Venue"));
@@ -180,9 +204,6 @@ public class EditEventDialog extends AppCompatDialogFragment {
         return this.activeTextView;
     }
 
-    public void showNewDate(TextView textView, String dateString) {
-        textView.setText(dateString);
-    }
 
 
     public interface EditEventDialogListener {

@@ -14,4 +14,6 @@
     <string name="edit_attendees">Edit Attendees</string>
     <string name="margin_top">15dp</string>
     <string name="add_attendee">Add Attendee</string>
+    <string name="sort">SORT</string>
+    <string name="delete">Delete Event</string>
 </resources>

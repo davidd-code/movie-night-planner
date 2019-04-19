@@ -117,6 +117,22 @@ public abstract class AbstractEvent implements Event {
         return format.format(this.startDate.getTime());
     }
 
+    public Calendar getStartDate() {
+        return this.startDate;
+    }
+
+    public String getStartDateOnly() {
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        format.setTimeZone(this.startDate.getTimeZone());
+        return format.format(this.startDate.getTime());
+    }
+
+    public String getStartTimeOnly() {
+        SimpleDateFormat format = new SimpleDateFormat("hh:mm a");
+        format.setTimeZone(this.startDate.getTimeZone());
+        return format.format(this.startDate.getTime());
+    }
+
     @Override
     public void setStartDate(String startDate) {
         setCalendarFromString(this.startDate, startDate);

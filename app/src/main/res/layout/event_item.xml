@@ -18,27 +18,43 @@
             android:padding="2dp" />
 
         <TextView
-            android:id="@+id/movieTitleTextView"
+            android:id="@+id/eventTitleTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_marginTop="0dp"
             android:layout_toEndOf="@+id/moviePosterImageView"
-            android:text="Line 1"
             android:textColor="@android:color/black"
             android:textSize="20sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/eventVenueTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/movieTitleTextView"
+            android:layout_below="@+id/eventTitleTextView"
             android:layout_marginStart="0dp"
             android:layout_marginTop="1dp"
             android:layout_toEndOf="@+id/moviePosterImageView"
-            android:text="Line2"
             android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/startDateDisplay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="1dp"
+            android:layout_marginEnd="1dp" />
+
+        <TextView
+            android:id="@+id/startTimeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/eventVenueTextView"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="1dp"
+            android:layout_marginEnd="1dp" />
     </RelativeLayout>
 
 </android.support.v7.widget.CardView>

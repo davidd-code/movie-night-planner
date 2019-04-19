@@ -12,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -48,6 +49,9 @@ public class AddEventsActivity extends AppCompatActivity implements DatePickerDi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_events);
 
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+
         // Assigning the text views inside of this activity
         titleEditText = (EditText) findViewById(R.id.titleEditText);
         startTimeTextView = (TextView)findViewById(R.id.startTimeTextView);
@@ -61,19 +65,22 @@ public class AddEventsActivity extends AppCompatActivity implements DatePickerDi
         movieSelectedTextView = (TextView) findViewById(R.id.movieSelectedTextView);
         Button saveEventBtn = (Button) findViewById(R.id.saveEventButton);
 
+        // Calendar variables to be usedt
         startDate = Calendar.getInstance();
         endDate = Calendar.getInstance();
         eventsController = new EventsController();
 
+        // Setting onclicklistener for start time
         startTimeTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Opens time picker dialog
                 setActiveTimeTextView(startTimeTextView);
                 DialogFragment startTimePicker = new TimePickerFragment();
                 startTimePicker.show(getSupportFragmentManager(), "Start Time");
             }
         });
-
+        // Setting onclicklistener for start date
         startDateTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,7 +89,7 @@ public class AddEventsActivity extends AppCompatActivity implements DatePickerDi
                 startDatePicker.show(getSupportFragmentManager(), "Start Date");
             }
         });
-
+        // setting onclicklistener for endtime
         endTimeTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,7 +98,7 @@ public class AddEventsActivity extends AppCompatActivity implements DatePickerDi
                 startTimePicker.show(getSupportFragmentManager(), "Start Time");
             }
         });
-
+        // setting onclicklistener for end date
         endDateTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,15 +107,16 @@ public class AddEventsActivity extends AppCompatActivity implements DatePickerDi
                 endDatePicker.show(getSupportFragmentManager(), "End Date");
             }
         });
-
+        // setting onclicklistener for selecting movie button
         selectMovieBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // opens new activity to select the movie associated with the current event
                 movieIntent = new Intent(getApplicationContext(), SelectMovieActivity.class);
                 startActivityForResult(movieIntent, SELECT_MOVIE);
             }
         });
-
+        // opens new activity to select and invite attendees to current event
         addContactBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -117,7 +125,7 @@ public class AddEventsActivity extends AppCompatActivity implements DatePickerDi
                 startActivityForResult(i, SELECT_CONTACT);
             }
         });
-
+        // saves the event to the list of events
         saveEventBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -143,7 +151,8 @@ public class AddEventsActivity extends AppCompatActivity implements DatePickerDi
                         movie = null;
                 }
 
-                eventsController.addEvent(id, title, startDateString, endDateString, venue, location, movie, contacts);
+//                eventsController.addEvent(id, title, startDateString, endDateString, venue, location, movie, contacts);
+                EventModel.getInstance().getController().addEvent(id, title, startDateString, endDateString, venue, location, movie, contacts);
                 finish();
             }
         });
@@ -153,25 +162,26 @@ public class AddEventsActivity extends AppCompatActivity implements DatePickerDi
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         switch(requestCode) {
+            // sets the movie based on result from intent
             case SELECT_MOVIE:
                 if(resultCode == Activity.RESULT_OK) {
                     String text = data.getStringExtra("Movie Title");
                     movieSelectedTextView.setText(text);
                 }
                 break;
+            // adds contact based on which one was picked from the intent
             case SELECT_CONTACT:
                 if(resultCode == Activity.RESULT_OK) {
                     String[] newContact = new String[2];
                     Context context = getApplicationContext();
                     CharSequence text;
                     int duration = Toast.LENGTH_SHORT;
-//                    Works for phone / name only
                     Uri contactUri = data.getData();
                     String[] nameProjection = new String[]{ContactsContract.Contacts.DISPLAY_NAME};
                     Cursor nameCursor = getApplicationContext().getContentResolver().query(contactUri, nameProjection,
                             null, null, null);
                     String name="";
-//                     If the cursor returned is valid, get the phone number
+//                     If the cursor returned is valid, get the phone number and name of contact
                     if(nameCursor != null && nameCursor.moveToFirst()) {
                         name = nameCursor.getString(nameCursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
                         newContact[0] = name;
@@ -183,12 +193,14 @@ public class AddEventsActivity extends AppCompatActivity implements DatePickerDi
                         int phoneIndex = phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
                         String phoneNo = phoneCursor.getString(phoneIndex);
                         newContact[1] = phoneNo;
+                        // if this contact has not already been added to this event
                         if(!contacts.contains(newContact)) {
                             contacts.add(newContact);
                             text = name + " has been added to this event";
                             Toast toast = Toast.makeText(context, text, duration);
                             toast.show();
                         } else {
+                            // display message  indicating that the contact selected already invited
                             text = "That contact has already been invited to this event";
                             Toast toast = Toast.makeText(context, text, duration);
                             toast.show();
@@ -200,6 +212,7 @@ public class AddEventsActivity extends AppCompatActivity implements DatePickerDi
                 }
         }
     }
+    // sets the date after user has input from datepicker
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -219,7 +232,7 @@ public class AddEventsActivity extends AppCompatActivity implements DatePickerDi
         }
         activeDateTextView.setText(displayDate);
     }
-
+    // sets the textview that is currently active
     public void setActiveDateTextView(TextView textView) {
         this.activeDateTextView = textView;
     }
@@ -228,7 +241,7 @@ public class AddEventsActivity extends AppCompatActivity implements DatePickerDi
         this.activeTimeTextView = textView;
     }
 
-
+    // sets the time from the timepicker dialog
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss a");

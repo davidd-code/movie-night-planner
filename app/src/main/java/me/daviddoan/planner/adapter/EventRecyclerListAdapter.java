@@ -24,16 +24,21 @@ public class EventRecyclerListAdapter extends RecyclerView.Adapter<EventRecycler
 
 
     public static class RecyclerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public ImageView mImageView;
-        public TextView mTextView1;
-        public TextView mTextView2;
+        private ImageView mPosterImageView;
+        private TextView mEventTitleTextView;
+        private TextView mEventVenueTextView;
+        private TextView mEventStartDateTextView;
+        private TextView mEventStartTimeTextView;
+
         EventRecyclerListListener eventRecyclerListListener;
 
         public RecyclerViewHolder(@NonNull View itemView, EventRecyclerListListener listener) {
             super(itemView);
-            mImageView = itemView.findViewById(R.id.moviePosterImageView);
-            mTextView1 = itemView.findViewById(R.id.movieTitleTextView);
-            mTextView2 = itemView.findViewById(R.id.textView2);
+            mPosterImageView = itemView.findViewById(R.id.moviePosterImageView);
+            mEventTitleTextView = itemView.findViewById(R.id.eventTitleTextView);
+            mEventVenueTextView = itemView.findViewById(R.id.eventVenueTextView);
+            mEventStartDateTextView = itemView.findViewById(R.id.startDateDisplay);
+            mEventStartTimeTextView = itemView.findViewById(R.id.startTimeTextView);
             this.eventRecyclerListListener = listener;
             itemView.setOnClickListener(this);
 
@@ -58,15 +63,17 @@ public class EventRecyclerListAdapter extends RecyclerView.Adapter<EventRecycler
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewHolder recyclerViewHolder, int i) {
         EventImpl currentItem = mEventList.get(i);
-        recyclerViewHolder.mTextView1.setText(currentItem.getTitle());
-        recyclerViewHolder.mTextView2.setText(currentItem.getVenue());
+        recyclerViewHolder.mEventTitleTextView.setText(currentItem.getTitle());
+        recyclerViewHolder.mEventVenueTextView.setText(currentItem.getVenue());
+        recyclerViewHolder.mEventStartDateTextView.setText(currentItem.getStartDateOnly());
+        recyclerViewHolder.mEventStartTimeTextView.setText(currentItem.getStartTimeOnly());
         if(currentItem.getMovie() != null) {
             switch(currentItem.getMovie().getTitle()) {
                 case "Blade Runner":
-                    recyclerViewHolder.mImageView.setImageResource(R.drawable.blade_runner1982);
+                    recyclerViewHolder.mPosterImageView.setImageResource(R.drawable.blade_runner1982);
                     break;
                 case "Hackers":
-                    recyclerViewHolder.mImageView.setImageResource(R.drawable.hackers);
+                    recyclerViewHolder.mPosterImageView.setImageResource(R.drawable.hackers);
             }
         }
     }

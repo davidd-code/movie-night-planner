@@ -8,7 +8,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TimePicker;
@@ -35,13 +37,13 @@ public class MainActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
 
         RecyclerView.Adapter mAdapter;
         RecyclerView mRecyclerView;
         AppViewModel mAppViewModel;
         RecyclerView.LayoutManager mLayoutManager;
-
 
 
         ImageView addEventsBtn = (ImageView)findViewById(R.id.addEventsBtn);
@@ -56,13 +58,6 @@ public class MainActivity extends AppCompatActivity implements
         // Set up ViewModel object
         mAppViewModel = ViewModelProviders.of(this).get(AppViewModel.class);
         mAppViewModel.init();
-//        mAppViewModel.getEventList().observe(this, new Observer<ArrayList<EventImpl>>() {
-//            @Override
-//            public void onChanged(@Nullable ArrayList<EventImpl> events) {
-//                mAdapter.notifyDataSetChanged();
-//            }
-//        });
-
 
         EventModel.getInstance().setEventRecyclerViewAdapter(this);
         mRecyclerView = findViewById(R.id.eventsRecyclerView);
@@ -77,6 +72,19 @@ public class MainActivity extends AppCompatActivity implements
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
+
+        // Sorting events by date
+        Button sortBtn = (Button) findViewById(R.id.sortBtn);
+        sortBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(EventModel.getInstance().getController().isListSortedAsc()) {
+                    EventModel.getInstance().getController().sortDescending();
+                } else {
+                    EventModel.getInstance().getController().sortAscending();
+                }
+            }
+        });
     }
 
     @Override
@@ -87,8 +95,8 @@ public class MainActivity extends AppCompatActivity implements
     public void openEditDialog(int position) {
 
         editEventDialog = new EditEventDialog();
+        // Sends the details of the current event to the edit dialog
         args = new Bundle();
-//        Bundle args = new Bundle();
         editEventId = EventModel.getInstance().getEventInstance(position).getId();
         args.putString("ID", EventModel.getInstance().getEventInstance(position).getId());
         args.putString("Event Title", EventModel.getInstance().getEventInstance(position).getTitle());
@@ -101,16 +109,18 @@ public class MainActivity extends AppCompatActivity implements
         }
 
         editEventDialog.setArguments(args);
-
+        // open edit dialog
         editEventDialog.show(getSupportFragmentManager(), "Edit Event");
     }
 
+    // applies update to the event selected
     @Override
     public void applyUpdate(String title, String startDate, String endDate, String venue, String location, String movieTitle) {
         EventsController controller = new EventsController();
         controller.editEvent(editEventId,title, startDate, endDate, venue, location, movieTitle);
     }
 
+    // receives the user input from the edit dialog and updates the time of the event being editted
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -123,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements
         displayDate = dateFormat.format(calendar.getTime());
         editEventDialog.getActiveTextView().setText(displayDate);
     }
-
+    // same as function above
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss a");
