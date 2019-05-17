@@ -1,19 +1,31 @@
 <resources>
-    <string name="app_name">Movie Night Planner</string>
-    <string name="add_events">Add Event</string>
-    <string name="title">Title</string>
-    <string name="start_date">Start Date</string>
-    <string name="end_date">End Date</string>
-    <string name="set_time">Set Time</string>
-    <string name="set_date">Set Date</string>
-    <string name="venue">Venue</string>
-    <string name="location">Location</string>
-    <string name="select_movie">Select Movie</string>
-    <string name="save_event">Save Event</string>
-    <string name="cancel">Cancel</string>
-    <string name="edit_attendees">Edit Attendees</string>
-    <string name="margin_top">15dp</string>
-    <string name="add_attendee">Add Attendee</string>
-    <string name="sort">SORT</string>
-    <string name="delete">Delete Event</string>
+    <string name="app_name">Ass1</string>
+    <string name="choose_movie">Choose Movie</string>
+    <string name="new_event_title">Event Title</string>
+    <string name="new_event_venue">Venue Name</string>
+    <string name="select_start_date">Start Date</string>
+    <string name="select_end_date">End Date</string>
+    <string name="date_button_desc">Select Date Button</string>
+    <string name="location_button_desc">Location Button</string>
+    <string name="choose_movie_button_desc">Choose Movie Button</string>
+    <string name="add_event_button_desc">Add event button</string>
+    <string name="confirm_button">Confirm</string>
+    <string name="delete_button">Delete button</string>
+    <string name="phone">Phone Number</string>
+    <string name="contactName">Contact Name</string>
+    <string name="email">E-mail</string>
+    <string name="save_button_desc">save button</string>
+    <string name="invite_button_desc">invite button</string>
+    <string name="going">going</string>
+    <string name="num_placeholder">0</string>
+
+    <string name="Event">Event</string>
+    <string name="movie_list">Movies</string>
+    <string name="event_list">Events</string>
+    <string name="contacts">Choose Contacts</string>
+    <string name="ascending">ascending</string>
+    <string name="descending">descending</string>
+    <string name="save_close">Save and Close</string>
+
+    <string name="calendar_view">Calendar View</string>
 </resources>

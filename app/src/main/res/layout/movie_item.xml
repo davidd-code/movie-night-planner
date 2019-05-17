@@ -1,52 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/movieCardView"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="4dp"
-    app:cardCornerRadius="4dp">
+    android:layout_height="110dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="299dp"
-        android:layout_margin="4dp">
+        android:layout_height="match_parent"
+        android:layout_margin="4dp"
+        android:padding="2dp">
 
         <ImageView
-            android:id="@+id/moviePosterImageView"
-            android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:id="@+id/posterImage"
+            android:layout_width="66dp"
+            android:layout_height="100dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="0dp"
-            android:layout_marginTop="0dp"
-            android:padding="2dp" />
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="21dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="6dp"
+            android:src="@drawable/bladerunner1982" />
 
         <TextView
-            android:id="@+id/eventTitleTextView"
-            android:layout_width="match_parent"
+            android:id="@+id/movieTitle"
+            android:layout_width="202dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="0dp"
-            android:layout_marginBottom="20dp"
-            android:text="Line 1"
-            android:textAlignment="center"
-            android:textColor="@android:color/black"
-            android:textSize="20sp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="11dp"
+            android:layout_marginTop="29dp"
+            android:layout_marginEnd="105dp"
+            android:layout_toEndOf="@+id/posterImage"
+            android:text="Movie Title"
+            android:textSize="18sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/movieYearTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
+            android:id="@+id/movieYear"
+            android:layout_width="57dp"
+            android:layout_height="20dp"
+            android:layout_below="@+id/movieTitle"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginStart="0dp"
-            android:layout_marginBottom="0dp"
-            android:text="Line2"
-            android:textAlignment="center"
-            android:textSize="15sp" />
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="241dp"
+            android:layout_marginBottom="25dp"
+            android:layout_toEndOf="@+id/posterImage"
+            android:text="Year" />
+
+
     </RelativeLayout>
 
 </android.support.v7.widget.CardView>

@@ -1,72 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardCornerRadius="4dp"
-    android:layout_marginBottom="4dp">
+    android:layout_height="133dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp">
-
-        <ImageView
-            android:id="@+id/moviePosterImageView"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:padding="2dp" />
+        android:layout_height="match_parent"
+        android:layout_margin="4dp"
+        android:padding="2dp">
 
         <TextView
-            android:id="@+id/eventTitleTextView"
-            android:layout_width="wrap_content"
+            android:id="@+id/eventTitle"
+            android:layout_width="226dp"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="0dp"
-            android:layout_toEndOf="@+id/moviePosterImageView"
-            android:textColor="@android:color/black"
-            android:textSize="20sp"
+            android:layout_marginStart="7dp"
+            android:layout_marginTop="14dp"
+            android:text="@string/new_event_title"
+            android:textSize="18sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/eventVenueTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/eventTitleTextView"
-            android:layout_marginStart="0dp"
+            android:id="@+id/eventVenue"
+            android:layout_width="238dp"
+            android:layout_height="23dp"
+            android:layout_below="@+id/eventTitle"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="13dp"
+            android:layout_marginTop="3dp"
+            android:text="@string/new_event_venue"
+            android:textAlignment="textStart" />
+
+        <TextView
+            android:id="@+id/eventDate"
+            android:layout_width="238dp"
+            android:layout_height="23dp"
+            android:layout_below="@+id/eventVenue"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="13dp"
             android:layout_marginTop="1dp"
-            android:layout_toEndOf="@+id/moviePosterImageView"
-            android:textSize="15sp" />
+            android:text="@string/select_start_date"
+            android:textAlignment="textStart" />
 
         <TextView
-            android:id="@+id/startDateDisplay"
-            android:layout_width="wrap_content"
+            android:id="@+id/newMovie"
+            android:layout_width="238dp"
+            android:layout_height="23dp"
+            android:layout_below="@+id/eventDate"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="13dp"
+            android:layout_marginTop="1dp"
+            android:layout_marginBottom="14dp"
+            android:text="@string/choose_movie"
+            android:textAlignment="textStart" />
+
+        <TextView
+            android:id="@+id/numAttendees"
+            android:layout_width="47dp"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="0dp"
-            android:layout_marginEnd="0dp"
-            android:textSize="12sp" />
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="11dp"
+            android:layout_toStartOf="@+id/image_delete"
+            android:text="@string/num_placeholder"
+            android:textAlignment="center"
+            android:textSize="24sp" />
 
         <TextView
-            android:id="@+id/startTimeTextView"
+            android:id="@+id/goingLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/eventVenueTextView"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="-12dp"
-            android:layout_marginEnd="0dp"
+            android:layout_below="@+id/numAttendees"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="20dp"
+            android:layout_toStartOf="@+id/image_delete"
+            android:text="@string/going"
+            android:textAlignment="center"
             android:textSize="12sp" />
 
-        <TextView
-            android:id="@+id/numAttendeesTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <ImageView
+            android:id="@+id/image_delete"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="33dp"
-            android:layout_marginEnd="-1dp"
-            android:textSize="12sp" />
+            android:layout_marginTop="45dp"
+            android:layout_marginEnd="13dp"
+            android:contentDescription="@string/delete_button"
+            android:src="@drawable/ic_delete" />
+
+
     </RelativeLayout>
 
 </android.support.v7.widget.CardView>
