@@ -174,6 +174,11 @@ public class AddEditEventActivity extends AppCompatActivity implements GetLocati
 
     public void openDialog() {
         GetLocationDialog locationDialog = new GetLocationDialog();
+        Bundle args = new Bundle();
+        String[] location = currentEvent.getLocation().split(",");
+        args.putString("latitude", location[0]);
+        args.putString("longitude", location[1]);
+        locationDialog.setArguments(args);
         locationDialog.show(getSupportFragmentManager(), "get location");
     }
 

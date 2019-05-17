@@ -44,6 +44,9 @@ public class GetLocationDialog extends AppCompatDialogFragment {
 
         lat_Text = view.findViewById(R.id.location_lat);
         long_Text = view.findViewById(R.id.location_long);
+
+        lat_Text.setText(getArguments().getString("latitude"));
+        long_Text.setText(getArguments().getString("longitude"));
         return builder.create();
     }
 
