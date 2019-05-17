@@ -24,7 +24,7 @@ public class AddEventOnClickListener implements View.OnClickListener {
     public void onClick(View v) {
         int index = events.size();
 
-        events.add(index, new EventImpl());
+//        events.add(index, new EventImpl());
         Intent intent = new Intent(context, AddEditEventActivity.class);
         intent.putExtra("ITEM_INDEX", index);
         context.startActivity(intent);

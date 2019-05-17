@@ -26,6 +26,7 @@ import com.example.assignment_1.model.MovieImpl;
 import static com.example.assignment_1.controller.SelectMovieOnClickListener.MOVIE_REQUEST_CODE;
 import static com.example.assignment_1.model.EventModel.eventAdapter;
 import static com.example.assignment_1.model.EventModel.events;
+import static com.example.assignment_1.model.EventModel.movies;
 
 
 //implementation of GetLocationDialog temporary until assignment 2
@@ -67,9 +68,14 @@ public class AddEditEventActivity extends AppCompatActivity implements GetLocati
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if(!events.contains(currentEvent)){
+            events.add(currentEvent);
+        }
         switch(item.getItemId()) {
+
             case R.id.save_event:
                 saveEvent();
+                this.finish();
                 break;
             case R.id.save_close_event:
                 saveEvent();
@@ -90,10 +96,12 @@ public class AddEditEventActivity extends AppCompatActivity implements GetLocati
         if(index > -1){
             Intent intent = getIntent();
             eventIndex = intent.getIntExtra("ITEM_INDEX", -1);
-            if(eventIndex > -1) {
+            if(eventIndex == events.size()){
+                currentEvent = new EventImpl();
+            } else {
                 currentEvent = events.get(eventIndex);
-                setTextDetails();
             }
+            setTextDetails();
         }
     }
 
@@ -103,7 +111,9 @@ public class AddEditEventActivity extends AppCompatActivity implements GetLocati
         if(requestCode == MOVIE_REQUEST_CODE){
             if (resultCode == Activity.RESULT_OK) {
                 eventIndex = intentData.getIntExtra("EVENT_INDEX", -1);
-                currentEvent = events.get(eventIndex);
+//                currentEvent = events.get(eventIndex);
+                int position = intentData.getIntExtra("MOVIE_INDEX", -1);
+                currentEvent.setChosenMovie(movies.get(position));
                 setTextDetails();
             }
         }
@@ -149,8 +159,8 @@ public class AddEditEventActivity extends AppCompatActivity implements GetLocati
     }
 
     public void setListeners(){
-        startDateButton.setOnClickListener(new DateTimePickOnClickListener(this, eventIndex));
-        endDateButton.setOnClickListener(new DateTimePickOnClickListener(this, eventIndex));
+        startDateButton.setOnClickListener(new DateTimePickOnClickListener(this, eventIndex, currentEvent));
+        endDateButton.setOnClickListener(new DateTimePickOnClickListener(this, eventIndex, currentEvent));
         endDateButton.setEnabled(false);
         movieName.setOnClickListener(new SelectMovieOnClickListener(this, eventIndex));
         selectMovieButton.setOnClickListener(new SelectMovieOnClickListener(this, eventIndex));

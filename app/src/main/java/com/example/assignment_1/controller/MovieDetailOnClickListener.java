@@ -26,10 +26,11 @@ public class MovieDetailOnClickListener implements MovieListAdapter.OnItemClickL
     @Override
     public void onItemClick(int position) {
         //select movie
-        currentEvent = events.get(eventIndex);
-        currentEvent.setChosenMovie(movies.get(position));
+//        currentEvent = events.get(eventIndex);
+//        currentEvent.setChosenMovie(movies.get(position));
         Intent intent = new Intent();
         intent.putExtra("EVENT_INDEX", eventIndex);
+        intent.putExtra("MOVIE_INDEX", position);
         ((Activity)context).setResult(Activity.RESULT_OK, intent);
 
         ((Activity)context).finish();

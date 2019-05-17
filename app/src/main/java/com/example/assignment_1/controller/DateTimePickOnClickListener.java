@@ -38,15 +38,16 @@ public class DateTimePickOnClickListener implements View.OnClickListener, DatePi
 
     private int index = 0;
 
-    public DateTimePickOnClickListener(Context c, int i) {
+    public DateTimePickOnClickListener(Context c, int i, EventImpl currentEvent) {
         this.context = c;
         this.eventIndex = i;
+        this.currentEvent = currentEvent;
     }
 
     @Override
     public void onClick(View v) {
         pickDateTime(v);
-        currentEvent = events.get(eventIndex);
+
         startDate = ((Activity) context).findViewById(R.id.startDate);
         endDate = ((Activity) context).findViewById(R.id.endDate);
         endDateButton = ((Activity) context).findViewById(R.id.endDateButton);
