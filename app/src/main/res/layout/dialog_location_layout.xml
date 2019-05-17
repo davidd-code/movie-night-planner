@@ -13,7 +13,7 @@
         android:layout_marginTop="66dp"
         android:layout_marginEnd="98dp"
         android:inputType="numberSigned|number|numberDecimal"
-        android:text="lat" />
+        android:hint="@string/latitude" />
 
     <EditText
         android:id="@+id/location_long"
@@ -26,7 +26,7 @@
         android:layout_marginTop="26dp"
         android:layout_marginEnd="98dp"
         android:inputType="numberSigned|number|numberDecimal"
-        android:text="long" />
+        android:hint="@string/longitude" />
 
 
 </RelativeLayout>

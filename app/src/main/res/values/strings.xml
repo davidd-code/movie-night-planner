@@ -28,4 +28,7 @@
     <string name="save_close">Save and Close</string>
 
     <string name="calendar_view">Calendar View</string>
+
+    <string name="latitude">latitude</string>
+    <string name="longitude">longitude</string>
 </resources>
