@@ -185,7 +185,7 @@ public class AddEditEventActivity extends AppCompatActivity implements GetLocati
     @Override
     public void applyTexts(String location) {
         currentEvent.setLocation(location);
-        Toast.makeText(this, "Location Added", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Location Updated", Toast.LENGTH_SHORT).show();
     }
 
 
