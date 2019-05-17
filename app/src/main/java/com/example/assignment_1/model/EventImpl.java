@@ -13,8 +13,7 @@ public class EventImpl extends AbstractEvent {
 
     public EventImpl (){
         this.eventID = Integer.toString(events.size());
-        this.eventTitle = "New Event";
-        attendees = new ArrayList<Contact>();
+        attendees = new ArrayList<>();
     }
 
     public EventImpl(String id, String t, LocalDateTime s, LocalDateTime e, String v, String l){
@@ -25,7 +24,7 @@ public class EventImpl extends AbstractEvent {
         this.endDate = e;
         this.venue = v;
         this.location = l;
-        attendees = new ArrayList<Contact>();
+        attendees = new ArrayList<>();
     }
 
     public String stringFormatLocalDateTime(LocalDateTime ldt) {
@@ -39,7 +38,7 @@ public class EventImpl extends AbstractEvent {
     public boolean isAttending(Contact contact) {
         boolean status = false;
         for (Contact attendee : attendees) {
-            if ( attendee.getPhone() == contact.getPhone() ) {
+            if ( attendee.getPhone().equals(contact.getPhone()) ) {
                 return true;
             }
         }
