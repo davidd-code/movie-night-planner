@@ -15,6 +15,7 @@ public class InviteOnClickListener implements View.OnClickListener {
     private Context context;
     private EventImpl currentEvent;
 
+
     public InviteOnClickListener(Context c, EventImpl currentEvent) {
         this.context = c;
         this.currentEvent = currentEvent;
