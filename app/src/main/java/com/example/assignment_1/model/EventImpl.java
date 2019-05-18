@@ -1,18 +1,19 @@
 package com.example.assignment_1.model;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import static com.example.assignment_1.model.EventModel.events;
 
-public class EventImpl extends AbstractEvent {
+public class EventImpl extends AbstractEvent implements Serializable {
 
     private MovieImpl chosenMovie;
     private ArrayList<Contact> attendees;
 
     public EventImpl (){
-        this.eventID = Integer.toString(events.size());
+        this.eventID = Integer.toString(events.size()+1);
         attendees = new ArrayList<>();
     }
 

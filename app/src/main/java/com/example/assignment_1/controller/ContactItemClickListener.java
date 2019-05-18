@@ -18,14 +18,14 @@ public class ContactItemClickListener implements ContactListAdapter.OnItemClickL
     private int eventIndex;
     private EventImpl currentEvent;
 
-    public ContactItemClickListener(Context c, int i) {
-        this.eventIndex = i;
+    public ContactItemClickListener(Context c, EventImpl currentEvent) {
+//        this.eventIndex = i;
+        this.currentEvent = currentEvent;
         this.context = c;
     }
 
     @Override
     public void onItemClick(int pos, int event_index) {
-        currentEvent = events.get(event_index);
         if( !currentEvent.isAttending(contacts.get(pos)) ){
             currentEvent.addAttendees(contacts.get(pos));
         }else{
@@ -37,8 +37,9 @@ public class ContactItemClickListener implements ContactListAdapter.OnItemClickL
         Intent intent = new Intent();
         intent.putExtra("EVENT_INDEX", eventIndex);
         ((Activity) context).setResult(Activity.RESULT_OK, intent);
-        ((Activity)context).finish();
-        eventAdapter.notifyDataSetChanged();
+//        ((Activity)context).finish();
+        ((Activity)context).onBackPressed();
+
 
     }
 

@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.example.assignment_1.R;
 import com.example.assignment_1.model.Contact;
+import com.example.assignment_1.model.EventImpl;
 
 import static com.example.assignment_1.model.EventModel.contacts;
 import static com.example.assignment_1.model.EventModel.events;
@@ -18,18 +19,20 @@ import static com.example.assignment_1.model.EventModel.events;
 public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.ContactListViewHolder> {
 
     private OnItemClickListener listener;
-    private int eventIndex;
+    private EventImpl currentEvent;
 
-    public ContactListAdapter(int eventIndex) {
-        this.eventIndex = eventIndex;
+    public ContactListAdapter(EventImpl currentEvent) {
+        this.currentEvent = currentEvent;
     }
 
     public static class ContactListViewHolder extends RecyclerView.ViewHolder {
         public TextView contactName, phoneNumber, email;
         private CardView contactCard;
+        private EventImpl currentEvent;
 
-        public ContactListViewHolder(@NonNull final View itemView, final OnItemClickListener listener) {
+        public ContactListViewHolder(@NonNull final View itemView, final OnItemClickListener listener, final EventImpl currentEvent) {
             super(itemView);
+            this.currentEvent = currentEvent;
             contactName = itemView.findViewById(R.id.contact_Name);
             phoneNumber = itemView.findViewById(R.id.phone_Number);
             email = itemView.findViewById(R.id.email);
@@ -40,10 +43,11 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
                 public void onClick(View v) {
                     if (listener != null) {
                         int position = getAdapterPosition();
+                        // fix event_index returning 0 atm
                         int event_index = listener.getEventIndex();
                         if (position != RecyclerView.NO_POSITION) {
                             listener.onItemClick(position, event_index);
-                            if (events.get(event_index).isAttending(contacts.get(position))) {
+                            if (currentEvent.isAttending(contacts.get(position))) {
                                 contactCard.setCardBackgroundColor(Color.DKGRAY);
                             } else {
                                 contactCard.setCardBackgroundColor(Color.WHITE);
@@ -69,7 +73,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
     public ContactListAdapter.ContactListViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
 
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.contact_item, viewGroup, false);
-        ContactListViewHolder cvh = new ContactListViewHolder(v, listener);
+        ContactListViewHolder cvh = new ContactListViewHolder(v, listener, currentEvent);
         return cvh;
     }
 
@@ -79,7 +83,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
         contactListViewHolder.contactName.setText(currentContact.getFullName());
         contactListViewHolder.phoneNumber.setText(currentContact.getPhone());
         contactListViewHolder.email.setText(currentContact.getEmail());
-        if(events.get(eventIndex).isAttending(currentContact)){
+        if(currentEvent.isAttending(currentContact)){
             contactListViewHolder.contactCard.setCardBackgroundColor(Color.DKGRAY);
         }else{
             contactListViewHolder.contactCard.setCardBackgroundColor(Color.WHITE);
