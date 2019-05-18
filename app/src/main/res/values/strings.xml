@@ -31,4 +31,5 @@
 
     <string name="latitude">latitude</string>
     <string name="longitude">longitude</string>
+    <string name="title_activity_event_location">Map</string>
 </resources>
