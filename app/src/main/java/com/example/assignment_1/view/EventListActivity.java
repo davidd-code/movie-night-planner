@@ -1,10 +1,12 @@
 package com.example.assignment_1.view;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -15,9 +17,13 @@ import android.widget.Toast;
 import com.example.assignment_1.R;
 import com.example.assignment_1.controller.AddEventOnClickListener;
 import com.example.assignment_1.controller.EditEventOnClickListener;
+import com.example.assignment_1.controller.MapOnClickListener;
 import com.example.assignment_1.model.CustomComparator;
 import com.example.assignment_1.model.EventModel;
 import com.example.assignment_1.model.FileLoader;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.api.GoogleApi;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -39,6 +45,9 @@ public class EventListActivity extends AppCompatActivity {
     private ImageView addEventButton;
     private Button calendarButton;
 
+    private static final String TAG="EventListActivity";
+    private static final int ERROR_DIALOG_REQUEST = 9001;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,8 +59,37 @@ public class EventListActivity extends AppCompatActivity {
         if(savedInstanceState == null) {
             loadData();
         }
+
+
+
         buildRecyclerView();
         setButtons();
+
+        if(isServicesOK()) {
+            init();
+        }
+    }
+
+    private void init() {
+
+    }
+
+    public boolean isServicesOK() {
+        Log.d(TAG, "isServicesOK: checking google services version");
+        int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(EventListActivity.this);
+
+        if(available == ConnectionResult.SUCCESS) {
+            //everything is fine and user can make map requests
+            Log.d(TAG, "isServicesOK: Google Play services is working");
+            return true;
+        } else if(GoogleApiAvailability.getInstance().isUserResolvableError(available)) {
+            Log.d(TAG, "isServicesOK: an error occured but we can fix it");
+            Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(EventListActivity.this, available, ERROR_DIALOG_REQUEST);
+            dialog.show();
+        } else {
+            Toast.makeText(this, "You can't make map requests", Toast.LENGTH_SHORT).show();
+        }
+        return false;
     }
 
     @Override
@@ -102,6 +140,8 @@ public class EventListActivity extends AppCompatActivity {
     public void setButtons() {
         addEventButton = findViewById(R.id.addEventButton);
         calendarButton = findViewById(R.id.calendar_button);
+        ImageView mapButton = findViewById(R.id.mapButton);
+        mapButton.setOnClickListener(new MapOnClickListener(this));
         addEventButton.setOnClickListener(new AddEventOnClickListener(this, eventAdapter));
     }
 

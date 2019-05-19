@@ -2,6 +2,8 @@ package com.example.assignment_1.view;
 
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 
 import com.example.assignment_1.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -25,6 +27,12 @@ public class EventLocationActivity extends FragmentActivity implements OnMapRead
         mapFragment.getMapAsync(this);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.save_options_menu, menu);
+        return true;
+    }
 
     /**
      * Manipulates the map once available.
