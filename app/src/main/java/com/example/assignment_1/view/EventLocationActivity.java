@@ -86,6 +86,8 @@ public class EventLocationActivity extends FragmentActivity implements OnMapRead
             } else {
                 ActivityCompat.requestPermissions(this, permissions, LOCATION_PERMISSION_REQUEST_CODE);
             }
+        } else {
+            ActivityCompat.requestPermissions(this, permissions, LOCATION_PERMISSION_REQUEST_CODE);
         }
 }
 
