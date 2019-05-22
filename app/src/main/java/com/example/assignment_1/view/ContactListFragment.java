@@ -50,7 +50,6 @@ public class ContactListFragment extends Fragment {
         return contactListFragment;
     }
 
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);

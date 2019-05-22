@@ -1,10 +1,12 @@
 package com.example.assignment_1.model;
 
+import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import static com.example.assignment_1.model.EventModel.events;
+import static com.example.assignment_1.model.EventModel.movies;
 
 public class EventImpl extends AbstractEvent {
 
@@ -27,8 +29,22 @@ public class EventImpl extends AbstractEvent {
         attendees = new ArrayList<>();
     }
 
-    public String stringFormatLocalDateTime(LocalDateTime ldt) {
+    public EventImpl(String id, String t, String s, String e, String v, String l, String movieID){
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy hh:mm a");
 
+        this.eventID = id;
+        this.eventTitle = t;
+        this.startDate = LocalDateTime.parse(s, dtf);
+        this.endDate = LocalDateTime.parse(e, dtf);
+        this.venue = v;
+        this.location = l;
+        if(movieID != null)
+            this.chosenMovie = movies.get(Integer.parseInt(movieID));
+        attendees = new ArrayList<>();
+
+    }
+
+    public String ldtToString(LocalDateTime ldt) {
         String dateTimeString;
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy hh:mm a");
         dateTimeString = ldt.format(dtf);

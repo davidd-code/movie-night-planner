@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -15,15 +16,8 @@ import android.widget.Toast;
 import com.example.assignment_1.R;
 import com.example.assignment_1.controller.AddEventOnClickListener;
 import com.example.assignment_1.controller.EditEventOnClickListener;
+import com.example.assignment_1.data.DatabaseHelper;
 import com.example.assignment_1.model.CustomComparator;
-import com.example.assignment_1.model.EventModel;
-import com.example.assignment_1.model.FileLoader;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.text.ParseException;
 import java.util.Collections;
 
 import static com.example.assignment_1.model.EventModel.eventAdapter;
@@ -31,7 +25,7 @@ import static com.example.assignment_1.model.EventModel.events;
 
 public class EventListActivity extends AppCompatActivity {
 
-    private FileLoader fl = new FileLoader();
+    private DatabaseHelper dbHelper;
 
     private RecyclerView eRecyclerView;
     private RecyclerView.LayoutManager eLayoutManager;
@@ -46,12 +40,17 @@ public class EventListActivity extends AppCompatActivity {
 
         toolbar = findViewById(R.id.event_list_toolbar);
         setSupportActionBar(toolbar);
-
-        if(savedInstanceState == null) {
-            loadData();
-        }
         buildRecyclerView();
         setButtons();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        dbHelper = DatabaseHelper.getHelper(this);
+        dbHelper.open();
+        dbHelper.loadDatabase();
+        dbHelper.close();
     }
 
     @Override
@@ -76,33 +75,17 @@ public class EventListActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void loadData(){
-        InputStream isEvents = getResources().openRawResource(R.raw.events);
-        InputStream isMovies = getResources().openRawResource(R.raw.movies);
-        BufferedReader brEvents = new BufferedReader(new InputStreamReader(isEvents));
-        BufferedReader brMovies = new BufferedReader(new InputStreamReader(isMovies));
-
-        try{
-            EventModel.loadEvents(fl.loadFile(brEvents));
-            EventModel.loadMovies(fl.loadFile(brMovies), this);
-        }catch(ParseException e){
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                brEvents.close();
-                brMovies.close();
-            }catch(IOException e){
-                e.printStackTrace();
-            }
-        }
-    }
-
     public void setButtons() {
         addEventButton = findViewById(R.id.addEventButton);
         calendarButton = findViewById(R.id.calendar_button);
         addEventButton.setOnClickListener(new AddEventOnClickListener(this, eventAdapter));
+        calendarButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                eventAdapter.notifyDataSetChanged();
+                calendarButton.setText(Integer.toString(eventAdapter.getItemCount()));
+            }
+        });
     }
 
     public void buildRecyclerView(){

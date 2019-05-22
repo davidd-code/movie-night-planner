@@ -20,6 +20,7 @@ import com.example.assignment_1.R;
 import com.example.assignment_1.controller.DateTimePickOnClickListener;
 import com.example.assignment_1.controller.InviteOnClickListener;
 import com.example.assignment_1.controller.SelectMovieOnClickListener;
+import com.example.assignment_1.data.DatabaseHelper;
 import com.example.assignment_1.model.EventImpl;
 import com.example.assignment_1.model.MovieImpl;
 
@@ -31,6 +32,8 @@ import static com.example.assignment_1.model.EventModel.movies;
 
 //implementation of GetLocationDialog temporary until assignment 2
 public class AddEditEventActivity extends AppCompatActivity implements GetLocationDialog.LocationDialogListener {
+
+    private DatabaseHelper dbHelper;
 
     private TextView eventName, venueName, movieName,startDate, endDate, numAttendees;
     private ImageView startDateButton, endDateButton, selectMovieButton, locationButton, inviteButton;
@@ -55,6 +58,7 @@ public class AddEditEventActivity extends AppCompatActivity implements GetLocati
         checkForActivityResult(eventIndex);
         setListeners();
 
+        dbHelper = DatabaseHelper.getHelper(this);
 
         temp();
     }
@@ -88,6 +92,9 @@ public class AddEditEventActivity extends AppCompatActivity implements GetLocati
     public void saveEvent(){
         currentEvent.setTitle(String.valueOf(eventName.getText()));
         currentEvent.setVenue(String.valueOf(venueName.getText()));
+
+        dbHelper.updateEvent(currentEvent);
+
         Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
         eventAdapter.notifyDataSetChanged();
     }
@@ -138,11 +145,11 @@ public class AddEditEventActivity extends AppCompatActivity implements GetLocati
             movieName.setText(chosenMovie.getTitle());
         }
         if(currentEvent.getStartDate() != null) {
-            startDate.setText(currentEvent.stringFormatLocalDateTime(currentEvent.getStartDate()));
+            startDate.setText(currentEvent.ldtToString(currentEvent.getStartDate()));
             endDateButton.setEnabled(true);
         }
         if(currentEvent.getEndDate() != null) {
-            endDate.setText(currentEvent.stringFormatLocalDateTime(currentEvent.getEndDate()));
+            endDate.setText(currentEvent.ldtToString(currentEvent.getEndDate()));
         }
         if(currentEvent.getNumAttendees() > 0){
             numAttendees.setText(Integer.toString(currentEvent.getNumAttendees()));

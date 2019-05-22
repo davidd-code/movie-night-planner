@@ -100,12 +100,12 @@ public class DateTimePickOnClickListener implements View.OnClickListener, DatePi
 
         if (!startDateSelected) {
             currentEvent.setStartDate(dateTime);
-            startDate.setText(currentEvent.stringFormatLocalDateTime(dateTime));
+            startDate.setText(currentEvent.ldtToString(dateTime));
             endDateButton.setEnabled(true);
             startDateSelected = true;
         } else if (validEndDate(date[0], date[1])) {
             currentEvent.setEndDate(dateTime);
-            endDate.setText(currentEvent.stringFormatLocalDateTime(dateTime));
+            endDate.setText(currentEvent.ldtToString(dateTime));
         } else {
             System.out.println("::::::::::::ERROR INVALID DATES:::::::::::");
         }

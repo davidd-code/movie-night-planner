@@ -90,7 +90,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
             eventListViewHolder.eventMovie.setText(currentEvent.getChosenMovie().getTitle());
         }
         if(currentEvent.getStartDate() != null) {
-            eventListViewHolder.eventDate.setText(currentEvent.stringFormatLocalDateTime(currentEvent.getStartDate()));
+            eventListViewHolder.eventDate.setText(currentEvent.ldtToString(currentEvent.getStartDate()));
         }
     }
 
