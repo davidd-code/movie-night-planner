@@ -112,6 +112,18 @@ public class EventImpl extends AbstractEvent implements Serializable {
         return this.location;
     }
 
+    public Double getLatitude() {
+        String[] location = getLocation().split(", ");
+        Double latitude = Double.parseDouble(location[0]);
+        return latitude;
+    }
+
+    public Double getLongitude() {
+        String[] location = getLocation().split(", ");
+        Double longitude = Double.parseDouble(location[1]);
+        return longitude;
+    }
+
     @Override
     public void setLocation(String l){
         this.location = l;

@@ -9,14 +9,13 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.widget.Toast;
 
 import com.example.assignment_1.R;
+import com.example.assignment_1.model.CustomComparator;
+import com.example.assignment_1.model.EventImpl;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -25,6 +24,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+
+import java.util.ArrayList;
+
+import static com.example.assignment_1.model.EventModel.events;
 
 public class EventLocationActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -152,7 +155,24 @@ public class EventLocationActivity extends FragmentActivity implements OnMapRead
                 return;
             }
             mMap.setMyLocationEnabled(true);
+
+            // Add a marker for the 3 soonest events
+            for(EventImpl element: getSoonestEvents()) {
+                mMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(element.getLatitude(), element.getLongitude()))
+                    .title(element.getTitle()));
+            }
         }
 
+    }
+
+    private ArrayList<EventImpl> getSoonestEvents() {
+        CustomComparator c = new CustomComparator();
+        ArrayList<EventImpl> soonestEvents = new ArrayList<>();
+        c.sortDescending();
+        for(int i = 0; i < 3; i++) {
+            soonestEvents.add(events.get(i));
+        }
+        return soonestEvents;
     }
 }
