@@ -101,13 +101,14 @@ public class EventListActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        CustomComparator c = new CustomComparator();
         switch(item.getItemId()){
             case R.id.sort_ascending:
-                sortAscending();
+                c.sortAscending();
                 Toast.makeText(this, "Ascending", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.sort_descending:
-                sortDescending();
+                c.sortDescending();
                 Toast.makeText(this, "Descending", Toast.LENGTH_SHORT).show();
                 break;
         }
@@ -154,17 +155,6 @@ public class EventListActivity extends AppCompatActivity {
         eRecyclerView.setAdapter(eventAdapter);
 
         eventAdapter.setOnItemClickListener(new EditEventOnClickListener(this, eventAdapter));
-    }
-
-    public void sortAscending(){
-        CustomComparator c = new CustomComparator();
-        Collections.sort(events, c.reversed());
-        eventAdapter.notifyDataSetChanged();
-    }
-
-    public void sortDescending(){
-        Collections.sort(events, new CustomComparator());
-        eventAdapter.notifyDataSetChanged();
     }
 
 }
