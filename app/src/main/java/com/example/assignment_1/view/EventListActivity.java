@@ -2,9 +2,12 @@ package com.example.assignment_1.view;
 
 import android.app.AlarmManager;
 import android.app.Dialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,6 +17,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -23,12 +27,13 @@ import com.example.assignment_1.controller.AddEventOnClickListener;
 import com.example.assignment_1.controller.AlertReceiver;
 import com.example.assignment_1.controller.EditEventOnClickListener;
 import com.example.assignment_1.controller.HttpCall;
-import com.example.assignment_1.controller.HttpURLConnectionAsyncTaskdraft;
+import com.example.assignment_1.controller.HttpURLConnectionAsyncTask;
 import com.example.assignment_1.controller.MapOnClickListener;
 import com.example.assignment_1.controller.NotificationListener;
 import com.example.assignment_1.model.CustomComparator;
 import com.example.assignment_1.model.EventModel;
 import com.example.assignment_1.model.FileLoader;
+import com.example.assignment_1.service.LocationService;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
@@ -43,6 +48,7 @@ import static com.example.assignment_1.model.EventModel.eventAdapter;
 
 public class EventListActivity extends AppCompatActivity {
 
+    public static final String SERVICE_CHANNEL = "serviceChannel";
     private FileLoader fl = new FileLoader();
 
     private RecyclerView eRecyclerView;
@@ -79,7 +85,6 @@ public class EventListActivity extends AppCompatActivity {
             init();
         }
 
-//        new HttpURLConnectionAsyncTaskdraft(this).execute();
 
     }
 
@@ -121,13 +126,13 @@ public class EventListActivity extends AppCompatActivity {
     private void makeHttpRequest() {
         final HttpCall httpCall = new HttpCall();
         httpCall.setMethodtype(HttpCall.GET);
-        httpCall.setUrl("https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=Washington,DC&destinations=New+York+City,NY&key=AIzaSyDN4UvDycELwsIbLsF6CmPXgUtmPlbEU4w");
-//                httpCall.setUrl("https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=AIzaSyA7EyEiwsUHaXZBqRj_Te4SSN6RfxhfGc8&location=41.3851,%202.1734&radius=750");
+//        httpCall.setUrl("https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=Washington,DC&destinations=New+York+City,NY&key=AIzaSyDN4UvDycELwsIbLsF6CmPXgUtmPlbEU4w");
+        httpCall.setUrl("https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=40.6655101,-73.89188969999998&destinations=40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.659569%2C-73.933783%7C40.729029%2C-73.851524%7C40.6860072%2C-73.6334271%7C40.598566%2C-73.7527626%7C40.659569%2C-73.933783%7C40.729029%2C-73.851524%7C40.6860072%2C-73.6334271%7C40.598566%2C-73.7527626&key=YOUR_API_KEY");
 //                httpCall.setUrl("https://developer.android.com/");
         HashMap<String, String> params = new HashMap<>();
 //                params.put("name", "James Bond");
         httpCall.setParams(params);
-        new HttpURLConnectionAsyncTaskdraft() {
+        new HttpURLConnectionAsyncTask() {
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
@@ -135,6 +140,29 @@ public class EventListActivity extends AppCompatActivity {
 //                        Toast.makeText(getApplicationContext(), httpCall.getUrl(), Toast.LENGTH_LONG).show();
             }
         }.execute(httpCall);
+    }
+
+    private void createNotificationChannels() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel serviceChannel = new NotificationChannel(
+                    SERVICE_CHANNEL,
+                    "Service Channel",
+                    NotificationManager.IMPORTANCE_DEFAULT
+            );
+
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(serviceChannel);
+        }
+    }
+
+    public void startService(View v) {
+        Intent serviceIntent = new Intent(this, LocationService.class);
+        startService(serviceIntent);
+    }
+
+    public void stopService(View v) {
+        Intent serviceIntent = new Intent(this, LocationService.class);
+        stopService(serviceIntent);
     }
 
     @Override

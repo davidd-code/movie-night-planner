@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class HttpURLConnectionAsyncTaskdraft extends AsyncTask<HttpCall, String, String> {
+public class HttpURLConnectionAsyncTask extends AsyncTask<HttpCall, String, String> {
 
     private StringBuilder htmlStringBuilder = new StringBuilder();
 
@@ -28,7 +28,7 @@ public class HttpURLConnectionAsyncTaskdraft extends AsyncTask<HttpCall, String,
 
     private WeakReference<Activity> activity;
 
-//    public HttpURLConnectionAsyncTaskdraft(Activity activity) {
+//    public HttpURLConnectionAsyncTask(Activity activity) {
 //        this.activity = new WeakReference<>(activity);
 //    }
 
