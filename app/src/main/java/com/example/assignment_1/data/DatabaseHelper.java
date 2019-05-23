@@ -178,10 +178,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         int count = cursor.getInt(0);
         cursor.close();
         close();
-        if (count > 0)
-            return false;
-        else
-            return true;
+        return count <= 0;
     }
 
     public void addEvent(EventImpl event, SQLiteDatabase db){
