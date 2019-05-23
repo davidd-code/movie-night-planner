@@ -23,7 +23,6 @@ public class SelectMovieOnClickListener implements View.OnClickListener {
 
         Intent intent = new Intent(context, MovieListActivity.class);
         intent.putExtra("EVENT_INDEX", eventIndex);
-        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>::::::::::     " + eventIndex);
         ((Activity)context).startActivityForResult(intent, MOVIE_REQUEST_CODE);
     }
 }

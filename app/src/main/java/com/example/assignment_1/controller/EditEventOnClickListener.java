@@ -32,9 +32,12 @@ public class EditEventOnClickListener implements EventListAdapter.OnItemClickLis
 
     @Override
     public void onDeleteClick(int position) {
-        //
+        int eventID = position+1;
         events.remove(position);
-        dbHelper.deleteEvent(Integer.toString(position));
+
+        dbHelper.deleteEvent(Integer.toString(eventID));
+
+
         Toast.makeText(context, "Event Deleted", Toast.LENGTH_SHORT).show();
         adapter.notifyItemRemoved(position);
     }

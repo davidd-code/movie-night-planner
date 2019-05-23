@@ -1,6 +1,5 @@
 package com.example.assignment_1.model;
 
-import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -39,7 +38,7 @@ public class EventImpl extends AbstractEvent {
         this.venue = v;
         this.location = l;
         if(movieID != null)
-            this.chosenMovie = movies.get(Integer.parseInt(movieID));
+            this.chosenMovie = movies.get(Integer.parseInt(movieID) - 1);
         attendees = new ArrayList<>();
 
     }

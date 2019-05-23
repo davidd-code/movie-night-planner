@@ -3,6 +3,7 @@ package com.example.assignment_1.view;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -72,13 +73,23 @@ public class AddEditEventActivity extends AppCompatActivity implements GetLocati
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(!events.contains(currentEvent)){
+        /*if(!events.contains(currentEvent)){
             events.add(currentEvent);
-        }
+            SQLiteDatabase db = dbHelper.open();
+            dbHelper.addEvent(currentEvent, db);
+            dbHelper.close();
+        }*/
         switch(item.getItemId()) {
 
             case R.id.save_event:
                 saveEvent();
+                if(!events.contains(currentEvent)){
+                    events.add(currentEvent);
+    SQLiteDatabase db = dbHelper.getWritableDatabase();
+                    dbHelper.addEvent(currentEvent, db);
+                }else {
+                    dbHelper.updateEvent(currentEvent);
+                }
                 this.finish();
                 break;
             case R.id.save_close_event:
@@ -93,7 +104,7 @@ public class AddEditEventActivity extends AppCompatActivity implements GetLocati
         currentEvent.setTitle(String.valueOf(eventName.getText()));
         currentEvent.setVenue(String.valueOf(venueName.getText()));
 
-        dbHelper.updateEvent(currentEvent);
+
 
         Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
         eventAdapter.notifyDataSetChanged();

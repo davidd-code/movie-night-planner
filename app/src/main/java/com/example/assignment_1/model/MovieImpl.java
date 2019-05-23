@@ -4,13 +4,6 @@ public class MovieImpl extends AbstractMovie {
 
     private int imgResource;
 
-    public MovieImpl(String id, String t, String y, String p){
-        this.movieID = id;
-        this.movieTitle = t;
-        this.year = y;
-        this.poster = p;
-    }
-
     public MovieImpl(String id, String t, String y, String p, int r){
         this.movieID = id;
         this.movieTitle = t;

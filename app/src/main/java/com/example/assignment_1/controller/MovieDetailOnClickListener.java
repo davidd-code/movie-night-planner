@@ -8,9 +8,6 @@ import com.example.assignment_1.model.EventImpl;
 import com.example.assignment_1.view.ViewMoviePosterActivity;
 import com.example.assignment_1.viewModel.MovieListAdapter;
 
-import static com.example.assignment_1.model.EventModel.events;
-import static com.example.assignment_1.model.EventModel.movies;
-
 public class MovieDetailOnClickListener implements MovieListAdapter.OnItemClickListener {
 
     private Context context;

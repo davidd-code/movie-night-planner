@@ -3,10 +3,12 @@ package com.example.assignment_1.data;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.assignment_1.R;
+import com.example.assignment_1.model.Contact;
 import com.example.assignment_1.model.EventImpl;
 import com.example.assignment_1.model.EventModel;
 import com.example.assignment_1.model.FileLoader;
@@ -18,6 +20,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.ParseException;
 
+import static com.example.assignment_1.model.EventModel.contacts;
 import static com.example.assignment_1.model.EventModel.events;
 import static com.example.assignment_1.model.EventModel.movies;
 
@@ -26,7 +29,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private FileLoader fl = new FileLoader();
     private Context context;
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 16;
     private static final String DATABASE_NAME = "MovieEventsDB.db";
 
     public static final String TABLE_EVENTS = "Events";
@@ -43,6 +46,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_MOVIE_YEAR = "Year";
     public static final String COL_MOVIE_POSTER = "Poster";
 
+    public static final String TABLE_ATTENDEES = "Attendees";
     public static final String TABLE_CONTACTS = "Contacts";
     public static final String COL_CONTACT_ID = "ContactID";
     public static final String COL_CONTACT_NAME = "Name";
@@ -72,6 +76,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     COL_CONTACT_NAME + " TEXT, " +
                     COL_CONTACT_PHONE + " TEXT, " +
                     COL_CONTACT_EMAIL + " TEXT " + ");";
+    public static final String CREATE_ATTENDEES_TABLE =
+            "CREATE TABLE " + TABLE_ATTENDEES + "(" +
+                    COL_EVENT_ID + " INTEGER, " +
+                    COL_CONTACT_ID + " INTEGER, " +
+                    " FOREIGN KEY (" + COL_EVENT_ID + ")" +
+                    " REFERENCES " + TABLE_EVENTS + "(" + COL_EVENT_ID + "), " +
+                    " FOREIGN KEY (" + COL_CONTACT_ID + ")" +
+                    " REFERENCES " + TABLE_CONTACTS + "(" + COL_CONTACT_ID + "));";
 
     private static DatabaseHelper instance;
 
@@ -109,8 +121,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public void open() {
-        getWritableDatabase();
+    public SQLiteDatabase open() {
+        return getWritableDatabase();
     }
 
     @Override
@@ -133,10 +145,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         try {
             db.execSQL(CREATE_MOVIES_TABLE);
             db.execSQL(CREATE_EVENTS_TABLE);
+            db.execSQL(CREATE_CONTACTS_TABLE);
+            db.execSQL(CREATE_ATTENDEES_TABLE);
             loadTextFile();
             populateNewDatabase(db);
         } catch (Exception e) {
             e.printStackTrace();
+        }finally {
+            close();
         }
     }
 
@@ -145,6 +161,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         try {
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_MOVIES);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_EVENTS);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_CONTACTS);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_ATTENDEES);
 
             onCreate(db);
         } catch (Exception e) {
@@ -152,31 +170,32 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    private String[] eventToString(EventImpl event) {
-        String[] eventValue = new String[7];
-        eventValue[0] = event.getID();
-        eventValue[1] = event.getTitle();
-        eventValue[2] = event.ldtToString(event.getStartDate());
-        eventValue[3] = event.ldtToString(event.getEndDate());
-        eventValue[4] = event.getVenue();
-        eventValue[5] = event.getLocation();
-        eventValue[6] = event.getChosenMovie().getID();
+    public Boolean contactsTableEmpty() {
+        SQLiteDatabase db = getWritableDatabase();
+        String count_query = "SELECT count(*) FROM " + TABLE_CONTACTS;
+        Cursor cursor = db.rawQuery(count_query, null);
+        cursor.moveToFirst();
 
-        return eventValue;
+        int count = cursor.getInt(0);
+        cursor.close();
+        close();
+        if (count > 0)
+            return false;
+        else
+            return true;
     }
 
     public void addEvent(EventImpl event, SQLiteDatabase db){
         try {
-            String[] eventValue = eventToString(event);
             ContentValues values = new ContentValues();
 
-            values.put(COL_EVENT_TITLE, eventValue[1]);
-            values.put(COL_EVENT_START, eventValue[2]);
-            values.put(COL_EVENT_END, eventValue[3]);
-            values.put(COL_EVENT_VENUE, eventValue[4]);
-            values.put(COL_EVENT_LOCATION, eventValue[5]);
+            values.put(COL_EVENT_TITLE, event.getTitle());
+            values.put(COL_EVENT_START, event.ldtToString(event.getStartDate()));
+            values.put(COL_EVENT_END, event.ldtToString(event.getEndDate()));
+            values.put(COL_EVENT_VENUE, event.getVenue());
+            values.put(COL_EVENT_LOCATION, event.getLocation());
             if(event.getChosenMovie() != null)
-                values.put(COL_MOVIE_ID, eventValue[6]);
+                values.put(COL_MOVIE_ID, event.getChosenMovie().getID());
 
             db.insert(TABLE_EVENTS, null, values);
         } catch (Exception e) {
@@ -198,89 +217,155 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public void deleteEvent(String eventID) {
-        try{
-            SQLiteDatabase db = getWritableDatabase();
-            db.execSQL("DELETE FROM " + TABLE_EVENTS + " WHERE " + COL_EVENT_ID + " =\"" + eventID + "\";");
+    public void addContact(Contact contact) {
+        SQLiteDatabase db = getWritableDatabase();
+        try {
+            ContentValues values = new ContentValues();
+
+            values.put(COL_CONTACT_ID, contact.getID());
+            values.put(COL_CONTACT_NAME, contact.getFullName());
+            values.put(COL_CONTACT_PHONE, contact.getPhone());
+            values.put(COL_CONTACT_EMAIL, contact.getEmail());
+
+            db.insert(TABLE_CONTACTS, null, values);
         } catch (Exception e) {
             e.printStackTrace();
+        }finally {
+            close();
         }
     }
 
-    private void readMovieTable(SQLiteDatabase db) {
+    private void readMovieTable() {
+        SQLiteDatabase db = getWritableDatabase();
+
         String mID, mTitle, year, poster;
         String query = "SELECT * FROM " + TABLE_MOVIES + " WHERE 1";
         Cursor cursor = db.rawQuery(query, null);
 
         cursor.moveToFirst();
+        movies.clear();
         while (!cursor.isAfterLast()) {
-            if (cursor.getString(cursor.getColumnIndex("MovieID")) != null) {
-                mID = cursor.getString(cursor.getColumnIndex("MovieID"));
-                mTitle = cursor.getString(cursor.getColumnIndex("MovieTitle"));
-                year = cursor.getString(cursor.getColumnIndex("Year"));
-                poster = cursor.getString(cursor.getColumnIndex("Poster"));
+            if (cursor.getString(cursor.getColumnIndex(COL_MOVIE_ID)) != null) {
+                mID = cursor.getString(cursor.getColumnIndex(COL_MOVIE_ID));
+                mTitle = cursor.getString(cursor.getColumnIndex(COL_MOVIE_TITLE));
+                year = cursor.getString(cursor.getColumnIndex(COL_MOVIE_YEAR));
+                poster = cursor.getString(cursor.getColumnIndex(COL_MOVIE_POSTER));
 
-                String imgSrc = poster.substring(0, poster.indexOf('.'));
+                String srcName = poster.toLowerCase();
+                String imgSrc = srcName.substring(0, srcName.indexOf('.'));
                 int imgRes = context.getResources().getIdentifier(imgSrc, "drawable", context.getPackageName());
                 movies.add(new MovieImpl(mID, mTitle, year, poster, imgRes));
             }
             cursor.moveToNext();
         }
+        for (int i=0; i<movies.size(); i++) {
+            MovieImpl movie = movies.get(i);
+            System.out.println("INDEX: " + i + " >>> " + "ID:" + movie.getID() + ", " + movie.getTitle());
+        }
         cursor.close();
+        close();
     }
 
-    private void readEventTable(SQLiteDatabase db) {
+    private void readEventTable() {
+        SQLiteDatabase db = getWritableDatabase();
+
         String eID, eTitle, start, end, venue, location, mID;
         String query = "SELECT * FROM " + TABLE_EVENTS + " WHERE 1";
         Cursor cursor = db.rawQuery(query, null);
 
         cursor.moveToFirst();
+        events.clear();
         while (!cursor.isAfterLast()) {
-            if (cursor.getString(cursor.getColumnIndex("EventID")) != null) {
-                eID = cursor.getString(cursor.getColumnIndex("EventID"));
-                eTitle = cursor.getString(cursor.getColumnIndex("EventTitle"));
-                start = cursor.getString(cursor.getColumnIndex("StartDate"));
-                end = cursor.getString(cursor.getColumnIndex("EndDate"));
-                venue = cursor.getString(cursor.getColumnIndex("Venue"));
-                location = cursor.getString(cursor.getColumnIndex("Location"));
-                if(cursor.getString(cursor.getColumnIndex("MovieID")) != null)
-                    mID = cursor.getString(cursor.getColumnIndex("MovieID"));
-                else
-                    mID = null;
-
+            if (cursor.getString(cursor.getColumnIndex(COL_EVENT_ID)) != null) {
+                eID = cursor.getString(cursor.getColumnIndex(COL_EVENT_ID));
+                eTitle = cursor.getString(cursor.getColumnIndex(COL_EVENT_TITLE));
+                start = cursor.getString(cursor.getColumnIndex(COL_EVENT_START));
+                end = cursor.getString(cursor.getColumnIndex(COL_EVENT_END));
+                venue = cursor.getString(cursor.getColumnIndex(COL_EVENT_VENUE));
+                location = cursor.getString(cursor.getColumnIndex(COL_EVENT_LOCATION));
+                mID = cursor.getString(cursor.getColumnIndex(COL_MOVIE_ID));
                 events.add(new EventImpl(eID, eTitle, start, end, venue, location, mID));
             }
             cursor.moveToNext();
         }
+        for (int i=0; i<events.size(); i++) {
+            EventImpl event = events.get(i);
+            System.out.println("INDEX: " + i + " >>> " + "ID:" + event.getID() + ", " + event.getTitle());
+        }
         cursor.close();
+        close();
     }
 
-    public void loadDatabase() {
+    public void readContactTable() {
+        SQLiteDatabase db = getWritableDatabase();
 
+        String cID, name, phone, email;
+        String query = "SELECT * FROM " + TABLE_CONTACTS + " WHERE 1";
+        Cursor cursor = db.rawQuery(query, null);
+
+        cursor.moveToFirst();
+        contacts.clear();
+        while (!cursor.isAfterLast()) {
+            if (cursor.getString(cursor.getColumnIndex(COL_CONTACT_ID)) != null) {
+                cID = cursor.getString(cursor.getColumnIndex(COL_CONTACT_ID));
+                name = cursor.getString(cursor.getColumnIndex(COL_CONTACT_NAME));
+                phone = cursor.getString(cursor.getColumnIndex(COL_CONTACT_PHONE));
+                email = cursor.getString(cursor.getColumnIndex(COL_CONTACT_EMAIL));
+
+                contacts.add(new Contact(cID, name, phone, email));
+            }
+            cursor.moveToNext();
+        }
+        for (int i=0; i<contacts.size(); i++) {
+            Contact contact = contacts.get(i);
+            System.out.println("INDEX: " + i + " >>> " + "ID:" + contact.getID() + ", " + contact.getFullName());
+        }
+        cursor.close();
+        close();
+    }
+
+    public void syncDatabase() {
         try{
-            SQLiteDatabase db = getWritableDatabase();
-            readMovieTable(db);
-            readEventTable(db);
-            close();
+            readMovieTable();
+            readEventTable();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public Boolean updateEvent(EventImpl event) {
-        String[] eventValue = eventToString(event);
 
         SQLiteDatabase db = getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(COL_EVENT_ID, eventValue[0]);
-        values.put(COL_EVENT_TITLE, eventValue[1]);
-        values.put(COL_EVENT_START, eventValue[2]);
-        values.put(COL_EVENT_END, eventValue[3]);
-        values.put(COL_EVENT_VENUE, eventValue[4]);
-        values.put(COL_EVENT_LOCATION, eventValue[5]);
-        values.put(COL_MOVIE_ID, eventValue[6]);
+        try {
+            ContentValues values = new ContentValues();
+            values.put(COL_EVENT_ID, event.getID());
+            values.put(COL_EVENT_TITLE, event.getTitle());
+            values.put(COL_EVENT_START, event.ldtToString(event.getStartDate()));
+            values.put(COL_EVENT_END, event.ldtToString(event.getEndDate()));
+            values.put(COL_EVENT_VENUE, event.getVenue());
+            values.put(COL_EVENT_LOCATION, event.getLocation());
+            if(event.getChosenMovie() != null)
+                values.put(COL_MOVIE_ID, event.getChosenMovie().getID());
 
-        db.update(TABLE_EVENTS, values, "EventID = ?", new String[]{eventValue[0]});
+            db.update(TABLE_EVENTS, values, COL_EVENT_ID + "= ?", new String[]{event.getID()});
+        } catch (SQLException SQLe) {
+            SQLe.printStackTrace();
+        }finally {
+            close();
+        }
         return true;
+    }
+
+    public void deleteEvent(String eventID) {
+        System.out.println(eventID);
+        try{
+            SQLiteDatabase db = getWritableDatabase();
+            db.delete(TABLE_EVENTS, COL_EVENT_ID + "= ?", new String[]{eventID});
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            close();
+        }
     }
 }

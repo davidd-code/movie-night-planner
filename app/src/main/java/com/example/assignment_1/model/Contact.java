@@ -2,8 +2,7 @@ package com.example.assignment_1.model;
 
 public class Contact {
 
-    private String fullName, firstName, lastName, phone, email;
-    private String id;
+    private String id, fullName, phone, email;
 
     public Contact(String name, String phone) {
         this.fullName = name;
@@ -23,22 +22,6 @@ public class Contact {
 
     public String getFullName() {
         return this.fullName;
-    }
-
-    public void setFirstName(String n) {
-        this.firstName = n;
-    }
-
-    public String getFirstName() {
-        return this.firstName;
-    }
-
-    public void setLastName(String n) {
-        this.lastName = n;
-    }
-
-    public String getLastName() {
-        return this.lastName;
     }
 
     public String getPhone() {

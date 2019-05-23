@@ -16,6 +16,7 @@ import android.widget.Button;
 
 import com.example.assignment_1.R;
 import com.example.assignment_1.controller.ContactItemClickListener;
+import com.example.assignment_1.data.DatabaseHelper;
 import com.example.assignment_1.model.Contact;
 import com.example.assignment_1.viewModel.ContactListAdapter;
 
@@ -33,6 +34,8 @@ public class ContactListFragment extends Fragment {
     private RecyclerView.LayoutManager clf_LayoutManager;
 
     private Button inviteButton;
+
+    private DatabaseHelper dbHelper;
 
     private static boolean build = true;
 
@@ -53,7 +56,17 @@ public class ContactListFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        loadContacts();
+        dbHelper = DatabaseHelper.getHelper(context);
+        if(dbHelper.contactsTableEmpty()) {
+            System.out.println("NOT FROM DATABASE");
+            contacts = loadContacts();
+            for (Contact contact : contacts) {
+                dbHelper.addContact(contact);
+            }
+        }else{
+            System.out.println("FROM DATABASE");
+            dbHelper.readContactTable();
+        }
     }
 
     @Override
