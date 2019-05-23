@@ -2,14 +2,10 @@ package com.example.assignment_1.view;
 
 import android.app.AlarmManager;
 import android.app.Dialog;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,7 +22,8 @@ import com.example.assignment_1.R;
 import com.example.assignment_1.controller.AddEventOnClickListener;
 import com.example.assignment_1.controller.AlertReceiver;
 import com.example.assignment_1.controller.EditEventOnClickListener;
-import com.example.assignment_1.controller.HttpURLConnectionAsyncTask;
+import com.example.assignment_1.controller.HttpCall;
+import com.example.assignment_1.controller.HttpURLConnectionAsyncTaskdraft;
 import com.example.assignment_1.controller.MapOnClickListener;
 import com.example.assignment_1.controller.NotificationListener;
 import com.example.assignment_1.model.CustomComparator;
@@ -34,17 +31,15 @@ import com.example.assignment_1.model.EventModel;
 import com.example.assignment_1.model.FileLoader;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.api.GoogleApi;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.ParseException;
-import java.util.Collections;
+import java.util.HashMap;
 
 import static com.example.assignment_1.model.EventModel.eventAdapter;
-import static com.example.assignment_1.model.EventModel.events;
 
 public class EventListActivity extends AppCompatActivity {
 
@@ -84,7 +79,7 @@ public class EventListActivity extends AppCompatActivity {
             init();
         }
 
-        new HttpURLConnectionAsyncTask(this).execute();
+//        new HttpURLConnectionAsyncTaskdraft(this).execute();
 
     }
 
@@ -123,28 +118,24 @@ public class EventListActivity extends AppCompatActivity {
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, milliseconds, pendingIntent);
     }
 
-//    private void createNotificationChannels() {
-//         If using API level 26 or higher
-//        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            NotificationChannel channel1 = new NotificationChannel(
-//                    CHANNEL_1_ID,
-//                    "channel1",
-//                    NotificationManager.IMPORTANCE_HIGH
-//            );
-//            channel1.setDescription("This is channel 1");
-//
-//            NotificationChannel channel2 = new NotificationChannel(
-//                    CHANNEL_1_ID,
-//                    "channel1",
-//                    NotificationManager.IMPORTANCE_LOW
-//            );
-//            channel2.setDescription("This is channel 2");
-//
-//            NotificationManager manager = getSystemService(NotificationManager.class);
-//            manager.createNotificationChannel(channel1);
-//            manager.createNotificationChannel(channel2);
-//        }
-//    }
+    private void makeHttpRequest() {
+        final HttpCall httpCall = new HttpCall();
+        httpCall.setMethodtype(HttpCall.GET);
+        httpCall.setUrl("https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=Washington,DC&destinations=New+York+City,NY&key=AIzaSyDN4UvDycELwsIbLsF6CmPXgUtmPlbEU4w");
+//                httpCall.setUrl("https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=AIzaSyA7EyEiwsUHaXZBqRj_Te4SSN6RfxhfGc8&location=41.3851,%202.1734&radius=750");
+//                httpCall.setUrl("https://developer.android.com/");
+        HashMap<String, String> params = new HashMap<>();
+//                params.put("name", "James Bond");
+        httpCall.setParams(params);
+        new HttpURLConnectionAsyncTaskdraft() {
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
+//                        Toast.makeText(getApplicationContext(), httpCall.getUrl(), Toast.LENGTH_LONG).show();
+            }
+        }.execute(httpCall);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -162,6 +153,8 @@ public class EventListActivity extends AppCompatActivity {
                 startAlarm(5000);
                 NotificationThresholdDialog notificationDialog = new NotificationThresholdDialog();
                 notificationDialog.show(getSupportFragmentManager(), "Notification Threshold");
+
+                makeHttpRequest();
                 break;
             case R.id.sort_ascending:
                 c.sortAscending();

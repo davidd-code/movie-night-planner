@@ -34,4 +34,5 @@ public class HttpCall {
     public void setParams(HashMap<String, String> params) {
         this.params = params;
     }
+
 }
