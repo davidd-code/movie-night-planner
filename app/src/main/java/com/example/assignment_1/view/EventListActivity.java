@@ -26,6 +26,7 @@ import com.example.assignment_1.R;
 import com.example.assignment_1.controller.AddEventOnClickListener;
 import com.example.assignment_1.controller.AlertReceiver;
 import com.example.assignment_1.controller.EditEventOnClickListener;
+import com.example.assignment_1.controller.HttpURLConnectionAsyncTask;
 import com.example.assignment_1.controller.MapOnClickListener;
 import com.example.assignment_1.controller.NotificationListener;
 import com.example.assignment_1.model.CustomComparator;
@@ -82,6 +83,9 @@ public class EventListActivity extends AppCompatActivity {
         if(isServicesOK()) {
             init();
         }
+
+        new HttpURLConnectionAsyncTask(this).execute();
+
     }
 
     private void init() {
