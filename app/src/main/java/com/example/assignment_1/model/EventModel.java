@@ -16,16 +16,16 @@ public final class EventModel {
 
     private EventModel(){};
 
-    public static ArrayList<EventImpl> events = new ArrayList<EventImpl>();
-    public static ArrayList<MovieImpl> movies = new ArrayList<MovieImpl>();
+    public static ArrayList<EventImpl> events = new ArrayList<>();
+    public static ArrayList<MovieImpl> movies = new ArrayList<>();
     public static ArrayList<Contact> contacts = new ArrayList<>();
     public static EventListAdapter eventAdapter = new EventListAdapter(events);
     public static ContactListAdapter contactAdapter;
     public static final String JAYG = "]|[::::|:::>>]|[<<:::|::::>>]|[>>>>>>>>>>>>>> ";
 
-    public void addEvent(EventImpl newEvent){
-        events.add(newEvent);
-    }
+//    public void addEvent(EventImpl newEvent){
+//        events.add(newEvent);
+//    }
 
     public static void loadEvents(ArrayList<String[]> data) throws ParseException {
 

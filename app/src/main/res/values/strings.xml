@@ -33,4 +33,8 @@
     <string name="longitude">longitude</string>
     <string name="title_activity_event_location">Map</string>
     <string name="event_locations">location</string>
+
+    <string name="notification_threshold">Notification Threshold</string>
+    <string name="minutes">Minutes</string>
+    <string name="threshold_hint">Please enter a number</string>
 </resources>

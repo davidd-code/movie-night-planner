@@ -103,6 +103,10 @@ public class EventListActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         CustomComparator c = new CustomComparator();
         switch(item.getItemId()){
+            case R.id.notification_threshold:
+                NotificationThresholdDialog notificationDialog = new NotificationThresholdDialog();
+                notificationDialog.show(getSupportFragmentManager(), "Notification Threshold");
+                break;
             case R.id.sort_ascending:
                 c.sortAscending();
                 Toast.makeText(this, "Ascending", Toast.LENGTH_SHORT).show();
