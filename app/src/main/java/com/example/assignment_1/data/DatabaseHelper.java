@@ -32,28 +32,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 16;
     private static final String DATABASE_NAME = "MovieEventsDB.db";
 
-    public static final String TABLE_EVENTS = "Events";
-    public static final String COL_EVENT_ID = "EventID";
-    public static final String COL_EVENT_TITLE = "EventTitle";
-    public static final String COL_EVENT_START = "StartDate";
-    public static final String COL_EVENT_END = "EndDate";
-    public static final String COL_EVENT_VENUE = "Venue";
-    public static final String COL_EVENT_LOCATION = "Location";
+    private static final String TABLE_EVENTS = "Events";
+    private static final String COL_EVENT_ID = "EventID";
+    private static final String COL_EVENT_TITLE = "EventTitle";
+    private static final String COL_EVENT_START = "StartDate";
+    private static final String COL_EVENT_END = "EndDate";
+    private static final String COL_EVENT_VENUE = "Venue";
+    private static final String COL_EVENT_LOCATION = "Location";
 
-    public static final String TABLE_MOVIES = "Movies";
-    public static final String COL_MOVIE_ID = "MovieID";
-    public static final String COL_MOVIE_TITLE = "MovieTitle";
-    public static final String COL_MOVIE_YEAR = "Year";
-    public static final String COL_MOVIE_POSTER = "Poster";
+    private static final String TABLE_MOVIES = "Movies";
+    private static final String COL_MOVIE_ID = "MovieID";
+    private static final String COL_MOVIE_TITLE = "MovieTitle";
+    private static final String COL_MOVIE_YEAR = "Year";
+    private static final String COL_MOVIE_POSTER = "Poster";
 
-    public static final String TABLE_ATTENDEES = "Attendees";
-    public static final String TABLE_CONTACTS = "Contacts";
-    public static final String COL_CONTACT_ID = "ContactID";
-    public static final String COL_CONTACT_NAME = "Name";
-    public static final String COL_CONTACT_PHONE = "Phone";
-    public static final String COL_CONTACT_EMAIL = "Email";
+    private static final String TABLE_ATTENDEES = "Attendees";
+    private static final String TABLE_CONTACTS = "Contacts";
+    private static final String COL_CONTACT_ID = "ContactID";
+    private static final String COL_CONTACT_NAME = "Name";
+    private static final String COL_CONTACT_PHONE = "Phone";
+    private static final String COL_CONTACT_EMAIL = "Email";
 
-    public static final String CREATE_EVENTS_TABLE =
+    private static final String CREATE_EVENTS_TABLE =
             "CREATE TABLE " + TABLE_EVENTS + "(" +
                     COL_EVENT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     COL_EVENT_TITLE + " TEXT, " +
@@ -64,19 +64,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     COL_MOVIE_ID + " INTEGER," +
                     " FOREIGN KEY (" + COL_MOVIE_ID + ")" +
                     " REFERENCES " + TABLE_MOVIES + "(" + COL_MOVIE_ID + "));";
-    public static final String CREATE_MOVIES_TABLE =
+    private static final String CREATE_MOVIES_TABLE =
             "CREATE TABLE " + TABLE_MOVIES + "(" +
                     COL_MOVIE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     COL_MOVIE_TITLE + " TEXT, " +
                     COL_MOVIE_YEAR + " TEXT, " +
                     COL_MOVIE_POSTER + " TEXT " + ");";
-    public static final String CREATE_CONTACTS_TABLE =
+    private static final String CREATE_CONTACTS_TABLE =
             "CREATE TABLE " + TABLE_CONTACTS + "(" +
                     COL_CONTACT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     COL_CONTACT_NAME + " TEXT, " +
                     COL_CONTACT_PHONE + " TEXT, " +
                     COL_CONTACT_EMAIL + " TEXT " + ");";
-    public static final String CREATE_ATTENDEES_TABLE =
+    private static final String CREATE_ATTENDEES_TABLE =
             "CREATE TABLE " + TABLE_ATTENDEES + "(" +
                     COL_EVENT_ID + " INTEGER, " +
                     COL_CONTACT_ID + " INTEGER, " +
@@ -98,7 +98,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return instance;
     }
 
-    public void loadTextFile(){
+    private void loadTextFile(){
         InputStream isEvents = context.getResources().openRawResource(R.raw.events);
         InputStream isMovies = context.getResources().openRawResource(R.raw.movies);
         BufferedReader brEvents = new BufferedReader(new InputStreamReader(isEvents));
@@ -121,8 +121,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public SQLiteDatabase open() {
-        return getWritableDatabase();
+    public void open() {
+        getWritableDatabase();
     }
 
     @Override
@@ -133,7 +133,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public void populateNewDatabase(SQLiteDatabase db) {
+    private void populateNewDatabase(SQLiteDatabase db) {
         for(MovieImpl movie : movies)
             addMovie(movie, db);
         for(EventImpl event : events)
@@ -179,10 +179,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         int count = cursor.getInt(0);
         cursor.close();
         close();
-        if (count > 0)
-            return false;
-        else
-            return true;
+        return count <= 0;
     }
 
     public void addEvent(EventImpl event, SQLiteDatabase db){
@@ -203,7 +200,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public void addMovie(MovieImpl movie, SQLiteDatabase db) {
+    private void addMovie(MovieImpl movie, SQLiteDatabase db) {
         try {
             ContentValues values = new ContentValues();
 
