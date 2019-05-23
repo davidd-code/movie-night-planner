@@ -14,7 +14,6 @@ import com.example.assignment_1.model.Contact;
 import com.example.assignment_1.model.EventImpl;
 
 import static com.example.assignment_1.model.EventModel.contacts;
-import static com.example.assignment_1.model.EventModel.events;
 
 public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.ContactListViewHolder> {
 

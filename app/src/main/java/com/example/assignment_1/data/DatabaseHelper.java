@@ -30,7 +30,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private FileLoader fl = new FileLoader();
     private Context context;
 
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
     private static final String DATABASE_NAME = "MovieEventsDB.db";
 
     private static final String TABLE_EVENTS = "Events";
