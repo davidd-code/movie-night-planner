@@ -1,7 +1,9 @@
 package com.example.assignment_1.view;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -47,7 +49,7 @@ public class NotificationThresholdDialog extends AppCompatDialogFragment {
     }
 
     private void startAlarm(int minute) {
-
+        AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
     }
 }
 

@@ -1,7 +1,11 @@
 package com.example.assignment_1.view;
 
 import android.app.Dialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,6 +22,7 @@ import com.example.assignment_1.R;
 import com.example.assignment_1.controller.AddEventOnClickListener;
 import com.example.assignment_1.controller.EditEventOnClickListener;
 import com.example.assignment_1.controller.MapOnClickListener;
+import com.example.assignment_1.controller.NotificationListener;
 import com.example.assignment_1.model.CustomComparator;
 import com.example.assignment_1.model.EventModel;
 import com.example.assignment_1.model.FileLoader;
@@ -48,6 +53,10 @@ public class EventListActivity extends AppCompatActivity {
     private static final String TAG="EventListActivity";
     private static final int ERROR_DIALOG_REQUEST = 9001;
 
+//    public static final String CHANNEL_1_ID = "channel1";
+//    public static final String CHANNEL_2_ID = "channel2";
+    private NotificationListener mNotificationListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +69,7 @@ public class EventListActivity extends AppCompatActivity {
             loadData();
         }
 
-
+        mNotificationListener = new NotificationListener(this);
 
         buildRecyclerView();
         setButtons();
@@ -92,6 +101,34 @@ public class EventListActivity extends AppCompatActivity {
         return false;
     }
 
+    public void sendOnChannel(String title, String message) {
+        NotificationCompat.Builder nb = mNotificationListener.getChannel1Notification(title, message);
+        mNotificationListener.getNotificationManager().notify(1, nb.build());
+    }
+
+//    private void createNotificationChannels() {
+//         If using API level 26 or higher
+//        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            NotificationChannel channel1 = new NotificationChannel(
+//                    CHANNEL_1_ID,
+//                    "channel1",
+//                    NotificationManager.IMPORTANCE_HIGH
+//            );
+//            channel1.setDescription("This is channel 1");
+//
+//            NotificationChannel channel2 = new NotificationChannel(
+//                    CHANNEL_1_ID,
+//                    "channel1",
+//                    NotificationManager.IMPORTANCE_LOW
+//            );
+//            channel2.setDescription("This is channel 2");
+//
+//            NotificationManager manager = getSystemService(NotificationManager.class);
+//            manager.createNotificationChannel(channel1);
+//            manager.createNotificationChannel(channel2);
+//        }
+//    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
@@ -104,8 +141,9 @@ public class EventListActivity extends AppCompatActivity {
         CustomComparator c = new CustomComparator();
         switch(item.getItemId()){
             case R.id.notification_threshold:
-                NotificationThresholdDialog notificationDialog = new NotificationThresholdDialog();
-                notificationDialog.show(getSupportFragmentManager(), "Notification Threshold");
+                sendOnChannel("Notification title", "message");
+//                NotificationThresholdDialog notificationDialog = new NotificationThresholdDialog();
+//                notificationDialog.show(getSupportFragmentManager(), "Notification Threshold");
                 break;
             case R.id.sort_ascending:
                 c.sortAscending();
