@@ -33,13 +33,11 @@ public class MovieListActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intentData){
         super.onActivityResult(requestCode, resultCode, intentData);
-        if(requestCode == MOVIE_REQUEST_CODE){
+        if(requestCode == MOVIE_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 eventIndex = intentData.getIntExtra("EVENT_INDEX", -1);
                 System.out.println("::::::::::::::::::::::::     " + eventIndex + "     :::::::::::::::::::::::::::");
             }
-        }else{
-            System.out.println(">>>>>>>>>>>>>>>>>>>>>>> >>>>>>>>>>>>>   " + eventIndex);
         }
     }
 
@@ -55,11 +53,6 @@ public class MovieListActivity extends AppCompatActivity {
         Intent intent = getIntent();
         eventIndex = intent.getIntExtra("EVENT_INDEX", -1);
 
-        if (eventIndex == -1) {
-            System.out.println("::::::::::::::::::::::::::ERROR NO EVENT INDEX:::::::::::::::::::::::::::::::::::");
-        }else{
-            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>   " + eventIndex);
-        }
         mAdapter.setOnItemClickListener(new MovieDetailOnClickListener(this, eventIndex));
     }
 }

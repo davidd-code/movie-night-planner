@@ -16,6 +16,7 @@ import android.widget.Button;
 
 import com.example.assignment_1.R;
 import com.example.assignment_1.controller.ContactItemClickListener;
+import com.example.assignment_1.data.DatabaseHelper;
 import com.example.assignment_1.model.Contact;
 import com.example.assignment_1.model.EventImpl;
 import com.example.assignment_1.viewModel.ContactListAdapter;
@@ -36,13 +37,12 @@ public class ContactListFragment extends Fragment {
 
     private Button inviteButton;
     private EventImpl currentEvent;
+    private DatabaseHelper dbHelper;
 
     private static boolean build = true;
 
     public ContactListFragment() {
     }
-
-    private static int clf_eventId;
 
     public static ContactListFragment newInstance(EventImpl currentEvent) {
         ContactListFragment contactListFragment = new ContactListFragment();
@@ -56,7 +56,22 @@ public class ContactListFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        loadContacts();
+        dbHelper = DatabaseHelper.getHelper(context);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if(dbHelper.contactsTableEmpty()) {
+                    //System.out.println("NOT FROM DATABASE");
+                    contacts = loadContacts();
+                    for (Contact contact : contacts) {
+                        dbHelper.addContact(contact);
+                    }
+                }else{
+                    //System.out.println("FROM DATABASE");
+                    dbHelper.readContactTable();
+                }
+            }
+        }).start();
     }
 
     @Override

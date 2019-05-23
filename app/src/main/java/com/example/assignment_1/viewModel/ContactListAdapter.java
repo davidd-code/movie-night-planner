@@ -21,8 +21,8 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
     private OnItemClickListener listener;
     private EventImpl currentEvent;
 
-    public ContactListAdapter(EventImpl currentEvent) {
-        this.currentEvent = currentEvent;
+    public ContactListAdapter(EventImpl event) {
+        this.currentEvent = event;
     }
 
     public static class ContactListViewHolder extends RecyclerView.ViewHolder {
@@ -30,9 +30,9 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
         private CardView contactCard;
         private EventImpl currentEvent;
 
-        public ContactListViewHolder(@NonNull final View itemView, final OnItemClickListener listener, final EventImpl currentEvent) {
+        public ContactListViewHolder(@NonNull final View itemView, final OnItemClickListener listener, final EventImpl event) {
             super(itemView);
-            this.currentEvent = currentEvent;
+            this.currentEvent = event;
             contactName = itemView.findViewById(R.id.contact_Name);
             phoneNumber = itemView.findViewById(R.id.phone_Number);
             email = itemView.findViewById(R.id.email);
@@ -43,7 +43,6 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
                 public void onClick(View v) {
                     if (listener != null) {
                         int position = getAdapterPosition();
-                        // fix event_index returning 0 atm
                         int event_index = listener.getEventIndex();
                         if (position != RecyclerView.NO_POSITION) {
                             listener.onItemClick(position, event_index);

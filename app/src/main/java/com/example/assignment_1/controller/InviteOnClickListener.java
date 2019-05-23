@@ -15,19 +15,18 @@ public class InviteOnClickListener implements View.OnClickListener {
     private Context context;
     private EventImpl currentEvent;
 
-
-    public InviteOnClickListener(Context c, EventImpl currentEvent) {
+    public InviteOnClickListener(Context c, EventImpl event) {
         this.context = c;
-        this.currentEvent = currentEvent;
+        this.currentEvent = event;
     }
 
     @Override
     public void onClick(View v) {
 
-        openFragment(currentEvent);
+        openFragment();
     }
 
-    public void openFragment(EventImpl currentEvent) {
+    public void openFragment() {
         ContactListFragment frag = ContactListFragment.newInstance(currentEvent);
         FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();

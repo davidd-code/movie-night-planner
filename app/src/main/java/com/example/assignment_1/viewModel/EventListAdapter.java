@@ -87,10 +87,10 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         eventListViewHolder.eventVenue.setText(currentEvent.getVenue());
         eventListViewHolder.numAttendees.setText(Integer.toString(currentEvent.getNumAttendees()));
         if(currentEvent.getChosenMovie() != null){
-            eventListViewHolder.eventMovie.setText(currentEvent.getChosenMovie().getTitle());
+            eventListViewHolder.eventMovie.setText((currentEvent.getChosenMovie()).getTitle());
         }
         if(currentEvent.getStartDate() != null) {
-            eventListViewHolder.eventDate.setText(currentEvent.stringFormatLocalDateTime(currentEvent.getStartDate()));
+            eventListViewHolder.eventDate.setText(currentEvent.ldtToString(currentEvent.getStartDate()));
         }
     }
 

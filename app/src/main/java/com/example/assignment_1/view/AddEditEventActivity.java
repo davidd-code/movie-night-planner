@@ -3,6 +3,7 @@ package com.example.assignment_1.view;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +21,7 @@ import com.example.assignment_1.R;
 import com.example.assignment_1.controller.DateTimePickOnClickListener;
 import com.example.assignment_1.controller.InviteOnClickListener;
 import com.example.assignment_1.controller.SelectMovieOnClickListener;
+import com.example.assignment_1.data.DatabaseHelper;
 import com.example.assignment_1.model.EventImpl;
 import com.example.assignment_1.model.MovieImpl;
 
@@ -31,6 +33,8 @@ import static com.example.assignment_1.model.EventModel.movies;
 
 //implementation of GetLocationDialog temporary until assignment 2
 public class AddEditEventActivity extends AppCompatActivity implements GetLocationDialog.LocationDialogListener {
+
+    private DatabaseHelper dbHelper;
 
     private TextView eventName, venueName, movieName,startDate, endDate, numAttendees;
     private ImageView startDateButton, endDateButton, selectMovieButton, locationButton, inviteButton;
@@ -55,6 +59,7 @@ public class AddEditEventActivity extends AppCompatActivity implements GetLocati
         checkForActivityResult(eventIndex);
         setListeners();
 
+        dbHelper = DatabaseHelper.getHelper(this);
 
         temp();
     }
@@ -68,13 +73,28 @@ public class AddEditEventActivity extends AppCompatActivity implements GetLocati
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(!events.contains(currentEvent)){
-            events.add(currentEvent);
-        }
         switch(item.getItemId()) {
 
             case R.id.save_event:
                 saveEvent();
+                if(!events.contains(currentEvent)){
+                    events.add(currentEvent);
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            SQLiteDatabase db = dbHelper.getWritableDatabase();
+                            dbHelper.addEvent(currentEvent, db);
+                        }
+                    }).start();
+
+                }else {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            dbHelper.updateEvent(currentEvent);
+                        }
+                    }).start();
+                }
                 this.finish();
                 break;
             case R.id.save_close_event:
@@ -111,7 +131,6 @@ public class AddEditEventActivity extends AppCompatActivity implements GetLocati
         if(requestCode == MOVIE_REQUEST_CODE){
             if (resultCode == Activity.RESULT_OK) {
                 eventIndex = intentData.getIntExtra("EVENT_INDEX", -1);
-//                currentEvent = events.get(eventIndex);
                 int position = intentData.getIntExtra("MOVIE_INDEX", -1);
                 currentEvent.setChosenMovie(movies.get(position));
                 setTextDetails();
@@ -138,11 +157,11 @@ public class AddEditEventActivity extends AppCompatActivity implements GetLocati
             movieName.setText(chosenMovie.getTitle());
         }
         if(currentEvent.getStartDate() != null) {
-            startDate.setText(currentEvent.stringFormatLocalDateTime(currentEvent.getStartDate()));
+            startDate.setText(currentEvent.ldtToString(currentEvent.getStartDate()));
             endDateButton.setEnabled(true);
         }
         if(currentEvent.getEndDate() != null) {
-            endDate.setText(currentEvent.stringFormatLocalDateTime(currentEvent.getEndDate()));
+            endDate.setText(currentEvent.ldtToString(currentEvent.getEndDate()));
         }
         if(currentEvent.getNumAttendees() > 0){
             numAttendees.setText(Integer.toString(currentEvent.getNumAttendees()));

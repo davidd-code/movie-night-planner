@@ -2,6 +2,7 @@ package com.example.assignment_1.model;
 
 import android.content.Context;
 
+import com.example.assignment_1.data.DatabaseHelper;
 import com.example.assignment_1.viewModel.ContactListAdapter;
 import com.example.assignment_1.viewModel.EventListAdapter;
 
@@ -48,9 +49,7 @@ public final class EventModel {
 
             start = LocalDateTime.parse(fStart, dtf);
             end = LocalDateTime.parse(fEnd, dtf);
-            events.add(i ,new EventImpl(txtInfo[0], txtInfo[1], start, end, txtInfo[4], txtInfo[5]));
-
-            System.out.println(events.get(i).toString());
+            events.add(i, new EventImpl(txtInfo[0], txtInfo[1], start, end, txtInfo[4], txtInfo[5]));
         }
     }
 
@@ -61,7 +60,7 @@ public final class EventModel {
             String imgSrc = txtInfo[3].toLowerCase();
             String imgSrcName = imgSrc.substring(0, imgSrc.indexOf('.'));
             int imgRes = c.getResources().getIdentifier(imgSrcName, "drawable", c.getPackageName());
-            movies.add(i, new MovieImpl(txtInfo[0], txtInfo[1], txtInfo[2], txtInfo[3], imgRes));
+            movies.add(i, new MovieImpl(txtInfo[0], txtInfo[1], txtInfo[2], imgSrc, imgRes));
         }
     }
 }
