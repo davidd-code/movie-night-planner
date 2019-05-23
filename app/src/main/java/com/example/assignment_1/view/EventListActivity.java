@@ -1,8 +1,12 @@
 package com.example.assignment_1.view;
 
+import android.app.AlarmManager;
 import android.app.Dialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
@@ -20,6 +24,7 @@ import android.widget.Toast;
 
 import com.example.assignment_1.R;
 import com.example.assignment_1.controller.AddEventOnClickListener;
+import com.example.assignment_1.controller.AlertReceiver;
 import com.example.assignment_1.controller.EditEventOnClickListener;
 import com.example.assignment_1.controller.MapOnClickListener;
 import com.example.assignment_1.controller.NotificationListener;
@@ -101,9 +106,17 @@ public class EventListActivity extends AppCompatActivity {
         return false;
     }
 
-    public void sendOnChannel(String title, String message) {
-        NotificationCompat.Builder nb = mNotificationListener.getChannel1Notification(title, message);
-        mNotificationListener.getNotificationManager().notify(1, nb.build());
+//    public void sendOnChannel(String title, String message) {
+//        NotificationCompat.Builder nb = mNotificationListener.getChannel1Notification(title, message);
+//        mNotificationListener.getNotificationManager().notify(1, nb.build());
+//    }
+
+    private void startAlarm(int milliseconds) {
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, AlertReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1413, intent, 0);
+
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, milliseconds, pendingIntent);
     }
 
 //    private void createNotificationChannels() {
@@ -141,9 +154,10 @@ public class EventListActivity extends AppCompatActivity {
         CustomComparator c = new CustomComparator();
         switch(item.getItemId()){
             case R.id.notification_threshold:
-                sendOnChannel("Notification title", "message");
-//                NotificationThresholdDialog notificationDialog = new NotificationThresholdDialog();
-//                notificationDialog.show(getSupportFragmentManager(), "Notification Threshold");
+//                sendOnChannel("Notification title", "message");
+                startAlarm(5000);
+                NotificationThresholdDialog notificationDialog = new NotificationThresholdDialog();
+                notificationDialog.show(getSupportFragmentManager(), "Notification Threshold");
                 break;
             case R.id.sort_ascending:
                 c.sortAscending();

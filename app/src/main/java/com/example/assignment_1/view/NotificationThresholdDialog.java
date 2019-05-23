@@ -18,7 +18,7 @@ import com.example.assignment_1.R;
 public class NotificationThresholdDialog extends AppCompatDialogFragment {
 
     EditText notificationThreshold;
-    int notificationThresholdInt;
+    int notificationThresholdInt = 60;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -48,8 +48,5 @@ public class NotificationThresholdDialog extends AppCompatDialogFragment {
         return builder.create();
     }
 
-    private void startAlarm(int minute) {
-        AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
-    }
 }
 
