@@ -1,5 +1,6 @@
 package com.example.assignment_1.model;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -7,7 +8,7 @@ import java.util.ArrayList;
 import static com.example.assignment_1.model.EventModel.events;
 import static com.example.assignment_1.model.EventModel.movies;
 
-public class EventImpl extends AbstractEvent {
+public class EventImpl extends AbstractEvent implements Serializable {
 
     private MovieImpl chosenMovie;
     private ArrayList<Contact> attendees;

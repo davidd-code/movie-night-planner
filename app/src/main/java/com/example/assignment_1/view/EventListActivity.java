@@ -18,7 +18,6 @@ import com.example.assignment_1.controller.AddEventOnClickListener;
 import com.example.assignment_1.controller.EditEventOnClickListener;
 import com.example.assignment_1.data.DatabaseHelper;
 import com.example.assignment_1.model.CustomComparator;
-import com.example.assignment_1.model.EventImpl;
 
 import java.util.Collections;
 
@@ -47,15 +46,24 @@ public class EventListActivity extends AppCompatActivity {
 
         dbHelper = DatabaseHelper.getHelper(this);
         dbHelper.open();
+        dbHelper.close();
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        eventAdapter.notifyDataSetChanged();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        dbHelper.syncDatabase();
-        for (EventImpl event : events) {
-            System.out.println("NUM" + event.getNumAttendees());
-        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                dbHelper.syncDatabase();
+            }
+        }).start();
     }
 
     @Override

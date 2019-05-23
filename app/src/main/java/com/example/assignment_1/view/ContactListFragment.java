@@ -18,6 +18,7 @@ import com.example.assignment_1.R;
 import com.example.assignment_1.controller.ContactItemClickListener;
 import com.example.assignment_1.data.DatabaseHelper;
 import com.example.assignment_1.model.Contact;
+import com.example.assignment_1.model.EventImpl;
 import com.example.assignment_1.viewModel.ContactListAdapter;
 
 import java.util.ArrayList;
@@ -34,21 +35,17 @@ public class ContactListFragment extends Fragment {
     private RecyclerView.LayoutManager clf_LayoutManager;
 
     private Button inviteButton;
-
+    private EventImpl currentEvent;
     private DatabaseHelper dbHelper;
 
-    private static boolean build = true;
 
     public ContactListFragment() {
     }
 
-    private static int event_index;
-
-    public static ContactListFragment newInstance(int eventIndex) {
-        event_index = eventIndex;
+    public static ContactListFragment newInstance(EventImpl currentEvent) {
         ContactListFragment contactListFragment = new ContactListFragment();
         Bundle args = new Bundle();
-        args.putInt("event_index", eventIndex);
+        args.putSerializable("current_event", currentEvent);
         contactListFragment.setArguments(args);
         return contactListFragment;
     }
@@ -57,16 +54,21 @@ public class ContactListFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         dbHelper = DatabaseHelper.getHelper(context);
-        if(dbHelper.contactsTableEmpty()) {
-            System.out.println("NOT FROM DATABASE");
-            contacts = loadContacts();
-            for (Contact contact : contacts) {
-                dbHelper.addContact(contact);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if(dbHelper.contactsTableEmpty()) {
+                    //System.out.println("NOT FROM DATABASE");
+                    contacts = loadContacts();
+                    for (Contact contact : contacts) {
+                        dbHelper.addContact(contact);
+                    }
+                }else{
+                    //System.out.println("FROM DATABASE");
+                    dbHelper.readContactTable();
+                }
             }
-        }else{
-            System.out.println("FROM DATABASE");
-            dbHelper.readContactTable();
-        }
+        }).start();
     }
 
     @Override
@@ -84,13 +86,14 @@ public class ContactListFragment extends Fragment {
         clf_RecyclerView = view.findViewById(R.id.contact_RecyclerView);
         clf_LayoutManager = new LinearLayoutManager(getContext());
         clf_RecyclerView.setLayoutManager(clf_LayoutManager);
-        clf_Adapter = new ContactListAdapter(event_index);
+        currentEvent = (EventImpl) getArguments().getSerializable("current_event");
+        clf_Adapter = new ContactListAdapter(currentEvent);
         contactAdapter = clf_Adapter;
         clf_RecyclerView.setAdapter(clf_Adapter);
-        clf_Adapter.setOnItemClickListener(new ContactItemClickListener(getContext(), event_index));
+        clf_Adapter.setOnItemClickListener(new ContactItemClickListener(getContext(), currentEvent));
 
         inviteButton = view.findViewById(R.id.invite_contact_button);
-        inviteButton.setOnClickListener(new ContactItemClickListener(getContext(), event_index));
+        inviteButton.setOnClickListener(new ContactItemClickListener(getContext(), currentEvent));
     }
 
     public ArrayList<Contact> loadContacts() {

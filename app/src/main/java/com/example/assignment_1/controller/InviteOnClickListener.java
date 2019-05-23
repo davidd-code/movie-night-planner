@@ -7,26 +7,27 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.example.assignment_1.R;
+import com.example.assignment_1.model.EventImpl;
 import com.example.assignment_1.view.ContactListFragment;
 
 public class InviteOnClickListener implements View.OnClickListener {
 
     private Context context;
-    private int eventIndex;
+    private EventImpl currentEvent;
 
-    public InviteOnClickListener(Context c, int i) {
+    public InviteOnClickListener(Context c, EventImpl event) {
         this.context = c;
-        this.eventIndex = i;
+        this.currentEvent = event;
     }
 
     @Override
     public void onClick(View v) {
 
-        openFragment(eventIndex);
+        openFragment();
     }
 
-    public void openFragment(int eventIndex) {
-        ContactListFragment frag = ContactListFragment.newInstance(eventIndex);
+    public void openFragment() {
+        ContactListFragment frag = ContactListFragment.newInstance(currentEvent);
         FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.addToBackStack(null);

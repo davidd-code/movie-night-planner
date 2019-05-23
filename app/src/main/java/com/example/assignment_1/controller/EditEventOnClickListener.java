@@ -24,7 +24,6 @@ public class EditEventOnClickListener implements EventListAdapter.OnItemClickLis
 
     @Override
     public void onItemClick(int position) {
-        //
         Intent intent = new Intent(context, AddEditEventActivity.class);
         intent.putExtra("ITEM_INDEX", position);
         context.startActivity(intent);
@@ -32,11 +31,15 @@ public class EditEventOnClickListener implements EventListAdapter.OnItemClickLis
 
     @Override
     public void onDeleteClick(int position) {
-        int eventID = position+1;
+        final int eventID = position+1;
         events.remove(position);
 
-        dbHelper.deleteEvent(Integer.toString(eventID));
-
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                dbHelper.deleteEvent(Integer.toString(eventID));
+            }
+        }).start();
 
         Toast.makeText(context, "Event Deleted", Toast.LENGTH_SHORT).show();
         adapter.notifyItemRemoved(position);

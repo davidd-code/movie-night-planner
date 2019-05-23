@@ -73,22 +73,27 @@ public class AddEditEventActivity extends AppCompatActivity implements GetLocati
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        /*if(!events.contains(currentEvent)){
-            events.add(currentEvent);
-            SQLiteDatabase db = dbHelper.open();
-            dbHelper.addEvent(currentEvent, db);
-            dbHelper.close();
-        }*/
         switch(item.getItemId()) {
 
             case R.id.save_event:
                 saveEvent();
                 if(!events.contains(currentEvent)){
                     events.add(currentEvent);
-    SQLiteDatabase db = dbHelper.getWritableDatabase();
-                    dbHelper.addEvent(currentEvent, db);
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            SQLiteDatabase db = dbHelper.getWritableDatabase();
+                            dbHelper.addEvent(currentEvent, db);
+                        }
+                    }).start();
+
                 }else {
-                    dbHelper.updateEvent(currentEvent);
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            dbHelper.updateEvent(currentEvent);
+                        }
+                    }).start();
                 }
                 this.finish();
                 break;
@@ -103,9 +108,6 @@ public class AddEditEventActivity extends AppCompatActivity implements GetLocati
     public void saveEvent(){
         currentEvent.setTitle(String.valueOf(eventName.getText()));
         currentEvent.setVenue(String.valueOf(venueName.getText()));
-
-
-
         Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
         eventAdapter.notifyDataSetChanged();
     }
@@ -129,7 +131,6 @@ public class AddEditEventActivity extends AppCompatActivity implements GetLocati
         if(requestCode == MOVIE_REQUEST_CODE){
             if (resultCode == Activity.RESULT_OK) {
                 eventIndex = intentData.getIntExtra("EVENT_INDEX", -1);
-//                currentEvent = events.get(eventIndex);
                 int position = intentData.getIntExtra("MOVIE_INDEX", -1);
                 currentEvent.setChosenMovie(movies.get(position));
                 setTextDetails();
@@ -182,7 +183,7 @@ public class AddEditEventActivity extends AppCompatActivity implements GetLocati
         endDateButton.setEnabled(false);
         movieName.setOnClickListener(new SelectMovieOnClickListener(this, eventIndex));
         selectMovieButton.setOnClickListener(new SelectMovieOnClickListener(this, eventIndex));
-        inviteButton.setOnClickListener(new InviteOnClickListener(this, eventIndex));
+        inviteButton.setOnClickListener(new InviteOnClickListener(this, currentEvent));
         //numAttendees.setOnClickListener();
     }
 
