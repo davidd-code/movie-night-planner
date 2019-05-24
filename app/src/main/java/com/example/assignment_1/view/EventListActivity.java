@@ -25,11 +25,9 @@ import android.widget.Toast;
 
 import com.example.assignment_1.R;
 import com.example.assignment_1.RESTApi.HttpURLConnectionAsyncTask;
-import com.example.assignment_1.RESTApi.HttpURLConnectionAsyncTaskDraft;
 import com.example.assignment_1.controller.AddEventOnClickListener;
 import com.example.assignment_1.controller.AlertReceiver;
 import com.example.assignment_1.controller.EditEventOnClickListener;
-import com.example.assignment_1.RESTApi.HttpCall;
 import com.example.assignment_1.controller.MapOnClickListener;
 import com.example.assignment_1.controller.NotificationListener;
 import com.example.assignment_1.model.CustomComparator;
@@ -44,7 +42,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.ParseException;
-import java.util.HashMap;
 
 import static com.example.assignment_1.model.EventModel.eventAdapter;
 

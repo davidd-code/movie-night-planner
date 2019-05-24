@@ -4,6 +4,10 @@ import android.app.Activity;
 import android.location.Location;
 import android.os.AsyncTask;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -63,11 +67,22 @@ public class HttpURLConnectionAsyncTask extends AsyncTask<String, String, String
             while((line = br.readLine()) != null) {
                 stringBuffer.append(line);
             }
+            String finalJSON = stringBuffer.toString();
+            JSONObject parentObject = new JSONObject(finalJSON);
+            JSONArray rowsArray = parentObject.getJSONArray("rows");
+            JSONObject elementsArray = rowsArray.getJSONObject(0);
+            JSONArray duration = elementsArray.getJSONArray("elements");
+            JSONObject durationElement = duration.getJSONObject(0);
+            JSONObject durationArray = durationElement.getJSONObject("duration");
+            String durationString = durationArray.getString("text");
+
             return stringBuffer.toString();
 
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
             e.printStackTrace();
         } finally {
             if(connection != null) {
