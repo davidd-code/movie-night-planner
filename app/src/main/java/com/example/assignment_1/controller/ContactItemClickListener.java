@@ -3,6 +3,7 @@ package com.example.assignment_1.controller;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 
 import com.example.assignment_1.data.DatabaseHelper;
@@ -20,6 +21,8 @@ public class ContactItemClickListener implements ContactListAdapter.OnItemClickL
     private EventImpl currentEvent;
     private DatabaseHelper dbHelper;
 
+    private static final String TAG = "ContactItemClickListener";
+
     public ContactItemClickListener(Context c, EventImpl event) {
         //this.eventIndex = i;
         this.context = c;
@@ -30,6 +33,7 @@ public class ContactItemClickListener implements ContactListAdapter.OnItemClickL
     @Override
     public void onItemClick(int pos, int event_index) {
         final Contact currentContact = contacts.get(pos);
+
         if( !currentEvent.isAttending(currentContact) ){
             currentEvent.addAttendees(currentContact);
             new Thread(new Runnable() {
@@ -39,7 +43,18 @@ public class ContactItemClickListener implements ContactListAdapter.OnItemClickL
                 }
             }).start();
         }else{
-            currentEvent.removeAttendee(currentContact);
+            Log.d(TAG, "Remove Attendee Clicked");
+            for (Contact attendee : currentEvent.getAttendees()) {
+                System.out.println("Attendees:\n"+attendee.getID()+", "+attendee.getFullName()+", "+attendee.getPhone());
+            }
+            System.out.println("CurrentContact:\n"+currentContact.getID()+", "+currentContact.getFullName()+", "+currentContact.getPhone());
+
+            if(currentEvent.removeAttendee(currentContact))
+                Log.d(TAG, "removed attendee");
+            else
+                Log.d(TAG, "attendee NOT removed");
+
+            Log.d(TAG, "Attendees: " + currentEvent.getNumAttendees());
             new Thread(new Runnable() {
                 @Override
                 public void run() {

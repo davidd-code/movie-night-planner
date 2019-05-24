@@ -1,7 +1,10 @@
 package com.example.assignment_1.view;
 
+import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -13,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.assignment_1.R;
 import com.example.assignment_1.controller.ContactItemClickListener;
@@ -21,11 +25,14 @@ import com.example.assignment_1.model.Contact;
 import com.example.assignment_1.model.EventImpl;
 import com.example.assignment_1.viewModel.ContactListAdapter;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 import static com.example.assignment_1.model.EventModel.contactAdapter;
 import static com.example.assignment_1.model.EventModel.contacts;
+import static com.example.assignment_1.model.EventModel.eventAdapter;
+import static com.example.assignment_1.view.EventListActivity.DATABASE_UPDATED_ACTION;
+import static com.example.assignment_1.view.EventListActivity.UPDATE_ACTION_TEXT;
+import static com.example.assignment_1.view.EventListActivity.update;
 
 
 public class ContactListFragment extends Fragment {
@@ -52,11 +59,25 @@ public class ContactListFragment extends Fragment {
         return contactListFragment;
     }
 
+    private BroadcastReceiver uiUpdater = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (DATABASE_UPDATED_ACTION.equals(intent.getAction())) {
+                String updateAvailable = intent.getStringExtra(UPDATE_ACTION_TEXT);
+                Toast.makeText(context, "UI updated", Toast.LENGTH_SHORT).show();
+                contactAdapter.notifyDataSetChanged();
+                eventAdapter.notifyDataSetChanged();
+            }
+        }
+    };
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(final Context context) {
         super.onAttach(context);
         dbHelper = DatabaseHelper.getHelper(context);
+        IntentFilter filter = new IntentFilter(DATABASE_UPDATED_ACTION);
+        context.registerReceiver(uiUpdater, filter);
+
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -69,9 +90,16 @@ public class ContactListFragment extends Fragment {
                 }else{
                     //System.out.println("FROM DATABASE");
                     dbHelper.readContactTable();
+                    context.sendBroadcast(update);
                 }
             }
         }).start();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        getContext().unregisterReceiver(uiUpdater);
     }
 
     @Override

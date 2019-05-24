@@ -159,8 +159,8 @@ public class EventImpl extends AbstractEvent implements Serializable {
         this.attendees.add(c);
     }
 
-    public void removeAttendee(Contact c){
-        this.attendees.remove(c);
+    public boolean removeAttendee(Contact c){
+        return this.attendees.remove(c);
     }
 
     public String toString(){

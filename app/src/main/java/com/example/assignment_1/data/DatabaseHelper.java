@@ -271,10 +271,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }
             cursor.moveToNext();
         }
-        for (int i=0; i<movies.size(); i++) {
-            MovieImpl movie = movies.get(i);
-            System.out.println("INDEX: " + i + " >>> " + "ID:" + movie.getID() + ", " + movie.getTitle());
-        }
+//        for (int i=0; i<movies.size(); i++) {
+//            MovieImpl movie = movies.get(i);
+//            System.out.println("INDEX: " + i + " >>> " + "ID:" + movie.getID() + ", " + movie.getTitle());
+//        }
         cursor.close();
         close();
     }
@@ -301,10 +301,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }
             cursor.moveToNext();
         }
-        for (int i=0; i<events.size(); i++) {
-            EventImpl event = events.get(i);
-            System.out.println("INDEX: " + i + " >>> " + "ID:" + event.getID() + ", " + event.getTitle());
-        }
+//        for (int i=0; i<events.size(); i++) {
+//            EventImpl event = events.get(i);
+//            System.out.println("INDEX: " + i + " >>> " + "ID:" + event.getID() + ", " + event.getTitle());
+//        }
         cursor.close();
         close();
     }
@@ -329,10 +329,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }
             cursor.moveToNext();
         }
-        for (int i=0; i<contacts.size(); i++) {
-            Contact contact = contacts.get(i);
-            System.out.println("INDEX: " + i + " >>> " + "ID:" + contact.getID() + ", " + contact.getFullName());
-        }
+//        for (int i=0; i<contacts.size(); i++) {
+//            Contact contact = contacts.get(i);
+//            System.out.println("INDEX: " + i + " >>> " + "ID:" + contact.getID() + ", " + contact.getFullName());
+//        }
         cursor.close();
         close();
     }
@@ -354,12 +354,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 eID = cursor.getString(cursor.getColumnIndex(COL_EVENT_ID));
                 cID = cursor.getString(cursor.getColumnIndex(COL_CONTACT_ID));
 
-                System.out.println("read attendees\n eID = " + eID);
-                System.out.println("cID = " + cID);
                 for (Contact contact : contacts) {
-                    System.out.println("contact ID=" + contact.getID() + " " + contact.getFullName());
                     if (contact.getID().equals(cID)){
-                        System.out.println("ADDED");
                         attendees.add(contact);
                     }
                 }
@@ -407,7 +403,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void deleteEvent(String eventID) {
-        System.out.println(eventID);
+//        System.out.println(eventID);
         try{
             SQLiteDatabase db = getWritableDatabase();
             db.delete(TABLE_EVENTS, COL_EVENT_ID + "= ?", new String[]{eventID});
