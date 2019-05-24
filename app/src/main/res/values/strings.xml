@@ -37,4 +37,8 @@
     <string name="notification_threshold">Notification Threshold</string>
     <string name="minutes">Minutes</string>
     <string name="threshold_hint">Please enter a number</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="cancel">Cancel</string>
+    <string name="remind">Remind</string>
+
 </resources>

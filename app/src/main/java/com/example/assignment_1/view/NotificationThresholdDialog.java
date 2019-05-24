@@ -1,15 +1,13 @@
 package com.example.assignment_1.view;
 
-import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -19,6 +17,9 @@ public class NotificationThresholdDialog extends AppCompatDialogFragment {
 
     EditText notificationThreshold;
     int notificationThresholdInt = 60;
+    Button remind, dismiss, cancel;
+
+    private NotificationOnClickListener listener;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -29,6 +30,9 @@ public class NotificationThresholdDialog extends AppCompatDialogFragment {
         View view = inflater.inflate(R.layout.dialog_notification_threshold, null);
 
         notificationThreshold = view.findViewById(R.id.notification_editText);
+        remind = view.findViewById(R.id.remind_button);
+        dismiss = view.findViewById(R.id.dismiss_button);
+        cancel = view.findViewById(R.id.cancel_button);
 
         builder.setView(view).setTitle("Notification Threshold").setNegativeButton("cancel", new DialogInterface.OnClickListener() {
             @Override
@@ -44,9 +48,41 @@ public class NotificationThresholdDialog extends AppCompatDialogFragment {
             }
         });
 
+        remind.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(listener != null){
+                    listener.onRemindClick();
+                }
+            }
+        });
+        dismiss.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(listener != null){
+                    listener.onDismissClick();
+                }
+            }
+        });
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(listener != null){
+                    listener.onCancelClick();
+                }
+            }
+        });
+
         // Create the AlertDialog object and return it
         return builder.create();
     }
+
+    public interface NotificationOnClickListener {
+        void onRemindClick();
+        void onDismissClick();
+        void onCancelClick();
+    }
+
 
 }
 

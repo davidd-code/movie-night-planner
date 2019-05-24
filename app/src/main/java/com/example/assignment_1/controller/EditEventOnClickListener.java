@@ -2,7 +2,6 @@ package com.example.assignment_1.controller;
 
 import android.content.Context;
 import android.content.Intent;
-import android.widget.Toast;
 
 import com.example.assignment_1.view.AddEditEventActivity;
 import com.example.assignment_1.viewModel.EventListAdapter;
@@ -31,7 +30,6 @@ public class EditEventOnClickListener implements EventListAdapter.OnItemClickLis
     public void onDeleteClick(int position) {
         //
         events.remove(position);
-        Toast.makeText(context, "Event Deleted", Toast.LENGTH_SHORT).show();
         adapter.notifyItemRemoved(position);
     }
 }
