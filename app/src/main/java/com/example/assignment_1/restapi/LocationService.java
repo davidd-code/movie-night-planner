@@ -99,32 +99,17 @@ public class LocationService extends IntentService {
         sb.append(currentLocation.getLatitude());
         sb.append(", ");
         sb.append(currentLocation.getLongitude());
-        LocalDateTime currentTime = LocalDateTime.now();
-        final int notificationP = notificationPeriod;
-        for(EventImpl element: events) {
-//                                HttpURLConnectionAsyncTask connect = (HttpURLConnectionAsyncTask) new HttpURLConnectionAsyncTask(currentLocation, element.getLatitude(), element.getLongitude()).execute();
-            HttpURLConnectionAsyncTask connect = (HttpURLConnectionAsyncTask) new HttpURLConnectionAsyncTask(currentLocation, element.getLatitude(), element.getLongitude()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                        String ds = connect.getDuration();
-                        long travelTime = connect.getTravelTimeSeconds();
-//                        long travelTime = 0;
-            long minutesUntilEvent = ChronoUnit.MINUTES.between(element.getStartDate(), currentTime);
 
-//                        if(minutesUntilEvent - travelTime < notificationP) {
-//                            displayNotification(getApplicationContext(), element.getTitle(), "is starting in " + minutesUntilEvent + " minutes. Approximately " + travelTime + " travel time.");
-//                        }
-
-        }
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
                     LocalDateTime currentTime = LocalDateTime.now();
                     for(EventImpl element: events) {
-//                                HttpURLConnectionAsyncTask connect = (HttpURLConnectionAsyncTask) new HttpURLConnectionAsyncTask(currentLocation, element.getLatitude(), element.getLongitude()).execute();
-                        new HttpURLConnectionAsyncTask(currentLocation, element.getLatitude(), element.getLongitude()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-//                        String ds = connect.getDuration();
-//                        long travelTime = connect.getTravelTimeSeconds();
-//                        long travelTime = 0;
+                        HttpURLConnectionAsyncTask connect = (HttpURLConnectionAsyncTask) new HttpURLConnectionAsyncTask(currentLocation, element.getLatitude(), element.getLongitude()).execute();
+//                        HttpURLConnectionAsyncTask connect = (HttpURLConnectionAsyncTask) new HttpURLConnectionAsyncTask(currentLocation, element.getLatitude(), element.getLongitude()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                        String ds = connect.getDuration();
+                        long travelTime = connect.getTravelTimeSeconds();
                         long minutesUntilEvent = ChronoUnit.MINUTES.between(element.getStartDate(), currentTime);
 
 //                        if(minutesUntilEvent - travelTime < notificationP) {
