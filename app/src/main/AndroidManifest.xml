@@ -50,9 +50,11 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".service.LocationService"/>
-        
+
         <receiver android:name=".controller.AlertReceiver"/>
+        <receiver android:name=".RESTApi.LocationService"
+            android:enabled="true"
+            android:exported="true"/>
     </application>
 
 </manifest>

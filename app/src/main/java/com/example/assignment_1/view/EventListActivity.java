@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.example.assignment_1.R;
 import com.example.assignment_1.RESTApi.HttpURLConnectionAsyncTask;
+import com.example.assignment_1.RESTApi.LocationService;
 import com.example.assignment_1.controller.AddEventOnClickListener;
 import com.example.assignment_1.controller.AlertReceiver;
 import com.example.assignment_1.controller.EditEventOnClickListener;
@@ -33,7 +34,6 @@ import com.example.assignment_1.controller.NotificationListener;
 import com.example.assignment_1.model.CustomComparator;
 import com.example.assignment_1.model.EventModel;
 import com.example.assignment_1.model.FileLoader;
-import com.example.assignment_1.service.LocationService;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
@@ -48,6 +48,7 @@ import static com.example.assignment_1.model.EventModel.eventAdapter;
 public class EventListActivity extends AppCompatActivity {
 
     public static final String SERVICE_CHANNEL = "serviceChannel";
+    public static final int HOUR_IN_MILLISECONDS = 3600000;
     private FileLoader fl = new FileLoader();
 
     private RecyclerView eRecyclerView;
@@ -62,6 +63,7 @@ public class EventListActivity extends AppCompatActivity {
 //    public static final String CHANNEL_1_ID = "channel1";
 //    public static final String CHANNEL_2_ID = "channel2";
     private NotificationListener mNotificationListener;
+    long threshold;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +86,8 @@ public class EventListActivity extends AppCompatActivity {
             init();
         }
         createNotificationChannels();
-
+        threshold = HOUR_IN_MILLISECONDS;
+        setAlarm(threshold);
 
     }
 
@@ -115,32 +118,13 @@ public class EventListActivity extends AppCompatActivity {
 //        mNotificationListener.getNotificationManager().notify(1, nb.build());
 //    }
 
-    private void startAlarm(int milliseconds) {
+    private void setAlarm(long milliseconds) {
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this, AlertReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1413, intent, 0);
+        Intent intent = new Intent(this, LocationService.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
 
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, milliseconds, pendingIntent);
     }
-
-//    private void makeHttpRequest() {
-//        final HttpCall httpCall = new HttpCall();
-//        httpCall.setMethodtype(HttpCall.GET);
-//        httpCall.setUrl("https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=Washington,DC&destinations=New+York+City,NY&key=AIzaSyDN4UvDycELwsIbLsF6CmPXgUtmPlbEU4w");
-//        httpCall.setUrl("https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=40.6655101,-73.89188969999998&destinations=40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.659569%2C-73.933783%7C40.729029%2C-73.851524%7C40.6860072%2C-73.6334271%7C40.598566%2C-73.7527626%7C40.659569%2C-73.933783%7C40.729029%2C-73.851524%7C40.6860072%2C-73.6334271%7C40.598566%2C-73.7527626&key=YOUR_API_KEY");
-//                httpCall.setUrl("https://developer.android.com/");
-//        HashMap<String, String> params = new HashMap<>();
-//                params.put("name", "James Bond");
-//        httpCall.setParams(params);
-//        new HttpURLConnectionAsyncTaskDraft() {
-//            @Override
-//            protected void onPostExecute(String s) {
-//                super.onPostExecute(s);
-//                Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
-//                        Toast.makeText(getApplicationContext(), httpCall.getUrl(), Toast.LENGTH_LONG).show();
-//            }
-//        }.execute(httpCall);
-//    }
 
     private void createNotificationChannels() {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -153,16 +137,6 @@ public class EventListActivity extends AppCompatActivity {
             NotificationManager manager = getSystemService(NotificationManager.class);
             manager.createNotificationChannel(serviceChannel);
         }
-    }
-
-    public void startService(View v) {
-        Intent serviceIntent = new Intent(this, LocationService.class);
-        startService(serviceIntent);
-    }
-
-    public void stopService(View v) {
-        Intent serviceIntent = new Intent(this, LocationService.class);
-        stopService(serviceIntent);
     }
 
     @Override
@@ -178,7 +152,7 @@ public class EventListActivity extends AppCompatActivity {
         switch(item.getItemId()){
             case R.id.notification_threshold:
 //                sendOnChannel("Notification title", "message");
-//                startAlarm(5000);
+//                setAlarm(5000);
 //                NotificationThresholdDialog notificationDialog = new NotificationThresholdDialog();
 //                notificationDialog.show(getSupportFragmentManager(), "Notification Threshold");
 
