@@ -1,4 +1,4 @@
-package com.example.assignment_1.RESTApi;
+package com.example.assignment_1.restapi;
 
 import android.location.Location;
 import android.os.AsyncTask;

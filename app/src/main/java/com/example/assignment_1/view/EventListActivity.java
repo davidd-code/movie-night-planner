@@ -18,16 +18,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.assignment_1.R;
-import com.example.assignment_1.RESTApi.HttpURLConnectionAsyncTask;
-import com.example.assignment_1.RESTApi.LocationService;
+import com.example.assignment_1.restapi.LocationServiceReceiver;
 import com.example.assignment_1.controller.AddEventOnClickListener;
-import com.example.assignment_1.controller.AlertReceiver;
 import com.example.assignment_1.controller.EditEventOnClickListener;
 import com.example.assignment_1.controller.MapOnClickListener;
 import com.example.assignment_1.controller.NotificationListener;
@@ -120,7 +117,7 @@ public class EventListActivity extends AppCompatActivity {
 
     private void setAlarm(long milliseconds) {
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this, LocationService.class);
+        Intent intent = new Intent(this, LocationServiceReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
 
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, milliseconds, pendingIntent);
@@ -164,7 +161,7 @@ public class EventListActivity extends AppCompatActivity {
                 Location destination = new Location("");
                 destination.setLatitude(-37.8829696);
                 destination.setLongitude(146.07782);
-                new HttpURLConnectionAsyncTask(currentLocation, destination.getLatitude(), destination.getLongitude()).execute();
+//                new HttpURLConnectionAsyncTask(currentLocation, destination.getLatitude(), destination.getLongitude()).execute();
                 break;
             case R.id.sort_ascending:
                 c.sortAscending();
