@@ -7,6 +7,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -23,11 +24,12 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.assignment_1.R;
+import com.example.assignment_1.RESTApi.HttpURLConnectionAsyncTask;
+import com.example.assignment_1.RESTApi.HttpURLConnectionAsyncTaskDraft;
 import com.example.assignment_1.controller.AddEventOnClickListener;
 import com.example.assignment_1.controller.AlertReceiver;
 import com.example.assignment_1.controller.EditEventOnClickListener;
-import com.example.assignment_1.controller.HttpCall;
-import com.example.assignment_1.controller.HttpURLConnectionAsyncTask;
+import com.example.assignment_1.RESTApi.HttpCall;
 import com.example.assignment_1.controller.MapOnClickListener;
 import com.example.assignment_1.controller.NotificationListener;
 import com.example.assignment_1.model.CustomComparator;
@@ -84,6 +86,7 @@ public class EventListActivity extends AppCompatActivity {
         if(isServicesOK()) {
             init();
         }
+        createNotificationChannels();
 
 
     }
@@ -123,24 +126,24 @@ public class EventListActivity extends AppCompatActivity {
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, milliseconds, pendingIntent);
     }
 
-    private void makeHttpRequest() {
-        final HttpCall httpCall = new HttpCall();
-        httpCall.setMethodtype(HttpCall.GET);
+//    private void makeHttpRequest() {
+//        final HttpCall httpCall = new HttpCall();
+//        httpCall.setMethodtype(HttpCall.GET);
 //        httpCall.setUrl("https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=Washington,DC&destinations=New+York+City,NY&key=AIzaSyDN4UvDycELwsIbLsF6CmPXgUtmPlbEU4w");
-        httpCall.setUrl("https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=40.6655101,-73.89188969999998&destinations=40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.659569%2C-73.933783%7C40.729029%2C-73.851524%7C40.6860072%2C-73.6334271%7C40.598566%2C-73.7527626%7C40.659569%2C-73.933783%7C40.729029%2C-73.851524%7C40.6860072%2C-73.6334271%7C40.598566%2C-73.7527626&key=YOUR_API_KEY");
+//        httpCall.setUrl("https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=40.6655101,-73.89188969999998&destinations=40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.659569%2C-73.933783%7C40.729029%2C-73.851524%7C40.6860072%2C-73.6334271%7C40.598566%2C-73.7527626%7C40.659569%2C-73.933783%7C40.729029%2C-73.851524%7C40.6860072%2C-73.6334271%7C40.598566%2C-73.7527626&key=YOUR_API_KEY");
 //                httpCall.setUrl("https://developer.android.com/");
-        HashMap<String, String> params = new HashMap<>();
+//        HashMap<String, String> params = new HashMap<>();
 //                params.put("name", "James Bond");
-        httpCall.setParams(params);
-        new HttpURLConnectionAsyncTask() {
-            @Override
-            protected void onPostExecute(String s) {
-                super.onPostExecute(s);
-                Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
+//        httpCall.setParams(params);
+//        new HttpURLConnectionAsyncTaskDraft() {
+//            @Override
+//            protected void onPostExecute(String s) {
+//                super.onPostExecute(s);
+//                Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
 //                        Toast.makeText(getApplicationContext(), httpCall.getUrl(), Toast.LENGTH_LONG).show();
-            }
-        }.execute(httpCall);
-    }
+//            }
+//        }.execute(httpCall);
+//    }
 
     private void createNotificationChannels() {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -178,11 +181,19 @@ public class EventListActivity extends AppCompatActivity {
         switch(item.getItemId()){
             case R.id.notification_threshold:
 //                sendOnChannel("Notification title", "message");
-                startAlarm(5000);
-                NotificationThresholdDialog notificationDialog = new NotificationThresholdDialog();
-                notificationDialog.show(getSupportFragmentManager(), "Notification Threshold");
+//                startAlarm(5000);
+//                NotificationThresholdDialog notificationDialog = new NotificationThresholdDialog();
+//                notificationDialog.show(getSupportFragmentManager(), "Notification Threshold");
 
-                makeHttpRequest();
+//                makeHttpRequest();
+                Location currentLocation = new Location("");
+                currentLocation.setLatitude(-37.807390);
+                currentLocation.setLongitude(144.963300);
+
+                Location destination = new Location("");
+                destination.setLatitude(-37.8829696);
+                destination.setLongitude(145.07782);
+                new HttpURLConnectionAsyncTask(currentLocation, destination.getLatitude(), destination.getLongitude()).execute();
                 break;
             case R.id.sort_ascending:
                 c.sortAscending();

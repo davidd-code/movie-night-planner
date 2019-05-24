@@ -1,7 +1,7 @@
-package com.example.assignment_1.controller;
+package com.example.assignment_1.RESTApi;
 
 import android.app.Activity;
-import android.icu.util.Output;
+import android.location.Location;
 import android.os.AsyncTask;
 
 import java.io.BufferedReader;
@@ -17,18 +17,21 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-public class HttpURLConnectionAsyncTask extends AsyncTask<HttpCall, String, String> {
+public class HttpURLConnectionAsyncTaskDraft extends AsyncTask<HttpCall, String, String> {
 
     private StringBuilder htmlStringBuilder = new StringBuilder();
 
-    public static final String TEST_URL = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=Washington,DC&destinations=New+York+City,NY&key=AIzaSyDN4UvDycELwsIbLsF6CmPXgUtmPlbEU4w";
+//    public static final String TEST_URL = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=Washington,DC&destinations=New+York+City,NY&key=AIzaSyDN4UvDycELwsIbLsF6CmPXgUtmPlbEU4w";
+    public static String requestURL(Location currentLocation, Double destinationLatitude, Double destinationLongitude) {
+        String key = "AIzaSyDN4UvDycELwsIbLsF6CmPXgUtmPlbEU4w";
+        return "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=" + currentLocation.getLatitude() + "," + currentLocation.getLongitude() + "&destinations=" + destinationLatitude + "," + destinationLongitude + "&mode=driving&key=" + key;
+    }
 
     private WeakReference<Activity> activity;
 
-//    public HttpURLConnectionAsyncTask(Activity activity) {
+//    public HttpURLConnectionAsyncTaskDraft(Activity activity) {
 //        this.activity = new WeakReference<>(activity);
 //    }
 
