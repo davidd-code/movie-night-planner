@@ -8,22 +8,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLEncoder;
-import java.util.HashMap;
-import java.util.Map;
 
 public class HttpURLConnectionAsyncTask extends AsyncTask<String, String, String> {
 
@@ -43,22 +34,28 @@ public class HttpURLConnectionAsyncTask extends AsyncTask<String, String, String
         return "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=" + currentLocation.getLatitude() + "," + currentLocation.getLongitude() + "&destinations=" + destinationLatitude + "," + destinationLongitude + "&mode=driving&key=" + key;
     }
 
-    @Override
-    protected void onPostExecute(String s) {
-        super.onPostExecute(s);
-        System.out.println(s);
+    private static long getTravelTimeSeconds(String durationString) {
+        String[] splitString = durationString.split(" ");
+        long seconds = 0;
+        if(splitString.length == 2) {
+            int minutes = Integer.parseInt(splitString[0]);
+            seconds = minutes * 60;
+        } else if(splitString.length == 4) {
+            int hours = Integer.parseInt(splitString[0]);
+            int minutes = Integer.parseInt(splitString[2]);
+            seconds = (hours * 60 * 60) + (minutes * 60);
+        }
+        return seconds;
     }
 
     @Override
     protected String doInBackground(String... strings) {
-        StringBuilder sb = new StringBuilder();
         String urlString = requestURL(currentLocation, destinationLatitude, destinationLongitude);
         try {
             URL url = new URL(urlString);
             connection = (HttpURLConnection) url.openConnection();
             connection.connect();
 
-//            InputStream is = new BufferedInputStream(connection.getInputStream());
             InputStream is = connection.getInputStream();
             br = new BufferedReader(new InputStreamReader(is));
 
@@ -71,12 +68,12 @@ public class HttpURLConnectionAsyncTask extends AsyncTask<String, String, String
             JSONObject parentObject = new JSONObject(finalJSON);
             JSONArray rowsArray = parentObject.getJSONArray("rows");
             JSONObject elementsArray = rowsArray.getJSONObject(0);
-            JSONArray duration = elementsArray.getJSONArray("elements");
-            JSONObject durationElement = duration.getJSONObject(0);
-            JSONObject durationArray = durationElement.getJSONObject("duration");
-            String durationString = durationArray.getString("text");
+            JSONArray childArray = elementsArray.getJSONArray("elements");
+            JSONObject durationObject = childArray.getJSONObject(0);
+            JSONObject durationElement = durationObject.getJSONObject("duration");
+            String durationString = durationElement.getString("text");
 
-            return stringBuffer.toString();
+            return durationString;
 
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -97,5 +94,12 @@ public class HttpURLConnectionAsyncTask extends AsyncTask<String, String, String
             }
         }
         return null;
+    }
+
+    @Override
+    protected void onPostExecute(String s) {
+        super.onPostExecute(s);
+        getTravelTimeSeconds(s);
+        System.out.println(s);
     }
 }

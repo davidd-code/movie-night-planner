@@ -189,7 +189,7 @@ public class EventListActivity extends AppCompatActivity {
 
                 Location destination = new Location("");
                 destination.setLatitude(-37.8829696);
-                destination.setLongitude(145.07782);
+                destination.setLongitude(146.07782);
                 new HttpURLConnectionAsyncTask(currentLocation, destination.getLatitude(), destination.getLongitude()).execute();
                 break;
             case R.id.sort_ascending:
