@@ -30,9 +30,6 @@ public class NotificationThresholdDialog extends AppCompatDialogFragment {
         View view = inflater.inflate(R.layout.dialog_notification_threshold, null);
 
         notificationThreshold = view.findViewById(R.id.notification_editText);
-        remind = view.findViewById(R.id.remind_button);
-        dismiss = view.findViewById(R.id.dismiss_button);
-        cancel = view.findViewById(R.id.cancel_button);
 
         builder.setView(view).setTitle("Notification Threshold").setNegativeButton("cancel", new DialogInterface.OnClickListener() {
             @Override

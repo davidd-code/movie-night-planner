@@ -1,6 +1,5 @@
 package com.example.assignment_1.RESTApi;
 
-import android.app.Activity;
 import android.location.Location;
 import android.os.AsyncTask;
 
@@ -22,6 +21,7 @@ public class HttpURLConnectionAsyncTask extends AsyncTask<String, String, String
     private Double destinationLatitude, destinationLongitude;
     private BufferedReader br = null;
     private HttpURLConnection connection = null;
+    private static long seconds;
 
     public HttpURLConnectionAsyncTask(Location location, Double latitude, Double longitude) {
         this.currentLocation = location;
@@ -34,7 +34,7 @@ public class HttpURLConnectionAsyncTask extends AsyncTask<String, String, String
         return "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=" + currentLocation.getLatitude() + "," + currentLocation.getLongitude() + "&destinations=" + destinationLatitude + "," + destinationLongitude + "&mode=driving&key=" + key;
     }
 
-    private static long getTravelTimeSeconds(String durationString) {
+    private static long calculateTravelTimeSeconds(String durationString) {
         String[] splitString = durationString.split(" ");
         long seconds = 0;
         if(splitString.length == 2) {
@@ -45,6 +45,10 @@ public class HttpURLConnectionAsyncTask extends AsyncTask<String, String, String
             int minutes = Integer.parseInt(splitString[2]);
             seconds = (hours * 60 * 60) + (minutes * 60);
         }
+        return seconds;
+    }
+
+    public static long getTravelTimeSeconds() {
         return seconds;
     }
 
@@ -99,7 +103,7 @@ public class HttpURLConnectionAsyncTask extends AsyncTask<String, String, String
     @Override
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
-        getTravelTimeSeconds(s);
+        seconds = calculateTravelTimeSeconds(s);
         System.out.println(s);
     }
 }
