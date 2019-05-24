@@ -11,6 +11,7 @@ import com.example.assignment_1.model.EventImpl;
 import com.example.assignment_1.viewModel.ContactListAdapter;
 
 import static com.example.assignment_1.model.EventModel.contacts;
+import static com.example.assignment_1.view.EventListActivity.update;
 
 public class ContactItemClickListener implements ContactListAdapter.OnItemClickListener, View.OnClickListener {
 
@@ -51,14 +52,12 @@ public class ContactItemClickListener implements ContactListAdapter.OnItemClickL
 
     public void onConfirmButtonClick(){
         System.out.println(currentEvent.getTitle());
-        for(Contact attendee : currentEvent.getAttendees()){
-            System.out.println("CONTACT ID: " + attendee.getID());
-        }
         Intent intent = new Intent();
         intent.putExtra("EVENT_INDEX", eventIndex);
         ((Activity) context).setResult(Activity.RESULT_OK, intent);
         ((Activity)context).onBackPressed();
         //eventAdapter.notifyDataSetChanged();
+        context.sendBroadcast(update);
 
     }
 

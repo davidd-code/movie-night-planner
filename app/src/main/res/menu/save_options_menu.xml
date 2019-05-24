@@ -9,8 +9,8 @@
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/save_close_event"
-        android:title="@string/save_close"
+        android:id="@+id/delete_option"
+        android:title="@string/delete"
         app:showAsAction="never" />
 
 </menu>

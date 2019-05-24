@@ -25,7 +25,7 @@
     <string name="contacts">Choose Contacts</string>
     <string name="ascending">ascending</string>
     <string name="descending">descending</string>
-    <string name="save_close">Save and Close</string>
+    <string name="delete">Delete</string>
 
     <string name="calendar_view">Calendar View</string>
 

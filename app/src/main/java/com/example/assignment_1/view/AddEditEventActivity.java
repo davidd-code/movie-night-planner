@@ -2,7 +2,10 @@ package com.example.assignment_1.view;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -29,6 +32,8 @@ import static com.example.assignment_1.controller.SelectMovieOnClickListener.MOV
 import static com.example.assignment_1.model.EventModel.eventAdapter;
 import static com.example.assignment_1.model.EventModel.events;
 import static com.example.assignment_1.model.EventModel.movies;
+import static com.example.assignment_1.view.EventListActivity.DATABASE_UPDATED_ACTION;
+import static com.example.assignment_1.view.EventListActivity.UPDATE_ACTION_TEXT;
 
 
 //implementation of GetLocationDialog temporary until assignment 2
@@ -65,6 +70,30 @@ public class AddEditEventActivity extends AppCompatActivity implements GetLocati
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        IntentFilter filter = new IntentFilter(DATABASE_UPDATED_ACTION);
+        registerReceiver(uiUpdater, filter);
+    }
+
+    private BroadcastReceiver uiUpdater = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (DATABASE_UPDATED_ACTION.equals(intent.getAction())) {
+                String updateAvailable = intent.getStringExtra(UPDATE_ACTION_TEXT);
+                Toast.makeText(context, "UI updated", Toast.LENGTH_SHORT).show();
+                numAttendees.setText(Integer.toString(currentEvent.getNumAttendees()));
+            }
+        }
+    };
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unregisterReceiver(uiUpdater);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.save_options_menu, menu);
@@ -97,8 +126,8 @@ public class AddEditEventActivity extends AppCompatActivity implements GetLocati
                 }
                 this.finish();
                 break;
-            case R.id.save_close_event:
-                saveEvent();
+            case R.id.delete_option:
+                deleteEvent();
                 this.finish();
                 break;
         }
@@ -110,6 +139,19 @@ public class AddEditEventActivity extends AppCompatActivity implements GetLocati
         currentEvent.setVenue(String.valueOf(venueName.getText()));
         Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
         eventAdapter.notifyDataSetChanged();
+    }
+
+    public void deleteEvent() {
+        events.remove(currentEvent);
+        final String eventID = currentEvent.getID();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                dbHelper.deleteEvent(eventID);
+            }
+        }).start();
+
+        Toast.makeText(this, "Event Deleted", Toast.LENGTH_SHORT).show();
     }
 
     public void checkForActivityResult(int index){
