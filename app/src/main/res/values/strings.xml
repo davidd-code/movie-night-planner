@@ -35,6 +35,8 @@
     <string name="event_locations">location</string>
 
     <string name="notification_threshold">Notification Threshold</string>
+    <string name="notification_period">Notification Period</string>
+    <string name="remind_minutes">Remind in n minutes</string>
     <string name="minutes">Minutes</string>
     <string name="threshold_hint">Please enter a number</string>
     <string name="dismiss">Dismiss</string>

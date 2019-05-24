@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,13 +7,14 @@
     tools:context=".view.NotificationThresholdDialog">
 
     <EditText
-        android:id="@+id/notification_editText"
+        android:id="@+id/notification_threshold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="19dp"
         android:ems="10"
-        android:hint="@string/threshold_hint"
+        android:hint="@string/notification_threshold"
         android:inputType="numberSigned"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -22,11 +23,59 @@
         android:id="@+id/threshold_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="28dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="35dp"
+        android:layout_toEndOf="@+id/notification_threshold"
         android:text="@string/minutes"
         android:textSize="18sp"
-        app:layout_constraintStart_toEndOf="@+id/notification_editText"
+        app:layout_constraintStart_toEndOf="@+id/notification_threshold"
         app:layout_constraintTop_toTopOf="parent" />
 
-</android.support.constraint.ConstraintLayout>
+    <EditText
+        android:id="@+id/notification_period"
+        android:hint="@string/notification_period"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/notification_threshold"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:inputType="number" />
+
+    <TextView
+        android:id="@+id/period_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/threshold_textView"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="42dp"
+        android:layout_toEndOf="@+id/notification_period"
+        android:text="@string/minutes"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/remind_in_minutes"
+        android:hint="@string/remind_minutes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/notification_period"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="21dp"
+        android:ems="10"
+        android:inputType="numberSigned|number" />
+
+    <TextView
+        android:id="@+id/remind_minutes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/period_textView"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="44dp"
+        android:layout_toEndOf="@+id/remind_in_minutes"
+        android:text="@string/minutes"
+        android:textSize="18sp" />
+
+</RelativeLayout>

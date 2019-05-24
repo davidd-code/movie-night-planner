@@ -15,9 +15,8 @@ import com.example.assignment_1.R;
 
 public class NotificationThresholdDialog extends AppCompatDialogFragment {
 
-    EditText notificationThreshold;
+    EditText notificationThreshold, notificationPeriod, remindMinutes;
     int notificationThresholdInt = 60;
-    Button remind, dismiss, cancel;
 
     private NotificationOnClickListener listener;
 
@@ -29,7 +28,9 @@ public class NotificationThresholdDialog extends AppCompatDialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_notification_threshold, null);
 
-        notificationThreshold = view.findViewById(R.id.notification_editText);
+        notificationThreshold = view.findViewById(R.id.notification_threshold);
+        notificationPeriod = view.findViewById(R.id.notification_period);
+        remindMinutes = view.findViewById(R.id.remind_in_minutes);
 
         builder.setView(view).setTitle("Notification Threshold").setNegativeButton("cancel", new DialogInterface.OnClickListener() {
             @Override
@@ -45,39 +46,12 @@ public class NotificationThresholdDialog extends AppCompatDialogFragment {
             }
         });
 
-        remind.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(listener != null){
-                    listener.onRemindClick();
-                }
-            }
-        });
-        dismiss.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(listener != null){
-                    listener.onDismissClick();
-                }
-            }
-        });
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(listener != null){
-                    listener.onCancelClick();
-                }
-            }
-        });
-
         // Create the AlertDialog object and return it
         return builder.create();
     }
 
     public interface NotificationOnClickListener {
-        void onRemindClick();
-        void onDismissClick();
-        void onCancelClick();
+        void saveNotificationOptions(int threshold, int period, int remind);
     }
 
 
