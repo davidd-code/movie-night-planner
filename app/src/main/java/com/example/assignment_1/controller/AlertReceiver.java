@@ -8,9 +8,9 @@ import android.support.v4.app.NotificationCompat;
 public class AlertReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        NotificationListener notificationListener = new NotificationListener(context);
-        NotificationCompat.Builder nb = notificationListener.getChannel1Notification("title", "message");
-        notificationListener.getNotificationManager().notify(1, nb.build());
+//        NotificationListener notificationListener = new NotificationListener(context);
+//        NotificationCompat.Builder nb = notificationListener.getChannel1Notification("title", "message");
+//        notificationListener.getNotificationManager().notify(1, nb.build());
 
     }
 }

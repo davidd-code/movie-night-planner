@@ -44,7 +44,6 @@ import static com.example.assignment_1.model.EventModel.eventAdapter;
 
 public class EventListActivity extends AppCompatActivity {
 
-    public static final String SERVICE_CHANNEL = "serviceChannel";
     public static final int HOUR_IN_MILLISECONDS = 3600000;
     private FileLoader fl = new FileLoader();
 
@@ -57,9 +56,6 @@ public class EventListActivity extends AppCompatActivity {
     private static final String TAG="EventListActivity";
     private static final int ERROR_DIALOG_REQUEST = 9001;
 
-//    public static final String CHANNEL_1_ID = "channel1";
-//    public static final String CHANNEL_2_ID = "channel2";
-    private NotificationListener mNotificationListener;
     long threshold;
 
     @Override
@@ -73,33 +69,27 @@ public class EventListActivity extends AppCompatActivity {
         if(savedInstanceState == null) {
             loadData();
         }
-
-        mNotificationListener = new NotificationListener(this);
+//        createNotificationChannels();
+//        mNotificationListener = new NotificationListener(this);
 
         buildRecyclerView();
         setButtons();
+        isServicesOK();
 
-        if(isServicesOK()) {
-            init();
-        }
-        createNotificationChannels();
+//        createNotificationChannels();
         threshold = HOUR_IN_MILLISECONDS;
         setAlarm(threshold);
 
     }
 
-    private void init() {
 
-    }
-
-    public boolean isServicesOK() {
+    public void isServicesOK() {
         Log.d(TAG, "isServicesOK: checking google services version");
         int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(EventListActivity.this);
 
         if(available == ConnectionResult.SUCCESS) {
             //everything is fine and user can make map requests
             Log.d(TAG, "isServicesOK: Google Play services is working");
-            return true;
         } else if(GoogleApiAvailability.getInstance().isUserResolvableError(available)) {
             Log.d(TAG, "isServicesOK: an error occured but we can fix it");
             Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(EventListActivity.this, available, ERROR_DIALOG_REQUEST);
@@ -107,7 +97,6 @@ public class EventListActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "You can't make map requests", Toast.LENGTH_SHORT).show();
         }
-        return false;
     }
 
 //    public void sendOnChannel(String title, String message) {
@@ -118,23 +107,13 @@ public class EventListActivity extends AppCompatActivity {
     private void setAlarm(long milliseconds) {
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this, LocationServiceReceiver.class);
+        intent.putExtra("notificationPeriod", 1000);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
 
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, milliseconds, pendingIntent);
     }
 
-    private void createNotificationChannels() {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel serviceChannel = new NotificationChannel(
-                    SERVICE_CHANNEL,
-                    "Service Channel",
-                    NotificationManager.IMPORTANCE_DEFAULT
-            );
 
-            NotificationManager manager = getSystemService(NotificationManager.class);
-            manager.createNotificationChannel(serviceChannel);
-        }
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

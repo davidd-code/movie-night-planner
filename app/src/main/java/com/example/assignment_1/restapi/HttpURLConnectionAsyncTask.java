@@ -21,6 +21,7 @@ public class HttpURLConnectionAsyncTask extends AsyncTask<String, String, String
     private Double destinationLatitude, destinationLongitude;
     private BufferedReader br = null;
     private HttpURLConnection connection = null;
+    private String duration;
     private long seconds;
 
     public HttpURLConnectionAsyncTask(Location location, Double latitude, Double longitude) {
@@ -100,9 +101,14 @@ public class HttpURLConnectionAsyncTask extends AsyncTask<String, String, String
         return null;
     }
 
+    public String getDuration() {
+        return this.duration;
+    }
+
     @Override
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
+        this.duration = s;
         seconds = calculateTravelTimeSeconds(s);
         System.out.println(s);
     }
