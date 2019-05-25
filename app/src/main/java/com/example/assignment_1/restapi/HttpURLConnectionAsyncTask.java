@@ -127,7 +127,6 @@ public class HttpURLConnectionAsyncTask extends AsyncTask<String, String, String
         this.duration = s;
         Log.d(TAG, "onPostExecute: "+duration);
         this.seconds = calculateTravelTimeSeconds(s);
-        seconds = calculateTravelTimeMinutes(s);
         System.out.println(s);
     }
 }
