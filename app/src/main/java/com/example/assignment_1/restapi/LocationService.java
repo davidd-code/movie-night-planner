@@ -96,17 +96,12 @@ public class LocationService extends IntentService {
         locationManager.requestLocationUpdates("gps", 5000, 0, locationListener);
 
         final Location currentLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-        StringBuilder sb = new StringBuilder("");
-        sb.append(currentLocation.getLatitude());
-        sb.append(", ");
-        sb.append(currentLocation.getLongitude());
 
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
                     LocalDateTime currentTime = LocalDateTime.now();
-                    int i = 0;
                     for(EventImpl element: events) {
                         if(element.getStartDate().isAfter(currentTime)) {
 //                        new HttpURLConnectionAsyncTask(currentLocation, element.getLatitude(), element.getLongitude()).execute();
@@ -118,8 +113,7 @@ public class LocationService extends IntentService {
                             long minutesUntilEvent = ChronoUnit.MINUTES.between(currentTime, element.getStartDate());
 
                             if(minutesUntilEvent - travelTime < notificationPeriod) {
-                                displayNotification(getApplicationContext(), element.getTitle(), "is starting in " + minutesUntilEvent + " minutes. Approximately " + travelTime + "minutes travel time.", i);
-                                i++;
+                                displayNotification(getApplicationContext(), element.getTitle(), "is starting in " + minutesUntilEvent + " minutes. Approximately " + travelTime + "minutes travel time.", Integer.parseInt(element.getID()));
                             }
                         }
 
@@ -162,6 +156,7 @@ public class LocationService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-         notificationPeriod = intent.getIntExtra("notificationPeriod", 1000);
+         int notificationPeriodMilliseconds = intent.getIntExtra("notificationPeriod", 1000);
+         notificationPeriod = notificationPeriodMilliseconds / 60000;
     }
 }

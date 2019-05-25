@@ -40,6 +40,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.ParseException;
+import java.util.Calendar;
 
 import static com.example.assignment_1.model.EventModel.eventAdapter;
 
@@ -57,7 +58,7 @@ public class EventListActivity extends AppCompatActivity {
     private static final String TAG="EventListActivity";
     private static final int ERROR_DIALOG_REQUEST = 9001;
 
-    long threshold;
+    int threshold, period, remindAgain;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,13 +106,14 @@ public class EventListActivity extends AppCompatActivity {
 //        mNotificationListener.getNotificationManager().notify(1, nb.build());
 //    }
 
-    private void setAlarm(long milliseconds) {
+    private void setAlarm(int milliseconds) {
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this, LocationServiceReceiver.class);
-        intent.putExtra("notificationPeriod", 1000);
+        intent.putExtra("notificationPeriod", milliseconds);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
 
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, milliseconds, pendingIntent);
+//        alarmManager.setExact(AlarmManager.RTC_WAKEUP, milliseconds, pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, Calendar.getInstance().getTimeInMillis(), period, pendingIntent);
     }
 
 
@@ -130,7 +132,7 @@ public class EventListActivity extends AppCompatActivity {
             case R.id.notification_threshold:
 //                sendOnChannel("Notification title", "message");
 //                setAlarm(5000);
-//                NotificationThresholdDialog notificationDialog = new NotificationThresholdDialog();
+//                NotificationOptionsDialog notificationDialog = new NotificationOptionsDialog();
 //                notificationDialog.show(getSupportFragmentManager(), "Notification Threshold");
 
 //                makeHttpRequest();

@@ -13,10 +13,10 @@ import android.widget.Toast;
 
 import com.example.assignment_1.R;
 
-public class NotificationThresholdDialog extends AppCompatDialogFragment {
+public class NotificationOptionsDialog extends AppCompatDialogFragment {
 
     EditText notificationThreshold, notificationPeriod, remindMinutes;
-    int notificationThresholdInt = 60;
+    int notificationThresholdInt, notificationPeriodInt, remindMinutesInt;
 
     private NotificationOnClickListener listener;
 
@@ -43,6 +43,9 @@ public class NotificationThresholdDialog extends AppCompatDialogFragment {
                 String toast = "Int " + notificationThreshold.getText();
                 Toast.makeText(getContext(), toast, Toast.LENGTH_SHORT).show();
                 notificationThresholdInt = Integer.parseInt(notificationThreshold.getText().toString());
+                notificationPeriodInt = Integer.parseInt(notificationPeriod.getText().toString());
+                remindMinutesInt = Integer.parseInt(remindMinutes.getText().toString());
+                listener.saveNotificationOptions(notificationThresholdInt, notificationPeriodInt, remindMinutesInt);
             }
         });
 

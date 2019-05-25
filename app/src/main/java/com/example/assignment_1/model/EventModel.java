@@ -26,6 +26,14 @@ public final class EventModel {
 //    public void addEvent(EventImpl newEvent){
 //        events.add(newEvent);
 //    }
+    public EventImpl getEventFromId(String id) {
+        for(EventImpl element: events) {
+            if(element.getID().equals(id)) {
+                return element;
+            }
+        }
+        return null;
+    }
 
     public static void loadEvents(ArrayList<String[]> data) throws ParseException {
 
