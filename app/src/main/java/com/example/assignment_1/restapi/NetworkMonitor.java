@@ -1,4 +1,4 @@
-package com.example.assignment_1;
+package com.example.assignment_1.restapi;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.widget.Toast;
-
-import com.example.assignment_1.restapi.LocationServiceReceiver;
 
 public class NetworkMonitor extends BroadcastReceiver {
 
