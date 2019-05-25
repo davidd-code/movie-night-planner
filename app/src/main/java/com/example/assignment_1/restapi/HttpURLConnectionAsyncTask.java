@@ -19,8 +19,10 @@ public class HttpURLConnectionAsyncTask extends AsyncTask<String, String, String
 
     private Location currentLocation;
     private Double destinationLatitude, destinationLongitude;
-    private BufferedReader br = null;
-    private HttpURLConnection connection = null;
+//    private BufferedReader br = null;
+//    private HttpURLConnection connection = null;
+    private static BufferedReader br = null;
+    private static HttpURLConnection connection = null;
     private String duration;
     private long seconds;
 
@@ -53,9 +55,8 @@ public class HttpURLConnectionAsyncTask extends AsyncTask<String, String, String
         return seconds;
     }
 
-    @Override
-    protected String doInBackground(String... strings) {
-        String urlString = requestURL(currentLocation, destinationLatitude, destinationLongitude);
+    public static long getTravelTimeSeconds(Location location, double latitude, double longitude) {
+        String urlString = requestURL(location, latitude, longitude);
         try {
             URL url = new URL(urlString);
             connection = (HttpURLConnection) url.openConnection();
@@ -78,7 +79,7 @@ public class HttpURLConnectionAsyncTask extends AsyncTask<String, String, String
             JSONObject durationElement = durationObject.getJSONObject("duration");
             String durationString = durationElement.getString("text");
 
-            return durationString;
+            return calculateTravelTimeSeconds(durationString);
 
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -98,6 +99,55 @@ public class HttpURLConnectionAsyncTask extends AsyncTask<String, String, String
                 e.printStackTrace();
             }
         }
+        return 0;
+    }
+
+    @Override
+    protected String doInBackground(String... strings) {
+//        String urlString = requestURL(currentLocation, destinationLatitude, destinationLongitude);
+//        try {
+//            URL url = new URL(urlString);
+//            connection = (HttpURLConnection) url.openConnection();
+//            connection.connect();
+//
+//            InputStream is = connection.getInputStream();
+//            br = new BufferedReader(new InputStreamReader(is));
+//
+//            String line = "";
+//            StringBuilder stringBuffer = new StringBuilder();
+//            while((line = br.readLine()) != null) {
+//                stringBuffer.append(line);
+//            }
+//            String finalJSON = stringBuffer.toString();
+//            JSONObject parentObject = new JSONObject(finalJSON);
+//            JSONArray rowsArray = parentObject.getJSONArray("rows");
+//            JSONObject elementsArray = rowsArray.getJSONObject(0);
+//            JSONArray childArray = elementsArray.getJSONArray("elements");
+//            JSONObject durationObject = childArray.getJSONObject(0);
+//            JSONObject durationElement = durationObject.getJSONObject("duration");
+//            String durationString = durationElement.getString("text");
+//
+//            this.seconds = calculateTravelTimeSeconds(durationString);
+//            return durationString;
+//
+//        } catch (MalformedURLException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        } finally {
+//            if(connection != null) {
+//                connection.disconnect();
+//            }
+//            try {
+//                if(br != null) {
+//                    br.close();
+//                }
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
         return null;
     }
 

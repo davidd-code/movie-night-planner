@@ -16,6 +16,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NotificationCompat;
 
 import com.example.assignment_1.R;
 import com.example.assignment_1.model.EventImpl;
@@ -106,15 +107,17 @@ public class LocationService extends IntentService {
                 try {
                     LocalDateTime currentTime = LocalDateTime.now();
                     for(EventImpl element: events) {
-                        HttpURLConnectionAsyncTask connect = (HttpURLConnectionAsyncTask) new HttpURLConnectionAsyncTask(currentLocation, element.getLatitude(), element.getLongitude()).execute();
+
+//                        new HttpURLConnectionAsyncTask(currentLocation, element.getLatitude(), element.getLongitude()).execute();
 //                        HttpURLConnectionAsyncTask connect = (HttpURLConnectionAsyncTask) new HttpURLConnectionAsyncTask(currentLocation, element.getLatitude(), element.getLongitude()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                        String ds = connect.getDuration();
-                        long travelTime = connect.getTravelTimeSeconds();
+//                        String ds = connect.getDuration();
+//                        long travelTime = connect.getTravelTimeSeconds();
+                        long travelTime = HttpURLConnectionAsyncTask.getTravelTimeSeconds(currentLocation, element.getLatitude(), element.getLongitude());
                         long minutesUntilEvent = ChronoUnit.MINUTES.between(element.getStartDate(), currentTime);
 
-//                        if(minutesUntilEvent - travelTime < notificationP) {
-//                            displayNotification(getApplicationContext(), element.getTitle(), "is starting in " + minutesUntilEvent + " minutes. Approximately " + travelTime + " travel time.");
-//                        }
+                        if(minutesUntilEvent - travelTime < notificationPeriod) {
+                            displayNotification(getApplicationContext(), element.getTitle(), "is starting in " + minutesUntilEvent + " minutes. Approximately " + travelTime + " travel time.");
+                        }
 
                     }
                 } catch(Exception e) {
@@ -138,18 +141,18 @@ public class LocationService extends IntentService {
             manager.createNotificationChannel(serviceChannel);
         }
     }
-//    private void displayNotification(Context context, String title, String message) {
-//        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "channel1")
-//                .setSmallIcon(R.drawable.ic_explore_white)
-//                .setContentTitle(title)
-//                .setContentText(message)
-//                .setPriority(NotificationCompat.PRIORITY_HIGH);
-//
-//        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-//        builder.setChannelId("channel1");
-//
-//        notificationManager.notify(1, builder.build());
-//    }
+    private void displayNotification(Context context, String title, String message) {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "channel1")
+                .setSmallIcon(R.drawable.ic_explore_white)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setPriority(NotificationCompat.PRIORITY_HIGH);
+
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        builder.setChannelId("channel1");
+
+        notificationManager.notify(1, builder.build());
+    }
 
     @Override
     protected void onHandleIntent(Intent intent) {

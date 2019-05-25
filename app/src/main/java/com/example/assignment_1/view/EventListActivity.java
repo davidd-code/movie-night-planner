@@ -23,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.assignment_1.R;
+import com.example.assignment_1.restapi.HttpURLConnectionAsyncTask;
 import com.example.assignment_1.restapi.LocationServiceReceiver;
 import com.example.assignment_1.controller.AddEventOnClickListener;
 import com.example.assignment_1.controller.EditEventOnClickListener;
@@ -140,7 +141,7 @@ public class EventListActivity extends AppCompatActivity {
                 Location destination = new Location("");
                 destination.setLatitude(-37.8829696);
                 destination.setLongitude(146.07782);
-//                new HttpURLConnectionAsyncTask(currentLocation, destination.getLatitude(), destination.getLongitude()).execute();
+                new HttpURLConnectionAsyncTask(currentLocation, destination.getLatitude(), destination.getLongitude()).execute();
                 break;
             case R.id.sort_ascending:
                 c.sortAscending();
