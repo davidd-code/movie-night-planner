@@ -43,8 +43,11 @@ public class HttpURLConnectionThread extends Thread {
                 } while(travelTime == 0);
 
                 long minutesUntilEvent = ChronoUnit.MINUTES.between(currentTime, currentEvent.getStartDate());
+                travelTime *= 60 * 1000;
+                long millisecondsUntilEvent = ChronoUnit.MILLIS.between(currentTime, currentEvent.getStartDate());
                 Log.d(TAG, "travelTime: " + travelTime);
-                if(minutesUntilEvent - travelTime < notificationPeriod) {
+//                if(minutesUntilEvent - travelTime < notificationPeriod) {
+                if(millisecondsUntilEvent - travelTime < notificationPeriod) {
                     displayNotification(this.context, currentEvent.getTitle(), "is starting in " + minutesUntilEvent + " minutes. Approximately " + travelTime + " travel time.", Integer.parseInt(currentEvent.getID()));
                 }
             }

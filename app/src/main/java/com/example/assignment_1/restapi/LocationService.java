@@ -59,7 +59,8 @@ public class LocationService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         int notificationPeriodMilliseconds = intent.getIntExtra("notificationPeriod", 1000);
-        notificationPeriod = notificationPeriodMilliseconds / 60000;
+        int notificationPeriod = intent.getIntExtra("notificationPeriod", 1000);
+//        notificationPeriod = notificationPeriodMilliseconds / 60000;
 
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
 
