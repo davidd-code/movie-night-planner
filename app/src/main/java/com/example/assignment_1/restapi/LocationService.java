@@ -5,13 +5,11 @@ import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
@@ -20,9 +18,6 @@ import android.support.v4.app.ActivityCompat;
 import com.example.assignment_1.R;
 import com.example.assignment_1.model.EventImpl;
 
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-
 import static com.example.assignment_1.model.EventModel.events;
 
 public class LocationService extends IntentService {
@@ -30,6 +25,8 @@ public class LocationService extends IntentService {
     public static final String SERVICE_CHANNEL = "serviceChannel";
     private PowerManager.WakeLock wakeLock;
     int notificationPeriod;
+
+    private static final String TAG = "LocationService";
 
     public LocationService() {
         super("LocationService");
@@ -50,7 +47,7 @@ public class LocationService extends IntentService {
         wakeLock.acquire(600000);
         createNotificationChannels();
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Notification notification = new Notification.Builder(this, SERVICE_CHANNEL)
                     .setContentTitle("Title")
                     .setContentText("Running...")
@@ -94,36 +91,11 @@ public class LocationService extends IntentService {
         }
         locationManager.requestLocationUpdates("gps", 5000, 0, locationListener);
 
-        final Location currentLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-        StringBuilder sb = new StringBuilder("");
-        sb.append(currentLocation.getLatitude());
-        sb.append(", ");
-        sb.append(currentLocation.getLongitude());
-
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    LocalDateTime currentTime = LocalDateTime.now();
-                    for(EventImpl element: events) {
-                        HttpURLConnectionAsyncTask connect = (HttpURLConnectionAsyncTask) new HttpURLConnectionAsyncTask(currentLocation, element.getLatitude(), element.getLongitude()).execute();
-//                        HttpURLConnectionAsyncTask connect = (HttpURLConnectionAsyncTask) new HttpURLConnectionAsyncTask(currentLocation, element.getLatitude(), element.getLongitude()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                        String ds = connect.getDuration();
-                        long travelTime = connect.getTravelTimeSeconds();
-                        long minutesUntilEvent = ChronoUnit.MINUTES.between(element.getStartDate(), currentTime);
-
-//                        if(minutesUntilEvent - travelTime < notificationP) {
-//                            displayNotification(getApplicationContext(), element.getTitle(), "is starting in " + minutesUntilEvent + " minutes. Approximately " + travelTime + " travel time.");
-//                        }
-
-                    }
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-
-            }
-        });
-        thread.start();
+        Location currentLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        for (EventImpl event : events) {
+            HttpURLConnectionThread connectThread = new HttpURLConnectionThread(currentLocation, event);
+            connectThread.start();
+        }
     }
 
     private void createNotificationChannels() {

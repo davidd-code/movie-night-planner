@@ -2,13 +2,10 @@ package com.example.assignment_1.view;
 
 import android.app.AlarmManager;
 import android.app.Dialog;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,14 +20,14 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.assignment_1.R;
-import com.example.assignment_1.restapi.LocationServiceReceiver;
 import com.example.assignment_1.controller.AddEventOnClickListener;
 import com.example.assignment_1.controller.EditEventOnClickListener;
 import com.example.assignment_1.controller.MapOnClickListener;
-import com.example.assignment_1.controller.NotificationListener;
 import com.example.assignment_1.model.CustomComparator;
 import com.example.assignment_1.model.EventModel;
 import com.example.assignment_1.model.FileLoader;
+import com.example.assignment_1.restapi.HttpURLConnectionAsyncTask;
+import com.example.assignment_1.restapi.LocationServiceReceiver;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
@@ -129,7 +126,7 @@ public class EventListActivity extends AppCompatActivity {
             case R.id.notification_threshold:
 //                sendOnChannel("Notification title", "message");
 //                setAlarm(5000);
-//                NotificationThresholdDialog notificationDialog = new NotificationThresholdDialog();
+//                NotificationThresholdDialog notificatiof5nDialog = new NotificationThresholdDialog();
 //                notificationDialog.show(getSupportFragmentManager(), "Notification Threshold");
 
 //                makeHttpRequest();
@@ -140,7 +137,9 @@ public class EventListActivity extends AppCompatActivity {
                 Location destination = new Location("");
                 destination.setLatitude(-37.8829696);
                 destination.setLongitude(146.07782);
-//                new HttpURLConnectionAsyncTask(currentLocation, destination.getLatitude(), destination.getLongitude()).execute();
+                new HttpURLConnectionAsyncTask(currentLocation, destination.getLatitude(), destination.getLongitude()).execute();
+//                long travelTime = connect.getTravelTimeSeconds();
+//                Log.d(TAG, "travelTime: " + travelTime);
                 break;
             case R.id.sort_ascending:
                 c.sortAscending();
