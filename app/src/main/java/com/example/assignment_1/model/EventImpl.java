@@ -15,7 +15,7 @@ public class EventImpl extends AbstractEvent implements Serializable {
 
     public EventImpl (){
         this.eventID = Integer.toString(events.size()+1);
-        attendees = new ArrayList<>();
+        this.attendees = new ArrayList<>();
     }
 
     public EventImpl(String id, String t, LocalDateTime s, LocalDateTime e, String v, String l){
@@ -26,7 +26,7 @@ public class EventImpl extends AbstractEvent implements Serializable {
         this.endDate = e;
         this.venue = v;
         this.location = l;
-        attendees = new ArrayList<>();
+        this.attendees = new ArrayList<>();
     }
 
     public EventImpl(String id, String t, String s, String e, String v, String l, String movieID){
@@ -40,7 +40,7 @@ public class EventImpl extends AbstractEvent implements Serializable {
         this.location = l;
         if(movieID != null)
             this.chosenMovie = movies.get(Integer.parseInt(movieID) - 1);
-        attendees = new ArrayList<>();
+        this.attendees = new ArrayList<>();
 
     }
 

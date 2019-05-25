@@ -226,7 +226,7 @@ public class AddEditEventActivity extends AppCompatActivity implements GetLocati
         movieName.setOnClickListener(new SelectMovieOnClickListener(this, eventIndex));
         selectMovieButton.setOnClickListener(new SelectMovieOnClickListener(this, eventIndex));
         inviteButton.setOnClickListener(new InviteOnClickListener(this, currentEvent));
-        //numAttendees.setOnClickListener();
+        numAttendees.setOnClickListener(new InviteOnClickListener(this, currentEvent));
     }
 
     public void requestPermissions(){

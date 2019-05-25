@@ -12,7 +12,7 @@ public class NetworkMonitor extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 
         //event notification s
-
+        isConnected(context);
 
 
 

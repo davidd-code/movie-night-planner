@@ -16,6 +16,21 @@ public class Contact {
         this.email = e;
     }
 
+    @Override
+    public int hashCode() {
+        return id == null ? 0 : id.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null)
+            return false;
+        if(!(obj instanceof  Contact))
+            return false;
+        Contact other = (Contact) obj;
+        return id == null ? false : id.equals(other.id);
+    }
+
     public String getID() {
         return this.id;
     }

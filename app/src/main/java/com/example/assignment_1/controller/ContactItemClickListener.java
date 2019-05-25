@@ -43,18 +43,11 @@ public class ContactItemClickListener implements ContactListAdapter.OnItemClickL
                 }
             }).start();
         }else{
-            Log.d(TAG, "Remove Attendee Clicked");
-            for (Contact attendee : currentEvent.getAttendees()) {
-                System.out.println("Attendees:\n"+attendee.getID()+", "+attendee.getFullName()+", "+attendee.getPhone());
-            }
-            System.out.println("CurrentContact:\n"+currentContact.getID()+", "+currentContact.getFullName()+", "+currentContact.getPhone());
-
             if(currentEvent.removeAttendee(currentContact))
-                Log.d(TAG, "removed attendee");
+                Log.d(TAG, "Attendee removed from in-memory model");
             else
-                Log.d(TAG, "attendee NOT removed");
+                Log.d(TAG, "Attendee NOT removed from in-memory model");
 
-            Log.d(TAG, "Attendees: " + currentEvent.getNumAttendees());
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -71,7 +64,6 @@ public class ContactItemClickListener implements ContactListAdapter.OnItemClickL
         intent.putExtra("EVENT_INDEX", eventIndex);
         ((Activity) context).setResult(Activity.RESULT_OK, intent);
         ((Activity)context).onBackPressed();
-        //eventAdapter.notifyDataSetChanged();
         context.sendBroadcast(update);
 
     }

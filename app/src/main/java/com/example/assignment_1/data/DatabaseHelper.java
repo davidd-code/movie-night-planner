@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.ParseException;
-import java.util.ArrayList;
 
 import static com.example.assignment_1.model.EventModel.contacts;
 import static com.example.assignment_1.model.EventModel.events;
@@ -30,7 +29,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private FileLoader fl = new FileLoader();
     private Context context;
 
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
     private static final String DATABASE_NAME = "MovieEventsDB.db";
 
     private static final String TABLE_EVENTS = "Events";
@@ -340,7 +339,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private void readAttendees(EventImpl event) {
         SQLiteDatabase db = getWritableDatabase();
 
-        ArrayList<Contact> attendees = event.getAttendees();
         String eID, cID, query;
         String eventID = event.getID();
 
@@ -348,7 +346,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(query, null);
 
         cursor.moveToFirst();
-        attendees.clear();
+        event.getAttendees().clear();
         while (!cursor.isAfterLast()) {
             if (cursor.getString(cursor.getColumnIndex(COL_EVENT_ID)) != null) {
                 eID = cursor.getString(cursor.getColumnIndex(COL_EVENT_ID));
@@ -356,7 +354,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
                 for (Contact contact : contacts) {
                     if (contact.getID().equals(cID)){
-                        attendees.add(contact);
+                        event.addAttendees(contact);
                     }
                 }
             }
