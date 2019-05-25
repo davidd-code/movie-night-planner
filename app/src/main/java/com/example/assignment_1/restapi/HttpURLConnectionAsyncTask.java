@@ -37,19 +37,33 @@ public class HttpURLConnectionAsyncTask extends AsyncTask<String, String, String
         return "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=" + currentLocation.getLatitude() + "," + currentLocation.getLongitude() + "&destinations=" + destinationLatitude + "," + destinationLongitude + "&mode=driving&key=" + key;
     }
 
-    private static long calculateTravelTimeSeconds(String durationString) {
+//    private static long calculateTravelTimeSeconds(String durationString) {
+//        String[] splitString = durationString.split(" ");
+//        long seconds = 0;
+//        if(splitString.length == 2) {
+//            int minutes = Integer.parseInt(splitString[0]);
+//            seconds = minutes * 60;
+//        } else if(splitString.length == 4) {
+//            int hours = Integer.parseInt(splitString[0]);
+//            int minutes = Integer.parseInt(splitString[2]);
+//            seconds = (hours * 60 * 60) + (minutes * 60);
+//        }
+//        return seconds;
+//    }
+
+    private static long calculateTravelTimeMinutes(String durationString) {
         String[] splitString = durationString.split(" ");
-        long seconds = 0;
+        long minutes = 0;
         if(splitString.length == 2) {
-            int minutes = Integer.parseInt(splitString[0]);
-            seconds = minutes * 60;
+            minutes = Integer.parseInt(splitString[0]);
         } else if(splitString.length == 4) {
-            int hours = Integer.parseInt(splitString[0]);
-            int minutes = Integer.parseInt(splitString[2]);
-            seconds = (hours * 60 * 60) + (minutes * 60);
+            long hours = Integer.parseInt(splitString[0]);
+            minutes += hours * 60;
+            minutes += Integer.parseInt(splitString[2]);
         }
-        return seconds;
+        return minutes;
     }
+
 
     public long getTravelTimeSeconds() {
         return seconds;
@@ -79,7 +93,8 @@ public class HttpURLConnectionAsyncTask extends AsyncTask<String, String, String
             JSONObject durationElement = durationObject.getJSONObject("duration");
             String durationString = durationElement.getString("text");
 
-            return calculateTravelTimeSeconds(durationString);
+//            return calculateTravelTimeSeconds(durationString);
+            return calculateTravelTimeMinutes(durationString);
 
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -159,7 +174,7 @@ public class HttpURLConnectionAsyncTask extends AsyncTask<String, String, String
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
         this.duration = s;
-        seconds = calculateTravelTimeSeconds(s);
+        seconds = calculateTravelTimeMinutes(s);
         System.out.println(s);
     }
 }
