@@ -41,8 +41,9 @@ import java.util.Calendar;
 import static com.example.assignment_1.model.EventModel.eventAdapter;
 import static com.example.assignment_1.model.EventModel.events;
 
-public class EventListActivity extends AppCompatActivity {
+public class EventListActivity extends AppCompatActivity implements NotificationOptionsDialog.NotificationOnClickListener {
 
+    public static final int MINUTE_IN_MILLISECONDS = 60000;
     private DatabaseHelper dbHelper;
     public static final String DATABASE_UPDATED_ACTION = "com.example.assignment_1.DB_UPDATED";
     public static final String UPDATE_ACTION_TEXT = "com.example.assignment_1.UPDATE_TEXT";
@@ -79,6 +80,8 @@ public class EventListActivity extends AppCompatActivity {
         dbHelper.close();
 
         threshold = HOUR_IN_MILLISECONDS;
+        period = MINUTE_IN_MILLISECONDS;
+        remindAgain = MINUTE_IN_MILLISECONDS;
         setAlarm(threshold);
     }
 
@@ -148,8 +151,7 @@ public class EventListActivity extends AppCompatActivity {
         intent.putExtra("notificationPeriod", milliseconds);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
 
-//        alarmManager.setExact(AlarmManager.RTC_WAKEUP, milliseconds, pendingIntent);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, Calendar.getInstance().getTimeInMillis(), 1, pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, Calendar.getInstance().getTimeInMillis(), period, pendingIntent);
     }
 
     @Override
@@ -199,5 +201,19 @@ public class EventListActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void saveNotificationOptions(int threshold, int period, int remind) {
+        this.threshold = threshold * 60000;
+        this.period = period * 60000;
+        this.remindAgain = remind;
+        String test = threshold + ", " + period + ", " + remindAgain;
+        Toast.makeText(getApplicationContext(), test, Toast.LENGTH_SHORT).show();
 
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, LocationServiceReceiver.class);
+        intent.putExtra("notificationPeriod", threshold);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, Calendar.getInstance().getTimeInMillis(), period, pendingIntent);
+    }
 }
