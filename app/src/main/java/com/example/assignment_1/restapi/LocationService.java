@@ -14,7 +14,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.NotificationCompat;
 
 import com.example.assignment_1.R;
 import com.example.assignment_1.model.EventImpl;

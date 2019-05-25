@@ -81,7 +81,7 @@ public class AddEditEventActivity extends AppCompatActivity implements GetLocati
         public void onReceive(Context context, Intent intent) {
             if (DATABASE_UPDATED_ACTION.equals(intent.getAction())) {
                 String updateAvailable = intent.getStringExtra(UPDATE_ACTION_TEXT);
-                Toast.makeText(context, "UI updated", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(context, "UI updated", Toast.LENGTH_SHORT).show();
                 numAttendees.setText(Integer.toString(currentEvent.getNumAttendees()));
             }
         }

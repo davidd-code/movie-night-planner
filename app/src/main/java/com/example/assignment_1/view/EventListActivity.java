@@ -3,9 +3,6 @@ package com.example.assignment_1.view;
 import android.app.AlarmManager;
 import android.app.Dialog;
 import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
-import android.location.Location;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -29,9 +26,7 @@ import com.example.assignment_1.controller.EditEventOnClickListener;
 import com.example.assignment_1.controller.MapOnClickListener;
 import com.example.assignment_1.data.DatabaseHelper;
 import com.example.assignment_1.model.CustomComparator;
-import com.example.assignment_1.model.EventModel;
 import com.example.assignment_1.model.FileLoader;
-import com.example.assignment_1.restapi.HttpURLConnectionAsyncTask;
 import com.example.assignment_1.restapi.LocationServiceReceiver;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -99,7 +94,7 @@ public class EventListActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             if (DATABASE_UPDATED_ACTION.equals(intent.getAction())) {
                 String updateAvailable = intent.getStringExtra(UPDATE_ACTION_TEXT);
-                Toast.makeText(context, "UI updated", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(context, "UI updated", Toast.LENGTH_SHORT).show();
                 eventAdapter.notifyDataSetChanged();
             }
         }
