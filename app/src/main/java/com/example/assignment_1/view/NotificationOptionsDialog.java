@@ -2,8 +2,10 @@ package com.example.assignment_1.view;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,10 +17,22 @@ import com.example.assignment_1.R;
 
 public class NotificationOptionsDialog extends AppCompatDialogFragment {
 
+    FragmentActivity mContext;
     EditText notificationThreshold, notificationPeriod, remindMinutes;
     int notificationThresholdInt, notificationPeriodInt, remindMinutesInt;
 
     private NotificationOnClickListener listener;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mContext = (FragmentActivity) context;
+        try {
+            listener = (NotificationOnClickListener) context;
+        } catch(ClassCastException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
