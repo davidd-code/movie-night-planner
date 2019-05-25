@@ -80,7 +80,9 @@ public class LocationService extends IntentService {
 
             }
         };
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -94,41 +96,9 @@ public class LocationService extends IntentService {
 
         Location currentLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
         for (EventImpl event : events) {
-            HttpURLConnectionThread connectThread = new HttpURLConnectionThread(currentLocation, event);
+            HttpURLConnectionThread connectThread = new HttpURLConnectionThread(getApplicationContext(), currentLocation, event, notificationPeriod);
             connectThread.start();
         }
-//        final Location currentLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-//
-//        Thread thread = new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    LocalDateTime currentTime = LocalDateTime.now();
-//                    for(EventImpl element: events) {
-//                        if(element.getStartDate().isAfter(currentTime)) {
-////                        new HttpURLConnectionAsyncTask(currentLocation, element.getLatitude(), element.getLongitude()).execute();
-////                        HttpURLConnectionAsyncTask connect = (HttpURLConnectionAsyncTask) new HttpURLConnectionAsyncTask(currentLocation, element.getLatitude(), element.getLongitude()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-////                        String ds = connect.getDuration();
-////                        long travelTime = connect.getTravelTimeSeconds();
-////                            long travelTime = HttpURLConnectionAsyncTask.getTravelTimeSeconds(currentLocation, element.getLatitude(), element.getLongitude());
-//                            long travelTime = HttpURLConnectionAsyncTask.getTravelTimeSeconds(currentLocation, element.getLatitude(), element.getLongitude());
-//                            long minutesUntilEvent = ChronoUnit.MINUTES.between(currentTime, element.getStartDate());
-//
-//                            if(minutesUntilEvent - travelTime < notificationPeriod) {
-//                                displayNotification(getApplicationContext(), element.getTitle(), "is starting in " + minutesUntilEvent + " minutes. Approximately " + travelTime + "minutes travel time.", Integer.parseInt(element.getID()));
-//                            }
-//                        }
-//
-//
-//
-//                    }
-//                } catch(Exception e) {
-//                    e.printStackTrace();
-//                }
-//
-//            }
-//        });
-//        thread.start();
     }
 
     private void createNotificationChannels() {
@@ -142,18 +112,6 @@ public class LocationService extends IntentService {
             NotificationManager manager = getSystemService(NotificationManager.class);
             manager.createNotificationChannel(serviceChannel);
         }
-    }
-    private void displayNotification(Context context, String title, String message, int id) {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, SERVICE_CHANNEL)
-                .setSmallIcon(R.drawable.ic_explore_white)
-                .setContentTitle(title)
-                .setContentText(message)
-                .setPriority(NotificationCompat.PRIORITY_HIGH);
-
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        builder.setChannelId(SERVICE_CHANNEL);
-
-        notificationManager.notify(id, builder.build());
     }
 
     @Override

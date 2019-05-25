@@ -40,19 +40,19 @@ public class HttpURLConnectionAsyncTask extends AsyncTask<String, String, String
         return "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=" + currentLocation.getLatitude() + "," + currentLocation.getLongitude() + "&destinations=" + destinationLatitude + "," + destinationLongitude + "&mode=driving&key=" + key;
     }
 
-//    private static long calculateTravelTimeSeconds(String durationString) {
-//        String[] splitString = durationString.split(" ");
-//        long seconds = 0;
-//        if(splitString.length == 2) {
-//            int minutes = Integer.parseInt(splitString[0]);
-//            seconds = minutes * 60;
-//        } else if(splitString.length == 4) {
-//            int hours = Integer.parseInt(splitString[0]);
-//            int minutes = Integer.parseInt(splitString[2]);
-//            seconds = (hours * 60 * 60) + (minutes * 60);
-//        }
-//        return seconds;
-//    }
+    private static long calculateTravelTimeSeconds(String durationString) {
+        String[] splitString = durationString.split(" ");
+        long seconds = 0;
+        if(splitString.length == 2) {
+            int minutes = Integer.parseInt(splitString[0]);
+            seconds = minutes * 60;
+        } else if(splitString.length == 4) {
+            int hours = Integer.parseInt(splitString[0]);
+            int minutes = Integer.parseInt(splitString[2]);
+            seconds = (hours * 60 * 60) + (minutes * 60);
+        }
+        return seconds;
+    }
 
     private static long calculateTravelTimeMinutes(String durationString) {
         String[] splitString = durationString.split(" ");
@@ -72,8 +72,9 @@ public class HttpURLConnectionAsyncTask extends AsyncTask<String, String, String
         return seconds;
     }
 
-    public static long getTravelTimeSeconds(Location location, double latitude, double longitude) {
-        String urlString = requestURL(location, latitude, longitude);
+    @Override
+    protected String doInBackground(String... strings) {
+        String urlString = requestURL(currentLocation, destinationLatitude, destinationLongitude);
         try {
             URL url = new URL(urlString);
             connection = (HttpURLConnection) url.openConnection();
@@ -83,7 +84,7 @@ public class HttpURLConnectionAsyncTask extends AsyncTask<String, String, String
             br = new BufferedReader(new InputStreamReader(is));
 
             String line = "";
-            StringBuffer stringBuffer = new StringBuffer();
+            StringBuilder stringBuffer = new StringBuilder();
             while((line = br.readLine()) != null) {
                 stringBuffer.append(line);
             }
@@ -96,12 +97,7 @@ public class HttpURLConnectionAsyncTask extends AsyncTask<String, String, String
             JSONObject durationElement = durationObject.getJSONObject("duration");
             String durationString = durationElement.getString("text");
 
-//            return calculateTravelTimeSeconds(durationString);
-            return calculateTravelTimeMinutes(durationString);
-//
-            this.seconds = calculateTravelTimeSeconds(durationString);
-            Log.d(TAG, "doInBackground: "+durationString);
-//            s
+            this.seconds = calculateTravelTimeMinutes(durationString);
             return durationString;
 
         } catch (MalformedURLException e) {
@@ -122,60 +118,7 @@ public class HttpURLConnectionAsyncTask extends AsyncTask<String, String, String
                 e.printStackTrace();
             }
         }
-        return 0;
-    }
-
-    @Override
-    protected String doInBackground(String... strings) {
-//        String urlString = requestURL(currentLocation, destinationLatitude, destinationLongitude);
-//        try {
-//            URL url = new URL(urlString);
-//            connection = (HttpURLConnection) url.openConnection();
-//            connection.connect();
-//
-//            InputStream is = connection.getInputStream();
-//            br = new BufferedReader(new InputStreamReader(is));
-//
-//            String line = "";
-//            StringBuilder stringBuffer = new StringBuilder();
-//            while((line = br.readLine()) != null) {
-//                stringBuffer.append(line);
-//            }
-//            String finalJSON = stringBuffer.toString();
-//            JSONObject parentObject = new JSONObject(finalJSON);
-//            JSONArray rowsArray = parentObject.getJSONArray("rows");
-//            JSONObject elementsArray = rowsArray.getJSONObject(0);
-//            JSONArray childArray = elementsArray.getJSONArray("elements");
-//            JSONObject durationObject = childArray.getJSONObject(0);
-//            JSONObject durationElement = durationObject.getJSONObject("duration");
-//            String durationString = durationElement.getString("text");
-//
-//            this.seconds = calculateTravelTimeSeconds(durationString);
-//            return durationString;
-//
-//        } catch (MalformedURLException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        } finally {
-//            if(connection != null) {
-//                connection.disconnect();
-//            }
-//            try {
-//                if(br != null) {
-//                    br.close();
-//                }
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
         return null;
-    }
-
-    public String getDuration() {
-        return this.duration;
     }
 
     @Override
