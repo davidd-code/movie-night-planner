@@ -25,6 +25,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import static com.example.assignment_1.model.EventModel.events;
@@ -173,6 +174,13 @@ public class EventLocationActivity extends FragmentActivity implements OnMapRead
         for(int i = 0; i < 3; i++) {
             soonestEvents.add(events.get(i));
         }
+//        int counter = 0;
+//        while(soonestEvents.size() != 3) {
+//            if(LocalDateTime.now().isBefore(events.get(counter).getStartDate())) {
+//                soonestEvents.add(events.get(counter));
+//            }
+//            counter++;
+//        }
         return soonestEvents;
     }
 }

@@ -2,7 +2,6 @@ package com.example.assignment_1.controller;
 
 import android.content.Context;
 import android.content.Intent;
-import android.widget.Toast;
 
 import com.example.assignment_1.data.DatabaseHelper;
 import com.example.assignment_1.view.AddEditEventActivity;
