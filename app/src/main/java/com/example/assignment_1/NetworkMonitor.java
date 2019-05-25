@@ -11,7 +11,7 @@ public class NetworkMonitor extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        //event notification s
+        //event notification
         isConnected(context);
 
 
