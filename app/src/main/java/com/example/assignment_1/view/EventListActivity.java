@@ -111,7 +111,7 @@ public class EventListActivity extends AppCompatActivity {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
 
 //        alarmManager.setExact(AlarmManager.RTC_WAKEUP, milliseconds, pendingIntent);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, Calendar.getInstance().getTimeInMillis(), period, pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, Calendar.getInstance().getTimeInMillis(), 1000, pendingIntent);
     }
 
 
