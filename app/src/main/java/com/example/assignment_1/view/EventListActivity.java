@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -43,6 +44,7 @@ import java.text.ParseException;
 import java.util.Calendar;
 
 import static com.example.assignment_1.model.EventModel.eventAdapter;
+import static com.example.assignment_1.model.EventModel.events;
 
 public class EventListActivity extends AppCompatActivity {
 
@@ -71,9 +73,7 @@ public class EventListActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.event_list_toolbar);
         setSupportActionBar(toolbar);
 
-        if(savedInstanceState == null) {
-            loadData();
-        }
+
 
         buildRecyclerView();
         setButtons();
@@ -108,7 +108,7 @@ public class EventListActivity extends AppCompatActivity {
                 eventAdapter.notifyDataSetChanged();
             }
         }
-    }
+    };
 
     @Override
     protected void onStart() {
@@ -169,20 +169,9 @@ public class EventListActivity extends AppCompatActivity {
         CustomComparator c = new CustomComparator();
         switch(item.getItemId()){
             case R.id.notification_threshold:
-//                sendOnChannel("Notification title", "message");
-//                setAlarm(5000);
                 NotificationOptionsDialog notificationDialog = new NotificationOptionsDialog();
                 notificationDialog.show(getSupportFragmentManager(), "Notification Threshold");
 
-//                makeHttpRequest();
-                Location currentLocation = new Location("");
-                currentLocation.setLatitude(-37.807390);
-                currentLocation.setLongitude(144.963300);
-
-                Location destination = new Location("");
-                destination.setLatitude(-37.8829696);
-                destination.setLongitude(146.07782);
-                new HttpURLConnectionAsyncTask(currentLocation, destination.getLatitude(), destination.getLongitude()).execute();
                 break;
             case R.id.sort_ascending:
                 c.sortAscending();
