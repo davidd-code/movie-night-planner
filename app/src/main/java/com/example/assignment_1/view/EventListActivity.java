@@ -36,11 +36,6 @@ import com.example.assignment_1.restapi.LocationServiceReceiver;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.text.ParseException;
 import java.util.Calendar;
 
 import static com.example.assignment_1.model.EventModel.eventAdapter;
