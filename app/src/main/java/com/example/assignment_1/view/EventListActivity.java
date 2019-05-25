@@ -13,7 +13,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -38,7 +37,6 @@ public class EventListActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager eLayoutManager;
     private Toolbar toolbar;
     private ImageView addEventButton;
-    private Button calendarButton;
 
     private static final String TAG="EventListActivity";
     private static final int ERROR_DIALOG_REQUEST = 9001;
@@ -127,17 +125,9 @@ public class EventListActivity extends AppCompatActivity {
 
     public void setButtons() {
         addEventButton = findViewById(R.id.addEventButton);
-        calendarButton = findViewById(R.id.calendar_button);
         ImageView mapButton = findViewById(R.id.mapButton);
         mapButton.setOnClickListener(new MapOnClickListener(this));
         addEventButton.setOnClickListener(new AddEventOnClickListener(this, eventAdapter));
-        calendarButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                eventAdapter.notifyDataSetChanged();
-                calendarButton.setText(Integer.toString(eventAdapter.getItemCount()));
-            }
-        });
     }
 
     public void buildRecyclerView(){
