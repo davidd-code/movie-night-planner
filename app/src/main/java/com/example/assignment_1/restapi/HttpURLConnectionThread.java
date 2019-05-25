@@ -32,20 +32,24 @@ public class HttpURLConnectionThread extends Thread {
     @Override
     public void run() {
         try {
+
             LocalDateTime currentTime = LocalDateTime.now();
+            if(currentTime.isBefore(currentEvent.getStartDate())) {
+                HttpURLConnectionAsyncTask connect = (HttpURLConnectionAsyncTask) new HttpURLConnectionAsyncTask(currentLocation, currentEvent.getLatitude(), currentEvent.getLongitude()).execute();
 
-            HttpURLConnectionAsyncTask connect = (HttpURLConnectionAsyncTask) new HttpURLConnectionAsyncTask(currentLocation, currentEvent.getLatitude(), currentEvent.getLongitude()).execute();
+                long travelTime;
+                do {
+                    travelTime = connect.getTravelTimeSeconds();
+                } while(travelTime == 0);
 
-            long travelTime = connect.getTravelTimeSeconds();
-            while(travelTime == 0){
-                travelTime = connect.getTravelTimeSeconds();
+                long minutesUntilEvent = ChronoUnit.MINUTES.between(currentTime, currentEvent.getStartDate());
+                Log.d(TAG, "travelTime: " + travelTime);
+                if(minutesUntilEvent - travelTime < notificationPeriod) {
+                    displayNotification(this.context, currentEvent.getTitle(), "is starting in " + minutesUntilEvent + " minutes. Approximately " + travelTime + " travel time.", Integer.parseInt(currentEvent.getID()));
+                }
             }
 
-            long minutesUntilEvent = ChronoUnit.MINUTES.between(currentTime, currentEvent.getStartDate());
-            Log.d(TAG, "travelTime: " + travelTime);
-            if(minutesUntilEvent - travelTime < notificationPeriod) {
-                displayNotification(this.context, currentEvent.getTitle(), "is starting in " + minutesUntilEvent + " minutes. Approximately " + travelTime + " travel time.", Integer.parseInt(currentEvent.getID()));
-            }
+
 
         } catch(Exception e) {
             e.printStackTrace();

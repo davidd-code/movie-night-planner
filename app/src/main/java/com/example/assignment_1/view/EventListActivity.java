@@ -111,7 +111,7 @@ public class EventListActivity extends AppCompatActivity {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
 
 //        alarmManager.setExact(AlarmManager.RTC_WAKEUP, milliseconds, pendingIntent);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, Calendar.getInstance().getTimeInMillis(), 1000, pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, Calendar.getInstance().getTimeInMillis(), 1, pendingIntent);
     }
 
 
@@ -130,8 +130,8 @@ public class EventListActivity extends AppCompatActivity {
             case R.id.notification_threshold:
 //                sendOnChannel("Notification title", "message");
 //                setAlarm(5000);
-//                NotificationOptionsDialog notificationDialog = new NotificationOptionsDialog();
-//                notificationDialog.show(getSupportFragmentManager(), "Notification Threshold");
+                NotificationOptionsDialog notificationDialog = new NotificationOptionsDialog();
+                notificationDialog.show(getSupportFragmentManager(), "Notification Threshold");
 
 //                makeHttpRequest();
                 Location currentLocation = new Location("");

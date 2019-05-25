@@ -25,7 +25,7 @@ public class LocationService extends IntentService {
 
     public static final String SERVICE_CHANNEL = "serviceChannel";
     private PowerManager.WakeLock wakeLock;
-    int notificationPeriod;
+    int notificationPeriod = 5;
 
     private static final String TAG = "LocationService";
 
@@ -41,8 +41,28 @@ public class LocationService extends IntentService {
     @Override
     public void onCreate() {
         super.onCreate();
+    }
+
+    private void createNotificationChannels() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel serviceChannel = new NotificationChannel(
+                    SERVICE_CHANNEL,
+                    "Service Channel",
+                    NotificationManager.IMPORTANCE_DEFAULT
+            );
+
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(serviceChannel);
+        }
+    }
+
+    @Override
+    protected void onHandleIntent(Intent intent) {
+        int notificationPeriodMilliseconds = intent.getIntExtra("notificationPeriod", 1000);
+        notificationPeriod = notificationPeriodMilliseconds / 60000;
 
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+
         wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
                 "Assignment:WakeLock");
         wakeLock.acquire(600000);
@@ -99,24 +119,5 @@ public class LocationService extends IntentService {
             HttpURLConnectionThread connectThread = new HttpURLConnectionThread(getApplicationContext(), currentLocation, event, notificationPeriod);
             connectThread.start();
         }
-    }
-
-    private void createNotificationChannels() {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel serviceChannel = new NotificationChannel(
-                    SERVICE_CHANNEL,
-                    "Service Channel",
-                    NotificationManager.IMPORTANCE_DEFAULT
-            );
-
-            NotificationManager manager = getSystemService(NotificationManager.class);
-            manager.createNotificationChannel(serviceChannel);
-        }
-    }
-
-    @Override
-    protected void onHandleIntent(Intent intent) {
-         int notificationPeriodMilliseconds = intent.getIntExtra("notificationPeriod", 1000);
-         notificationPeriod = notificationPeriodMilliseconds / 60000;
     }
 }
