@@ -17,7 +17,6 @@ public class LocationServiceReceiver extends BroadcastReceiver {
         notificationPeriod = intent.getIntExtra("notificationPeriod", 0);
         serviceIntent.putExtra("notificationPeriod", notificationPeriod);
         context.startService(serviceIntent);
-
     }
 
 }

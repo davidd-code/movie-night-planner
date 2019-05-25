@@ -5,13 +5,11 @@ import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
@@ -21,9 +19,6 @@ import android.support.v4.app.NotificationCompat;
 import com.example.assignment_1.R;
 import com.example.assignment_1.model.EventImpl;
 
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-
 import static com.example.assignment_1.model.EventModel.events;
 
 public class LocationService extends IntentService {
@@ -31,6 +26,8 @@ public class LocationService extends IntentService {
     public static final String SERVICE_CHANNEL = "serviceChannel";
     private PowerManager.WakeLock wakeLock;
     int notificationPeriod;
+
+    private static final String TAG = "LocationService";
 
     public LocationService() {
         super("LocationService");
@@ -51,7 +48,7 @@ public class LocationService extends IntentService {
         wakeLock.acquire(600000);
         createNotificationChannels();
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Notification notification = new Notification.Builder(this, SERVICE_CHANNEL)
                     .setContentTitle("Title")
                     .setContentText("Running...")
@@ -95,38 +92,43 @@ public class LocationService extends IntentService {
         }
         locationManager.requestLocationUpdates("gps", 5000, 0, locationListener);
 
-        final Location currentLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    LocalDateTime currentTime = LocalDateTime.now();
-                    for(EventImpl element: events) {
-                        if(element.getStartDate().isAfter(currentTime)) {
-//                        new HttpURLConnectionAsyncTask(currentLocation, element.getLatitude(), element.getLongitude()).execute();
-//                        HttpURLConnectionAsyncTask connect = (HttpURLConnectionAsyncTask) new HttpURLConnectionAsyncTask(currentLocation, element.getLatitude(), element.getLongitude()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-//                        String ds = connect.getDuration();
-//                        long travelTime = connect.getTravelTimeSeconds();
+        Location currentLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        for (EventImpl event : events) {
+            HttpURLConnectionThread connectThread = new HttpURLConnectionThread(currentLocation, event);
+            connectThread.start();
+        }
+//        final Location currentLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+//
+//        Thread thread = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    LocalDateTime currentTime = LocalDateTime.now();
+//                    for(EventImpl element: events) {
+//                        if(element.getStartDate().isAfter(currentTime)) {
+////                        new HttpURLConnectionAsyncTask(currentLocation, element.getLatitude(), element.getLongitude()).execute();
+////                        HttpURLConnectionAsyncTask connect = (HttpURLConnectionAsyncTask) new HttpURLConnectionAsyncTask(currentLocation, element.getLatitude(), element.getLongitude()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+////                        String ds = connect.getDuration();
+////                        long travelTime = connect.getTravelTimeSeconds();
+////                            long travelTime = HttpURLConnectionAsyncTask.getTravelTimeSeconds(currentLocation, element.getLatitude(), element.getLongitude());
 //                            long travelTime = HttpURLConnectionAsyncTask.getTravelTimeSeconds(currentLocation, element.getLatitude(), element.getLongitude());
-                            long travelTime = HttpURLConnectionAsyncTask.getTravelTimeSeconds(currentLocation, element.getLatitude(), element.getLongitude());
-                            long minutesUntilEvent = ChronoUnit.MINUTES.between(currentTime, element.getStartDate());
-
-                            if(minutesUntilEvent - travelTime < notificationPeriod) {
-                                displayNotification(getApplicationContext(), element.getTitle(), "is starting in " + minutesUntilEvent + " minutes. Approximately " + travelTime + "minutes travel time.", Integer.parseInt(element.getID()));
-                            }
-                        }
-
-
-
-                    }
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-
-            }
-        });
-        thread.start();
+//                            long minutesUntilEvent = ChronoUnit.MINUTES.between(currentTime, element.getStartDate());
+//
+//                            if(minutesUntilEvent - travelTime < notificationPeriod) {
+//                                displayNotification(getApplicationContext(), element.getTitle(), "is starting in " + minutesUntilEvent + " minutes. Approximately " + travelTime + "minutes travel time.", Integer.parseInt(element.getID()));
+//                            }
+//                        }
+//
+//
+//
+//                    }
+//                } catch(Exception e) {
+//                    e.printStackTrace();
+//                }
+//
+//            }
+//        });
+//        thread.start();
     }
 
     private void createNotificationChannels() {

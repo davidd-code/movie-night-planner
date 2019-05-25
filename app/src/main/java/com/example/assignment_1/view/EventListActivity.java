@@ -2,13 +2,10 @@ package com.example.assignment_1.view;
 
 import android.app.AlarmManager;
 import android.app.Dialog;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -28,10 +25,11 @@ import com.example.assignment_1.restapi.LocationServiceReceiver;
 import com.example.assignment_1.controller.AddEventOnClickListener;
 import com.example.assignment_1.controller.EditEventOnClickListener;
 import com.example.assignment_1.controller.MapOnClickListener;
-import com.example.assignment_1.controller.NotificationListener;
 import com.example.assignment_1.model.CustomComparator;
 import com.example.assignment_1.model.EventModel;
 import com.example.assignment_1.model.FileLoader;
+import com.example.assignment_1.restapi.HttpURLConnectionAsyncTask;
+import com.example.assignment_1.restapi.LocationServiceReceiver;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 

@@ -2,6 +2,7 @@ package com.example.assignment_1.restapi;
 
 import android.location.Location;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -14,6 +15,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+
+import static android.support.constraint.Constraints.TAG;
 
 public class HttpURLConnectionAsyncTask extends AsyncTask<String, String, String> {
 
@@ -95,6 +98,11 @@ public class HttpURLConnectionAsyncTask extends AsyncTask<String, String, String
 
 //            return calculateTravelTimeSeconds(durationString);
             return calculateTravelTimeMinutes(durationString);
+//
+            this.seconds = calculateTravelTimeSeconds(durationString);
+            Log.d(TAG, "doInBackground: "+durationString);
+//            s
+            return durationString;
 
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -174,6 +182,8 @@ public class HttpURLConnectionAsyncTask extends AsyncTask<String, String, String
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
         this.duration = s;
+        Log.d(TAG, "onPostExecute: "+duration);
+        this.seconds = calculateTravelTimeSeconds(s);
         seconds = calculateTravelTimeMinutes(s);
         System.out.println(s);
     }
